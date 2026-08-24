@@ -34,9 +34,9 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({ onSt
 
   // Platform usernames state
   const [handles, setHandles] = useState({
-    leetcode: "tourist",
-    codeforces: "tourist",
-    codechef: "tourist",
+    leetcode: "",
+    codeforces: "",
+    codechef: "",
   });
 
   const studentName = session?.user?.name || "Sarah Hessy";
@@ -44,21 +44,21 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({ onSt
 
   // Dynamic live platform stats state
   const [stats, setStats] = useState({
-    leetcode: { username: "tourist", solved: 348, easy: 180, medium: 132, hard: 36, rating: 1785 },
-    codeforces: { username: "tourist", solved: 215, rating: 1420, maxRating: 1510 },
-    codechef: { username: "tourist", solved: 120, rating: 1640, stars: "3★" },
-    totalSolved: 683,
-    codeScore: 1945,
-    lastSynced: "Just now",
+    leetcode: { username: "None", solved: 0, easy: 0, medium: 0, hard: 0, rating: 0 },
+    codeforces: { username: "None", solved: 0, rating: 0, maxRating: 0 },
+    codechef: { username: "None", solved: 0, rating: 0, stars: "0★" },
+    totalSolved: 0,
+    codeScore: 0,
+    lastSynced: "Never",
   });
 
   const chartData = initialChartData || [
-    { week: "Wk 1", solved: Math.max(100, stats.totalSolved - 200) },
-    { week: "Wk 2", solved: Math.max(150, stats.totalSolved - 160) },
-    { week: "Wk 3", solved: Math.max(200, stats.totalSolved - 120) },
-    { week: "Wk 4", solved: Math.max(300, stats.totalSolved - 70) },
-    { week: "Wk 5", solved: Math.max(450, stats.totalSolved - 30) },
-    { week: "Wk 6 (Live)", solved: stats.totalSolved },
+    { week: "Wk 1", solved: 0 },
+    { week: "Wk 2", solved: 0 },
+    { week: "Wk 3", solved: 0 },
+    { week: "Wk 4", solved: 0 },
+    { week: "Wk 5", solved: 0 },
+    { week: "Wk 6 (Live)", solved: 0 },
   ];
 
   // Execute Live API Fetching via POST /api/sync

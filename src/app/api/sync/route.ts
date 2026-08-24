@@ -7,9 +7,9 @@ export async function POST(req: Request) {
   try {
     const body = await req.json().catch(() => ({}));
     const handles = body.handles || {
-      LEETCODE: body.leetcode || "tourist",
-      CODEFORCES: body.codeforces || "tourist",
-      CODECHEF: body.codechef || "tourist",
+      LEETCODE: body.leetcode || "",
+      CODEFORCES: body.codeforces || "",
+      CODECHEF: body.codechef || "",
     };
 
     const results: Record<string, any> = {};
@@ -28,16 +28,17 @@ export async function POST(req: Request) {
             easy: stats.easySolved || 0,
             medium: stats.mediumSolved || 0,
             hard: stats.hardSolved || 0,
-            rating: stats.rating || 1785,
+            rating: stats.rating || 0,
             rank: stats.rank || "N/A",
           };
           aggregatedTotalSolved += stats.totalSolved;
         }
       } catch (e: any) {
         console.warn("LeetCode fetch error:", e.message);
-        results.leetcode = { username, solved: 348, easy: 180, medium: 132, hard: 36, rating: 1785 };
-        aggregatedTotalSolved += 348;
+        results.leetcode = { username, solved: 0, easy: 0, medium: 0, hard: 0, rating: 0 };
       }
+    } else {
+      results.leetcode = { username: "None", solved: 0, easy: 0, medium: 0, hard: 0, rating: 0 };
     }
 
     // Fetch Codeforces live stats
@@ -50,17 +51,18 @@ export async function POST(req: Request) {
           results.codeforces = {
             username,
             solved: stats.totalSolved,
-            rating: stats.rating || 1420,
-            maxRating: stats.maxRating || 1510,
-            rank: stats.rank || "Specialist",
+            rating: stats.rating || 0,
+            maxRating: stats.maxRating || 0,
+            rank: stats.rank || "N/A",
           };
           aggregatedTotalSolved += stats.totalSolved;
         }
       } catch (e: any) {
         console.warn("Codeforces fetch error:", e.message);
-        results.codeforces = { username, solved: 215, rating: 1420, maxRating: 1510, rank: "Specialist" };
-        aggregatedTotalSolved += 215;
+        results.codeforces = { username, solved: 0, rating: 0, maxRating: 0, rank: "N/A" };
       }
+    } else {
+      results.codeforces = { username: "None", solved: 0, rating: 0, maxRating: 0, rank: "N/A" };
     }
 
     // Fetch CodeChef live stats
@@ -73,15 +75,16 @@ export async function POST(req: Request) {
           results.codechef = {
             username,
             solved: stats.totalSolved,
-            rating: stats.rating || 1640,
-            stars: (stats as any).stars || "3★",
+            rating: stats.rating || 0,
+            stars: (stats as any).stars || "0★",
           };
           aggregatedTotalSolved += stats.totalSolved;
         }
       } catch (e: any) {
-        results.codechef = { username, solved: 120, rating: 1640, stars: "3★" };
-        aggregatedTotalSolved += 120;
+        results.codechef = { username, solved: 0, rating: 0, stars: "0★" };
       }
+    } else {
+      results.codechef = { username: "None", solved: 0, rating: 0, stars: "0★" };
     }
 
     // Calculate aggregated CodeScore rating formula
@@ -93,11 +96,11 @@ export async function POST(req: Request) {
       success: true,
       timestamp: new Date().toISOString(),
       stats: {
-        leetcode: results.leetcode || { solved: 348, easy: 180, medium: 132, hard: 36, rating: 1785 },
-        codeforces: results.codeforces || { solved: 215, rating: 1420, maxRating: 1510 },
-        codechef: results.codechef || { solved: 120, rating: 1640, stars: "3★" },
+        leetcode: results.leetcode,
+        codeforces: results.codeforces,
+        codechef: results.codechef,
         totalSolved: aggregatedTotalSolved,
-        codeScore: codeScore || 1945,
+        codeScore: codeScore || 0,
       },
     });
   } catch (error: any) {
