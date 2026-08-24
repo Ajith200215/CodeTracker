@@ -164,15 +164,58 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <div>
               <h2 className="font-serif-display text-3xl font-extrabold text-[#1E1F2B]">
-                Sign In to CodeTracker
+                Account Sign In
               </h2>
               <p className="text-xs text-[#5A5C75] font-medium mt-1">
-                Enter your college email to sign in instantly, or use 1-click test credentials.
+                Select your role, then enter your college email to sign in instantly.
               </p>
             </div>
 
+            {/* Role Toggle Selection */}
+            <div className="grid grid-cols-2 gap-3 pt-1">
+              <button
+                onClick={() => {
+                  onRoleToggle("STUDENT");
+                  if (!inputEmail || inputEmail === "yukari.samo@college.edu") setInputEmail("sarah.hessy@college.edu");
+                }}
+                className={`p-3 rounded-2xl text-left transition-all border-2 ${
+                  currentRole === "STUDENT" 
+                    ? "bg-[#F0F2FF] border-[#6C5CE7]" 
+                    : "bg-white border-[#8B8CF6]/20 hover:border-[#8B8CF6]/50"
+                }`}
+              >
+                <div className="flex items-center gap-1.5 text-xs font-bold text-[#6C5CE7]">
+                  <GraduationCap className="w-3.5 h-3.5" />
+                  <span>Student Role</span>
+                </div>
+                <div className="text-[10px] font-semibold text-[#5A5C75] mt-0.5">
+                  Access Dashboard
+                </div>
+              </button>
+
+              <button
+                onClick={() => {
+                  onRoleToggle("TEACHER");
+                  if (!inputEmail || inputEmail === "sarah.hessy@college.edu") setInputEmail("yukari.samo@college.edu");
+                }}
+                className={`p-3 rounded-2xl text-left transition-all border-2 ${
+                  currentRole === "TEACHER" 
+                    ? "bg-[#1E1F2B] border-[#F8A195]" 
+                    : "bg-white border-slate-200 hover:border-slate-400"
+                }`}
+              >
+                <div className={`flex items-center gap-1.5 text-xs font-bold ${currentRole === "TEACHER" ? "text-[#F8A195]" : "text-slate-700"}`}>
+                  <ShieldAlert className="w-3.5 h-3.5" />
+                  <span>Teacher Role</span>
+                </div>
+                <div className={`text-[10px] font-semibold mt-0.5 ${currentRole === "TEACHER" ? "text-slate-300" : "text-slate-500"}`}>
+                  Manage Classrooms
+                </div>
+              </button>
+            </div>
+
             {/* Email Direct Sign In Input */}
-            <div className="space-y-2 text-left">
+            <div className="space-y-2 text-left mt-2">
               <label className="text-[11px] font-extrabold uppercase text-[#6A6C88] tracking-wider">
                 College Email Address
               </label>
@@ -189,17 +232,19 @@ export const Navbar: React.FC<NavbarProps> = ({
               <button
                 onClick={() => handleEmailSignIn(inputEmail, currentRole)}
                 disabled={isSubmitting}
-                className="w-full py-3 rounded-full bg-[#6C5CE7] hover:bg-[#5A4AD1] text-white font-extrabold text-xs shadow-md transition-all flex items-center justify-center gap-2"
+                className={`w-full py-3 rounded-full text-white font-extrabold text-xs shadow-md transition-all flex items-center justify-center gap-2 ${
+                  currentRole === "TEACHER" ? "bg-[#1E1F2B] hover:bg-[#2C2E40]" : "bg-[#6C5CE7] hover:bg-[#5A4AD1]"
+                }`}
               >
                 <span>{isSubmitting ? "Signing In..." : "Sign In with Email"}</span>
-                <ChevronRight className="w-4 h-4 text-[#F8A195]" />
+                <ChevronRight className={`w-4 h-4 ${currentRole === "TEACHER" ? "text-[#F8A195]" : "text-white/80"}`} />
               </button>
             </div>
 
             <div className="relative flex py-1 items-center">
               <div className="flex-grow border-t border-slate-200"></div>
               <span className="flex-shrink mx-3 text-[10px] font-bold uppercase text-[#8B8CF6]">
-                Or Google / Quick Demo
+                Or Google OAuth
               </span>
               <div className="flex-grow border-t border-slate-200"></div>
             </div>
@@ -229,35 +274,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               </svg>
               <span>Sign in with Google OAuth</span>
             </button>
-
-            {/* Fast 1-Click Demo Buttons */}
-            <div className="grid grid-cols-2 gap-3 pt-1">
-              <button
-                onClick={() => handleEmailSignIn("sarah.hessy@college.edu", "STUDENT")}
-                className="p-3 rounded-2xl bg-[#F0F2FF] hover:bg-[#E5E8FF] border border-[#8B8CF6]/30 text-left transition-all"
-              >
-                <div className="flex items-center gap-1.5 text-xs font-bold text-[#6C5CE7]">
-                  <GraduationCap className="w-3.5 h-3.5" />
-                  <span>Student Login</span>
-                </div>
-                <div className="text-[10px] font-semibold text-[#5A5C75] mt-0.5">
-                  sarah.hessy@college.edu
-                </div>
-              </button>
-
-              <button
-                onClick={() => handleEmailSignIn("yukari.samo@college.edu", "TEACHER")}
-                className="p-3 rounded-2xl bg-[#1E1F2B] hover:bg-[#2C2E40] text-white text-left transition-all"
-              >
-                <div className="flex items-center gap-1.5 text-xs font-bold text-[#F8A195]">
-                  <ShieldAlert className="w-3.5 h-3.5" />
-                  <span>Teacher Login</span>
-                </div>
-                <div className="text-[10px] font-semibold text-slate-300 mt-0.5">
-                  yukari.samo@college.edu
-                </div>
-              </button>
-            </div>
           </div>
         </div>
       )}

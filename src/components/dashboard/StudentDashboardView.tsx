@@ -23,9 +23,10 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianG
 
 interface StudentDashboardViewProps {
   onStartExam: () => void;
+  initialChartData?: { week: string; solved: number }[];
 }
 
-export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({ onStartExam }) => {
+export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({ onStartExam, initialChartData }) => {
   const { data: session } = useSession();
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncStatus, setSyncStatus] = useState<string | null>(null);
@@ -51,7 +52,7 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({ onSt
     lastSynced: "Just now",
   });
 
-  const chartData = [
+  const chartData = initialChartData || [
     { week: "Wk 1", solved: Math.max(100, stats.totalSolved - 200) },
     { week: "Wk 2", solved: Math.max(150, stats.totalSolved - 160) },
     { week: "Wk 3", solved: Math.max(200, stats.totalSolved - 120) },
