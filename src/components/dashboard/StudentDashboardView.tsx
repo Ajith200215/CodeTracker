@@ -27,8 +27,8 @@ interface StudentDashboardViewProps {
 
 export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({ onStartExam, initialChartData }) => {
   const { data: session } = useSession();
-  const [isSyncing, setIsSyncing] = useState(false);
-  const [syncStatus, setSyncStatus] = useState<string | null>(null);
+  const [isSyncing, setIsSyncing] = useState(true);
+  const [syncStatus, setSyncStatus] = useState<string | null>("Syncing live coding platform stats...");
   const [showHandlesModal, setShowHandlesModal] = useState(false);
 
   // Platform usernames state (defaults to active handles)
