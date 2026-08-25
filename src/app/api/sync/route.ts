@@ -8,10 +8,29 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);
+    
+    let defaultLeetcode = "Ajith0406";
+    if (process.env.LEETCODE_SESSION) {
+      try {
+        const parts = process.env.LEETCODE_SESSION.split(".");
+        if (parts.length >= 2) {
+          const payload = JSON.parse(Buffer.from(parts[1], "base64").toString("utf-8"));
+          if (payload.username) {
+            defaultLeetcode = payload.username;
+          }
+        }
+      } catch (e) {}
+    }
+
+    let emailPrefix = "";
+    if (session?.user?.email) {
+      emailPrefix = session.user.email.split("@")[0].replace(".", "_");
+    }
+
     let handles: Record<string, string> = {
-      LEETCODE: "Ajith0406",
-      CODEFORCES: "tourist",
-      CODECHEF: "tourist",
+      LEETCODE: defaultLeetcode,
+      CODEFORCES: emailPrefix || "tourist",
+      CODECHEF: emailPrefix || "tourist",
     };
 
     if (session?.user?.email) {
@@ -20,10 +39,22 @@ export async function GET() {
         include: { platformHandles: true },
       });
 
-      if (user && user.platformHandles.length > 0) {
-        user.platformHandles.forEach((h) => {
-          handles[h.platform] = h.username;
-        });
+      if (user) {
+        if (user.platformHandles.length > 0) {
+          user.platformHandles.forEach((h) => {
+            handles[h.platform] = h.username;
+          });
+        } else {
+          // Auto-bind default detected handle for new logged in student
+          await db.platformHandle.createMany({
+            data: [
+              { userId: user.id, platform: Platform.LEETCODE, username: defaultLeetcode },
+              { userId: user.id, platform: Platform.CODEFORCES, username: handles.CODEFORCES },
+              { userId: user.id, platform: Platform.CODECHEF, username: handles.CODECHEF },
+            ],
+            skipDuplicates: true,
+          }).catch(() => {});
+        }
       }
     }
 
