@@ -18,7 +18,8 @@ import {
   Search,
   Menu,
   X,
-  Mail
+  Mail,
+  Trophy
 } from "lucide-react";
 
 interface AppShellProps {
@@ -69,6 +70,7 @@ export const AppShell: React.FC<AppShellProps> = ({
 
   const studentNavItems = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { id: "leaderboard", label: "Leaderboard 🏆", icon: Trophy },
     { id: "classrooms", label: "Classrooms", icon: BookOpen },
     { id: "tests", label: "Tests", icon: GraduationCap },
     { id: "feedback", label: "Feedback", icon: MessageSquareQuote },
@@ -76,6 +78,7 @@ export const AppShell: React.FC<AppShellProps> = ({
 
   const teacherNavItems = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { id: "leaderboard", label: "Leaderboard 🏆", icon: Trophy },
     { id: "classrooms", label: "Classrooms", icon: BookOpen },
     { id: "tests", label: "Tests", icon: GraduationCap },
     { id: "monitor", label: "Monitor", icon: ShieldAlert },

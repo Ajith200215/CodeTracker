@@ -11,6 +11,7 @@ import { CTABanner } from "@/components/home/CTABanner";
 import { Footer } from "@/components/layout/Footer";
 import { AppShell } from "@/components/layout/AppShell";
 import { StudentDashboardView } from "@/components/dashboard/StudentDashboardView";
+import { UnifiedLeaderboardView } from "@/components/leaderboard/UnifiedLeaderboardView";
 import { ExamAttemptView } from "@/components/exam/ExamAttemptView";
 import { TeacherMonitorView } from "@/components/monitor/TeacherMonitorView";
 
@@ -99,6 +100,7 @@ export default function Home() {
       {activeTab === "dashboard" && (
         <StudentDashboardView onStartExam={() => setActiveTab("exam")} />
       )}
+      {activeTab === "leaderboard" && <UnifiedLeaderboardView />}
       {activeTab === "monitor" && <TeacherMonitorView />}
       {activeTab === "classrooms" && (
         <div className="bg-white p-8 rounded-3xl border border-[#8B8CF6]/20 shadow-xl space-y-4">

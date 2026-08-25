@@ -70,6 +70,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             {[
               { id: "home", label: "Home" },
               { id: "dashboard", label: "Dashboard" },
+              { id: "leaderboard", label: "Leaderboard 🏆" },
               { id: "classrooms", label: "Classrooms" },
               { id: "exam", label: "Live Exam" },
               { id: "monitor", label: "Proctor Monitor", teacherOnly: true },
