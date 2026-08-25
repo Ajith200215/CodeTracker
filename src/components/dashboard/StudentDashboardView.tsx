@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { motion } from "framer-motion";
 import { 
   Trophy, 
   Code2, 
@@ -32,11 +31,11 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({ onSt
   const [syncStatus, setSyncStatus] = useState<string | null>(null);
   const [showHandlesModal, setShowHandlesModal] = useState(false);
 
-  // Platform usernames state
+  // Platform usernames state (defaults to active handles)
   const [handles, setHandles] = useState({
-    leetcode: "",
-    codeforces: "",
-    codechef: "",
+    leetcode: "Ajith0406",
+    codeforces: "tourist",
+    codechef: "tourist",
   });
 
   const studentName = session?.user?.name || "Sarah Hessy";
@@ -61,17 +60,22 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({ onSt
     { week: "Wk 6 (Live)", solved: 0 },
   ];
 
-  // Execute Live API Fetching via POST /api/sync
-  const fetchLivePlatformStats = async (customHandles = handles) => {
+  // Execute Live API Fetching via GET or POST /api/sync
+  const fetchLivePlatformStats = async (customHandles?: typeof handles) => {
     setIsSyncing(true);
-    setSyncStatus("Connecting to live LeetCode & Codeforces APIs...");
+    setSyncStatus("Connecting to live LeetCode, Codeforces & CodeChef APIs...");
 
     try {
-      const response = await fetch("/api/sync", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ handles: customHandles }),
-      });
+      let response;
+      if (customHandles) {
+        response = await fetch("/api/sync", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ handles: customHandles }),
+        });
+      } else {
+        response = await fetch("/api/sync");
+      }
 
       const data = await response.json();
       if (data.success && data.stats) {
@@ -83,18 +87,26 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({ onSt
           codeScore: data.stats.codeScore,
           lastSynced: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         });
+        if (data.stats.leetcode?.username) {
+          setHandles({
+            leetcode: data.stats.leetcode.username !== "None" ? data.stats.leetcode.username : "",
+            codeforces: data.stats.codeforces?.username !== "None" ? data.stats.codeforces.username : "",
+            codechef: data.stats.codechef?.username !== "None" ? data.stats.codechef.username : "",
+          });
+        }
         setSyncStatus(`Live data fetched cleanly! Total Solved: ${data.stats.totalSolved} problems.`);
-      } else {
-        setSyncStatus("Fetched platform APIs successfully.");
       }
     } catch (error: any) {
       console.error("Live fetch error:", error);
-      setSyncStatus("Updated stats payload.");
     } finally {
       setIsSyncing(false);
       setTimeout(() => setSyncStatus(null), 4000);
     }
   };
+
+  useEffect(() => {
+    fetchLivePlatformStats();
+  }, []);
 
   const handleSaveHandles = () => {
     setShowHandlesModal(false);

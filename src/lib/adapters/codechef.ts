@@ -2,33 +2,53 @@ import { PlatformAdapter, PlatformStatsResult } from "./types";
 import { Platform } from "@prisma/client";
 
 export class CodeChefAdapter implements PlatformAdapter {
-  platform: Platform = Platform.CODECHEF;
+  platform: Platform = Platform.LEETCODE;
 
   async fetchStats(username: string): Promise<PlatformStatsResult> {
     const cleanUsername = username.trim();
+    if (!cleanUsername) {
+      throw new Error("CodeChef username cannot be empty");
+    }
+
     try {
-      const res = await fetch(`https://codechef-api.vercel.app/handle/${encodeURIComponent(cleanUsername)}`, {
+      const res = await fetch(`https://www.codechef.com/users/${encodeURIComponent(cleanUsername)}`, {
+        headers: {
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        },
         next: { revalidate: 300 },
       });
+
       if (res.ok) {
-        const data = await res.json();
-        return {
-          totalSolved: data.problemsSolved || data.totalSolved || 120,
-          rating: data.currentRating || data.rating || 1640,
-          maxRating: data.highestRating || 1700,
-          stars: data.stars || "3★",
-          raw: data,
-        };
+        const html = await res.text();
+        const ratingMatch = html.match(/class="rating-number">[\s\n]*(\d+)/);
+        const solvedMatch = 
+          html.match(/Total Problems Solved:[^\d]*(\d+)/i) || 
+          html.match(/Problems Solved:[^\d]*(\d+)/i) || 
+          html.match(/Fully Solved \((\d+)\)/);
+        const starsMatch = html.match(/class="rating-star">[\s\n]*<span>([^<]+)<\/span>/) || html.match(/(\d★|\d\s*star)/i);
+
+        const rating = ratingMatch ? parseInt(ratingMatch[1], 10) : 0;
+        const totalSolved = solvedMatch ? parseInt(solvedMatch[1], 10) : 0;
+        const stars = starsMatch ? starsMatch[1].trim() : (rating > 2000 ? "5★" : rating > 1600 ? "3★" : "1★");
+
+        if (rating > 0 || totalSolved > 0) {
+          return {
+            totalSolved,
+            rating,
+            stars,
+            raw: { rating, totalSolved, stars },
+          };
+        }
       }
-    } catch (e) {
-      console.warn(`CodeChef API error for ${cleanUsername}, using safe fallback`);
+    } catch (e: any) {
+      console.warn(`CodeChef direct fetch error for ${cleanUsername}:`, e.message);
     }
 
     return {
-      totalSolved: 120,
-      rating: 1640,
-      stars: "3★",
-      raw: { stale: true },
+      totalSolved: 0,
+      rating: 0,
+      stars: "0★",
+      raw: { error: true },
     };
   }
 }

@@ -6,16 +6,22 @@ export class LeetCodeAdapter implements PlatformAdapter {
 
   async fetchStats(username: string): Promise<PlatformStatsResult> {
     const cleanUsername = username.trim();
+    if (!cleanUsername) {
+      throw new Error("LeetCode username cannot be empty");
+    }
 
-    // Primary: LeetCode public API proxy
+    // Primary: Reliable public REST proxy
     try {
-      const proxyUrl = `https://leetcode-stats-api.herokuapp.com/${encodeURIComponent(cleanUsername)}`;
-      const res = await fetch(proxyUrl, { next: { revalidate: 300 } });
+      const proxyUrl = `https://alfa-leetcode-api.onrender.com/userProfile/${encodeURIComponent(cleanUsername)}`;
+      const res = await fetch(proxyUrl, { 
+        headers: { "User-Agent": "Mozilla/5.0" },
+        next: { revalidate: 300 } 
+      });
       if (res.ok) {
         const data = await res.json();
-        if (data.status === "success") {
+        if (typeof data.totalSolved === "number") {
           return {
-            totalSolved: data.totalSolved || 0,
+            totalSolved: data.totalSolved,
             easySolved: data.easySolved || 0,
             mediumSolved: data.mediumSolved || 0,
             hardSolved: data.hardSolved || 0,
@@ -48,9 +54,17 @@ export class LeetCodeAdapter implements PlatformAdapter {
       }
     `;
 
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+    };
+    if (process.env.LEETCODE_SESSION) {
+      headers["Cookie"] = `LEETCODE_SESSION=${process.env.LEETCODE_SESSION}`;
+    }
+
     const graphqlRes = await fetch(graphqlUrl, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers,
       body: JSON.stringify({ query, variables: { username: cleanUsername } }),
       next: { revalidate: 300 },
     });

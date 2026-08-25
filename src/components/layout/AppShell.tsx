@@ -43,10 +43,15 @@ export const AppShell: React.FC<AppShellProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleEmailSignIn = async (emailToUse: string, roleToUse: "STUDENT" | "TEACHER") => {
+    const trimmedEmail = emailToUse.trim();
+    if (!trimmedEmail) {
+      alert("Please enter your email address to sign in.");
+      return;
+    }
     setIsSubmitting(true);
     onRoleToggle(roleToUse);
     await signIn("credentials", {
-      email: emailToUse || "sarah.hessy@college.edu",
+      email: trimmedEmail,
       role: roleToUse,
       redirect: false,
     });

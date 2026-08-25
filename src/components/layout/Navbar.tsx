@@ -23,10 +23,15 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleEmailSignIn = async (emailToUse: string, roleToUse: "STUDENT" | "TEACHER") => {
+    const trimmedEmail = emailToUse.trim();
+    if (!trimmedEmail) {
+      alert("Please enter your email address to sign in.");
+      return;
+    }
     setIsSubmitting(true);
     onRoleToggle(roleToUse);
     await signIn("credentials", {
-      email: emailToUse || "sarah.hessy@college.edu",
+      email: trimmedEmail,
       role: roleToUse,
       redirect: false,
     });
@@ -174,10 +179,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Role Toggle Selection */}
             <div className="grid grid-cols-2 gap-3 pt-1">
               <button
-                onClick={() => {
-                  onRoleToggle("STUDENT");
-                  if (!inputEmail || inputEmail === "yukari.samo@college.edu") setInputEmail("sarah.hessy@college.edu");
-                }}
+                onClick={() => onRoleToggle("STUDENT")}
                 className={`p-3 rounded-2xl text-left transition-all border-2 ${
                   currentRole === "STUDENT" 
                     ? "bg-[#F0F2FF] border-[#6C5CE7]" 
@@ -194,10 +196,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
 
               <button
-                onClick={() => {
-                  onRoleToggle("TEACHER");
-                  if (!inputEmail || inputEmail === "sarah.hessy@college.edu") setInputEmail("yukari.samo@college.edu");
-                }}
+                onClick={() => onRoleToggle("TEACHER")}
                 className={`p-3 rounded-2xl text-left transition-all border-2 ${
                   currentRole === "TEACHER" 
                     ? "bg-[#1E1F2B] border-[#F8A195]" 
