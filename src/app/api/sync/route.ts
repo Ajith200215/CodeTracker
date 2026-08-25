@@ -23,29 +23,18 @@ function cleanHandle(val: any, fallback: string): string {
 }
 
 export async function GET() {
-  let defaultLeetcode = "Ajith0406";
-  if (process.env.LEETCODE_SESSION) {
-    try {
-      const parts = process.env.LEETCODE_SESSION.split(".");
-      if (parts.length >= 2) {
-        const payload = JSON.parse(Buffer.from(parts[1], "base64").toString("utf-8"));
-        if (payload.username && payload.username !== "None") {
-          defaultLeetcode = payload.username;
-        }
-      }
-    } catch (e) {}
-  }
+  const session = await getServerSession(authOptions).catch(() => null);
 
   let handles: Record<string, string> = {
-    LEETCODE: defaultLeetcode,
-    CODEFORCES: "tourist",
-    CODECHEF: "tourist",
+    LEETCODE: "",
+    CODEFORCES: "",
+    CODECHEF: "",
   };
 
-  try {
-    const session = await getServerSession(authOptions).catch(() => null);
+  let hasUserHandles = false;
 
-    if (session?.user?.email) {
+  if (session?.user?.email) {
+    try {
       let user = await db.user.findUnique({
         where: { email: session.user.email },
         include: { platformHandles: true },
@@ -68,15 +57,27 @@ export async function GET() {
           const cleaned = cleanHandle(h.username, "");
           if (cleaned) {
             handles[h.platform] = cleaned;
+            hasUserHandles = true;
           }
         });
       }
+    } catch (dbError) {
+      console.warn("DB interaction warning in GET /api/sync:", dbError);
     }
-  } catch (dbError) {
-    console.warn("DB interaction warning in GET /api/sync:", dbError);
   }
 
-  return fetchAndAggregateStats(handles, defaultLeetcode);
+  // Fallback defaults for guest or default Ajith account
+  if (!hasUserHandles) {
+    const emailStr = session?.user?.email?.toLowerCase() || "";
+    const nameStr = session?.user?.name?.toLowerCase() || "";
+    if (emailStr.includes("ajith") || nameStr.includes("ajith") || !session?.user) {
+      handles.LEETCODE = "Ajith0406";
+      handles.CODEFORCES = "tourist";
+      handles.CODECHEF = "tourist";
+    }
+  }
+
+  return fetchAndAggregateStats(handles);
 }
 
 export async function POST(req: Request) {
@@ -145,13 +146,13 @@ export async function POST(req: Request) {
   return fetchAndAggregateStats(inputHandles);
 }
 
-async function fetchAndAggregateStats(handles: Record<string, any>, defaultLeetcode = "Ajith0406") {
+async function fetchAndAggregateStats(handles: Record<string, any>) {
   const results: Record<string, any> = {};
   let aggregatedTotalSolved = 0;
 
   // Fetch LeetCode live stats
   const rawLc = handles.LEETCODE || handles.leetcode;
-  const leetcodeHandle = cleanHandle(rawLc, defaultLeetcode);
+  const leetcodeHandle = cleanHandle(rawLc, "");
   if (leetcodeHandle) {
     try {
       const adapter = getAdapter(Platform.LEETCODE);
@@ -172,11 +173,13 @@ async function fetchAndAggregateStats(handles: Record<string, any>, defaultLeetc
       console.warn("LeetCode fetch error:", e.message);
       results.leetcode = { username: leetcodeHandle, solved: 0, easy: 0, medium: 0, hard: 0, rating: 0 };
     }
+  } else {
+    results.leetcode = { username: "", solved: 0, easy: 0, medium: 0, hard: 0, rating: 0 };
   }
 
   // Fetch Codeforces live stats
   const rawCf = handles.CODEFORCES || handles.codeforces;
-  const codeforcesHandle = cleanHandle(rawCf, "tourist");
+  const codeforcesHandle = cleanHandle(rawCf, "");
   if (codeforcesHandle) {
     try {
       const adapter = getAdapter(Platform.CODEFORCES);
@@ -195,11 +198,13 @@ async function fetchAndAggregateStats(handles: Record<string, any>, defaultLeetc
       console.warn("Codeforces fetch error:", e.message);
       results.codeforces = { username: codeforcesHandle, solved: 0, rating: 0, maxRating: 0, rank: "N/A" };
     }
+  } else {
+    results.codeforces = { username: "", solved: 0, rating: 0, maxRating: 0, rank: "N/A" };
   }
 
   // Fetch CodeChef live stats
   const rawCc = handles.CODECHEF || handles.codechef;
-  const codechefHandle = cleanHandle(rawCc, "tourist");
+  const codechefHandle = cleanHandle(rawCc, "");
   if (codechefHandle) {
     try {
       const adapter = getAdapter(Platform.CODECHEF);
@@ -216,6 +221,8 @@ async function fetchAndAggregateStats(handles: Record<string, any>, defaultLeetc
     } catch (e: any) {
       results.codechef = { username: codechefHandle, solved: 0, rating: 0, stars: "0★" };
     }
+  } else {
+    results.codechef = { username: "", solved: 0, rating: 0, stars: "0★" };
   }
 
   // Calculate aggregated CodeScore rating formula

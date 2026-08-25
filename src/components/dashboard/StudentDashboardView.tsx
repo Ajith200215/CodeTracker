@@ -31,11 +31,11 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({ onSt
   const [syncStatus, setSyncStatus] = useState<string | null>("Syncing live coding platform stats...");
   const [showHandlesModal, setShowHandlesModal] = useState(false);
 
-  // Platform usernames state (defaults to active handles)
+  // Platform usernames state (defaults to empty if not configured yet)
   const [handles, setHandles] = useState({
-    leetcode: "Ajith0406",
-    codeforces: "tourist",
-    codechef: "tourist",
+    leetcode: "",
+    codeforces: "",
+    codechef: "",
   });
 
   const studentName = session?.user?.name || "Sarah Hessy";
@@ -43,9 +43,9 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({ onSt
 
   // Dynamic live platform stats state
   const [stats, setStats] = useState({
-    leetcode: { username: "Ajith0406", solved: 0, easy: 0, medium: 0, hard: 0, rating: 0 },
-    codeforces: { username: "tourist", solved: 0, rating: 0, maxRating: 0 },
-    codechef: { username: "tourist", solved: 0, rating: 0, stars: "0★" },
+    leetcode: { username: "", solved: 0, easy: 0, medium: 0, hard: 0, rating: 0 },
+    codeforces: { username: "", solved: 0, rating: 0, maxRating: 0 },
+    codechef: { username: "", solved: 0, rating: 0, stars: "0★" },
     totalSolved: 0,
     codeScore: 0,
     lastSynced: "Never",
@@ -79,13 +79,13 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({ onSt
 
       const data = await response.json();
       if (data.success && data.stats) {
-        const cleanLcUser = data.stats.leetcode?.username && data.stats.leetcode.username !== "None" ? data.stats.leetcode.username : "Ajith0406";
-        const cleanCfUser = data.stats.codeforces?.username && data.stats.codeforces.username !== "None" ? data.stats.codeforces.username : "tourist";
-        const cleanCcUser = data.stats.codechef?.username && data.stats.codechef.username !== "None" ? data.stats.codechef.username : "tourist";
+        const lcUser = data.stats.leetcode?.username && data.stats.leetcode.username !== "None" ? data.stats.leetcode.username : "";
+        const cfUser = data.stats.codeforces?.username && data.stats.codeforces.username !== "None" ? data.stats.codeforces.username : "";
+        const ccUser = data.stats.codechef?.username && data.stats.codechef.username !== "None" ? data.stats.codechef.username : "";
 
         setStats({
           leetcode: {
-            username: cleanLcUser,
+            username: lcUser,
             solved: data.stats.leetcode?.solved || 0,
             easy: data.stats.leetcode?.easy || 0,
             medium: data.stats.leetcode?.medium || 0,
@@ -93,13 +93,13 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({ onSt
             rating: data.stats.leetcode?.rating || 0,
           },
           codeforces: {
-            username: cleanCfUser,
+            username: cfUser,
             solved: data.stats.codeforces?.solved || 0,
             rating: data.stats.codeforces?.rating || 0,
             maxRating: data.stats.codeforces?.maxRating || 0,
           },
           codechef: {
-            username: cleanCcUser,
+            username: ccUser,
             solved: data.stats.codechef?.solved || 0,
             rating: data.stats.codechef?.rating || 0,
             stars: data.stats.codechef?.stars || "0★",
@@ -110,9 +110,9 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({ onSt
         });
 
         setHandles({
-          leetcode: cleanLcUser,
-          codeforces: cleanCfUser,
-          codechef: cleanCcUser,
+          leetcode: lcUser,
+          codeforces: cfUser,
+          codechef: ccUser,
         });
 
         setSyncStatus(`Live data fetched cleanly! Total Solved: ${data.stats.totalSolved} problems.`);
@@ -205,7 +205,7 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({ onSt
               <Code2 className="w-4 h-4 text-[#6C5CE7]" />
               <span className="text-xs font-bold text-[#6A6C88] uppercase">LeetCode</span>
             </div>
-            <span className="text-[10px] font-mono text-[#8B8CF6]">@{stats.leetcode.username}</span>
+            <span className="text-[10px] font-mono text-[#8B8CF6]">@{stats.leetcode.username || "Unlinked"}</span>
           </div>
           <div className="my-3">
             <div className="text-3xl font-black text-[#1E1F2B] font-serif-display">
@@ -230,7 +230,7 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({ onSt
               <TrendingUp className="w-4 h-4 text-[#3B82F6]" />
               <span className="text-xs font-bold text-[#6A6C88] uppercase">Codeforces</span>
             </div>
-            <span className="text-[10px] font-mono text-[#3B82F6]">@{stats.codeforces.username}</span>
+            <span className="text-[10px] font-mono text-[#3B82F6]">@{stats.codeforces.username || "Unlinked"}</span>
           </div>
           <div className="my-3">
             <div className="text-3xl font-black text-[#1E1F2B] font-serif-display">
@@ -253,7 +253,7 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({ onSt
               <Award className="w-4 h-4 text-[#F59E0B]" />
               <span className="text-xs font-bold text-[#6A6C88] uppercase">CodeChef</span>
             </div>
-            <span className="text-[10px] font-mono text-[#F59E0B]">@{stats.codechef.username}</span>
+            <span className="text-[10px] font-mono text-[#F59E0B]">@{stats.codechef.username || "Unlinked"}</span>
           </div>
           <div className="my-3">
             <div className="text-3xl font-black text-[#1E1F2B] font-serif-display">
