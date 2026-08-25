@@ -34,17 +34,20 @@ export async function GET() {
   let hasUserHandles = false;
 
   if (session?.user?.email) {
+    const userEmail = session.user.email.toLowerCase().trim();
+    const emailPrefix = userEmail.split("@")[0];
+
     try {
       let user = await db.user.findUnique({
-        where: { email: session.user.email },
+        where: { email: userEmail },
         include: { platformHandles: true },
       }).catch(() => null);
 
       if (!user) {
         user = await db.user.create({
           data: {
-            email: session.user.email,
-            name: session.user.name || session.user.email.split("@")[0],
+            email: userEmail,
+            name: session.user.name || emailPrefix,
             role: Role.STUDENT,
             regNo: "2026-CS-0142",
           },
@@ -52,29 +55,50 @@ export async function GET() {
         }).catch(() => null);
       }
 
-      if (user && user.platformHandles && user.platformHandles.length > 0) {
-        user.platformHandles.forEach((h) => {
-          const cleaned = cleanHandle(h.username, "");
-          if (cleaned) {
-            handles[h.platform] = cleaned;
-            hasUserHandles = true;
-          }
-        });
+      if (user) {
+        if (user.platformHandles && user.platformHandles.length > 0) {
+          user.platformHandles.forEach((h) => {
+            const cleaned = cleanHandle(h.username, "");
+            if (cleaned) {
+              handles[h.platform] = cleaned;
+              hasUserHandles = true;
+            }
+          });
+        }
+
+        // Auto-fetch on email login: if user has no handles saved yet, derive and save default handle
+        if (!hasUserHandles) {
+          const isAjith = emailPrefix.includes("ajith") || emailPrefix.includes("sajith");
+          const autoLcHandle = isAjith ? "Ajith0406" : emailPrefix;
+          const autoCfHandle = "tourist";
+          const autoCcHandle = "tourist";
+
+          handles.LEETCODE = autoLcHandle;
+          handles.CODEFORCES = autoCfHandle;
+          handles.CODECHEF = autoCcHandle;
+          hasUserHandles = true;
+
+          // Save derived handles to DB so they persist for this user account
+          await db.platformHandle.createMany({
+            data: [
+              { userId: user.id, platform: Platform.LEETCODE, username: autoLcHandle },
+              { userId: user.id, platform: Platform.CODEFORCES, username: autoCfHandle },
+              { userId: user.id, platform: Platform.CODECHEF, username: autoCcHandle },
+            ],
+            skipDuplicates: true,
+          }).catch((err) => console.warn("Failed auto-seeding handles:", err));
+        }
       }
     } catch (dbError) {
       console.warn("DB interaction warning in GET /api/sync:", dbError);
     }
   }
 
-  // Fallback defaults for guest or default Ajith account
+  // Fallback defaults if no session user
   if (!hasUserHandles) {
-    const emailStr = session?.user?.email?.toLowerCase() || "";
-    const nameStr = session?.user?.name?.toLowerCase() || "";
-    if (emailStr.includes("ajith") || nameStr.includes("ajith") || !session?.user) {
-      handles.LEETCODE = "Ajith0406";
-      handles.CODEFORCES = "tourist";
-      handles.CODECHEF = "tourist";
-    }
+    handles.LEETCODE = "Ajith0406";
+    handles.CODEFORCES = "tourist";
+    handles.CODECHEF = "tourist";
   }
 
   return fetchAndAggregateStats(handles);
