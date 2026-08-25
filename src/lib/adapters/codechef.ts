@@ -2,7 +2,7 @@ import { PlatformAdapter, PlatformStatsResult } from "./types";
 import { Platform } from "@prisma/client";
 
 export class CodeChefAdapter implements PlatformAdapter {
-  platform: Platform = Platform.LEETCODE;
+  platform: Platform = Platform.CODECHEF;
 
   async fetchStats(username: string): Promise<PlatformStatsResult> {
     const cleanUsername = username.trim();

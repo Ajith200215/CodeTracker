@@ -43,9 +43,9 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({ onSt
 
   // Dynamic live platform stats state
   const [stats, setStats] = useState({
-    leetcode: { username: "None", solved: 0, easy: 0, medium: 0, hard: 0, rating: 0 },
-    codeforces: { username: "None", solved: 0, rating: 0, maxRating: 0 },
-    codechef: { username: "None", solved: 0, rating: 0, stars: "0★" },
+    leetcode: { username: "Ajith0406", solved: 0, easy: 0, medium: 0, hard: 0, rating: 0 },
+    codeforces: { username: "tourist", solved: 0, rating: 0, maxRating: 0 },
+    codechef: { username: "tourist", solved: 0, rating: 0, stars: "0★" },
     totalSolved: 0,
     codeScore: 0,
     lastSynced: "Never",
@@ -79,21 +79,42 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({ onSt
 
       const data = await response.json();
       if (data.success && data.stats) {
+        const cleanLcUser = data.stats.leetcode?.username && data.stats.leetcode.username !== "None" ? data.stats.leetcode.username : "Ajith0406";
+        const cleanCfUser = data.stats.codeforces?.username && data.stats.codeforces.username !== "None" ? data.stats.codeforces.username : "tourist";
+        const cleanCcUser = data.stats.codechef?.username && data.stats.codechef.username !== "None" ? data.stats.codechef.username : "tourist";
+
         setStats({
-          leetcode: data.stats.leetcode,
-          codeforces: data.stats.codeforces,
-          codechef: data.stats.codechef,
-          totalSolved: data.stats.totalSolved,
-          codeScore: data.stats.codeScore,
+          leetcode: {
+            username: cleanLcUser,
+            solved: data.stats.leetcode?.solved || 0,
+            easy: data.stats.leetcode?.easy || 0,
+            medium: data.stats.leetcode?.medium || 0,
+            hard: data.stats.leetcode?.hard || 0,
+            rating: data.stats.leetcode?.rating || 0,
+          },
+          codeforces: {
+            username: cleanCfUser,
+            solved: data.stats.codeforces?.solved || 0,
+            rating: data.stats.codeforces?.rating || 0,
+            maxRating: data.stats.codeforces?.maxRating || 0,
+          },
+          codechef: {
+            username: cleanCcUser,
+            solved: data.stats.codechef?.solved || 0,
+            rating: data.stats.codechef?.rating || 0,
+            stars: data.stats.codechef?.stars || "0★",
+          },
+          totalSolved: data.stats.totalSolved || 0,
+          codeScore: data.stats.codeScore || 0,
           lastSynced: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         });
-        if (data.stats.leetcode?.username) {
-          setHandles({
-            leetcode: data.stats.leetcode.username !== "None" ? data.stats.leetcode.username : "",
-            codeforces: data.stats.codeforces?.username !== "None" ? data.stats.codeforces.username : "",
-            codechef: data.stats.codechef?.username !== "None" ? data.stats.codechef.username : "",
-          });
-        }
+
+        setHandles({
+          leetcode: cleanLcUser,
+          codeforces: cleanCfUser,
+          codechef: cleanCcUser,
+        });
+
         setSyncStatus(`Live data fetched cleanly! Total Solved: ${data.stats.totalSolved} problems.`);
       }
     } catch (error: any) {

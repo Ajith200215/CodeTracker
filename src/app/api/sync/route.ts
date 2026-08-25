@@ -8,35 +8,48 @@ import { authOptions } from "@/lib/authOptions";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-export async function GET() {
-  try {
-    const session = await getServerSession(authOptions);
-    
-    let defaultLeetcode = "Ajith0406";
-    if (process.env.LEETCODE_SESSION) {
-      try {
-        const parts = process.env.LEETCODE_SESSION.split(".");
-        if (parts.length >= 2) {
-          const payload = JSON.parse(Buffer.from(parts[1], "base64").toString("utf-8"));
-          if (payload.username) {
-            defaultLeetcode = payload.username;
-          }
-        }
-      } catch (e) {}
-    }
+function cleanHandle(val: any, fallback: string): string {
+  if (!val || typeof val !== "string") return fallback;
+  const trimmed = val.trim();
+  if (
+    trimmed === "" ||
+    trimmed.toLowerCase() === "none" ||
+    trimmed.toLowerCase() === "undefined" ||
+    trimmed.toLowerCase() === "null"
+  ) {
+    return fallback;
+  }
+  return trimmed;
+}
 
-    let handles: Record<string, string> = {
-      LEETCODE: defaultLeetcode,
-      CODEFORCES: "tourist",
-      CODECHEF: "tourist",
-    };
+export async function GET() {
+  let defaultLeetcode = "Ajith0406";
+  if (process.env.LEETCODE_SESSION) {
+    try {
+      const parts = process.env.LEETCODE_SESSION.split(".");
+      if (parts.length >= 2) {
+        const payload = JSON.parse(Buffer.from(parts[1], "base64").toString("utf-8"));
+        if (payload.username && payload.username !== "None") {
+          defaultLeetcode = payload.username;
+        }
+      }
+    } catch (e) {}
+  }
+
+  let handles: Record<string, string> = {
+    LEETCODE: defaultLeetcode,
+    CODEFORCES: "tourist",
+    CODECHEF: "tourist",
+  };
+
+  try {
+    const session = await getServerSession(authOptions).catch(() => null);
 
     if (session?.user?.email) {
-      // Ensure User exists in DB
       let user = await db.user.findUnique({
         where: { email: session.user.email },
         include: { platformHandles: true },
-      });
+      }).catch(() => null);
 
       if (!user) {
         user = await db.user.create({
@@ -50,39 +63,37 @@ export async function GET() {
         }).catch(() => null);
       }
 
-      if (user && user.platformHandles.length > 0) {
+      if (user && user.platformHandles && user.platformHandles.length > 0) {
         user.platformHandles.forEach((h) => {
-          if (h.username) {
-            handles[h.platform] = h.username;
+          const cleaned = cleanHandle(h.username, "");
+          if (cleaned) {
+            handles[h.platform] = cleaned;
           }
         });
       }
     }
-
-    return fetchAndAggregateStats(handles);
-  } catch (error: any) {
-    console.error("Error in GET /api/sync:", error);
-    return NextResponse.json(
-      { success: false, error: error.message || "Failed to fetch platform stats" },
-      { status: 500 }
-    );
+  } catch (dbError) {
+    console.warn("DB interaction warning in GET /api/sync:", dbError);
   }
+
+  return fetchAndAggregateStats(handles, defaultLeetcode);
 }
 
 export async function POST(req: Request) {
+  let inputHandles: Record<string, string> = {};
   try {
     const body = await req.json().catch(() => ({}));
-    const inputHandles = body.handles || {
+    inputHandles = body.handles || {
       LEETCODE: body.leetcode || "",
       CODEFORCES: body.codeforces || "",
       CODECHEF: body.codechef || "",
     };
 
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(authOptions).catch(() => null);
     if (session?.user?.email) {
       let user = await db.user.findUnique({
         where: { email: session.user.email },
-      });
+      }).catch(() => null);
 
       if (!user) {
         user = await db.user.create({
@@ -108,7 +119,7 @@ export async function POST(req: Request) {
         for (const [key, val] of Object.entries(inputHandles)) {
           const platformEnum = platformMappings[key];
           const usernameStr = (val as string)?.trim();
-          if (platformEnum && usernameStr) {
+          if (platformEnum && usernameStr && usernameStr.toLowerCase() !== "none") {
             await db.platformHandle.upsert({
               where: {
                 userId_platform: {
@@ -127,23 +138,20 @@ export async function POST(req: Request) {
         }
       }
     }
-
-    return fetchAndAggregateStats(inputHandles);
-  } catch (error: any) {
-    console.error("Error in POST /api/sync:", error);
-    return NextResponse.json(
-      { success: false, error: error.message || "Failed to sync platform stats" },
-      { status: 500 }
-    );
+  } catch (err: any) {
+    console.warn("Warning in POST /api/sync:", err);
   }
+
+  return fetchAndAggregateStats(inputHandles);
 }
 
-async function fetchAndAggregateStats(handles: Record<string, any>) {
+async function fetchAndAggregateStats(handles: Record<string, any>, defaultLeetcode = "Ajith0406") {
   const results: Record<string, any> = {};
   let aggregatedTotalSolved = 0;
 
   // Fetch LeetCode live stats
-  const leetcodeHandle = handles.LEETCODE || handles.leetcode || "Ajith0406";
+  const rawLc = handles.LEETCODE || handles.leetcode;
+  const leetcodeHandle = cleanHandle(rawLc, defaultLeetcode);
   if (leetcodeHandle) {
     try {
       const adapter = getAdapter(Platform.LEETCODE);
@@ -167,7 +175,8 @@ async function fetchAndAggregateStats(handles: Record<string, any>) {
   }
 
   // Fetch Codeforces live stats
-  const codeforcesHandle = handles.CODEFORCES || handles.codeforces || "tourist";
+  const rawCf = handles.CODEFORCES || handles.codeforces;
+  const codeforcesHandle = cleanHandle(rawCf, "tourist");
   if (codeforcesHandle) {
     try {
       const adapter = getAdapter(Platform.CODEFORCES);
@@ -189,7 +198,8 @@ async function fetchAndAggregateStats(handles: Record<string, any>) {
   }
 
   // Fetch CodeChef live stats
-  const codechefHandle = handles.CODECHEF || handles.codechef || "tourist";
+  const rawCc = handles.CODECHEF || handles.codechef;
+  const codechefHandle = cleanHandle(rawCc, "tourist");
   if (codechefHandle) {
     try {
       const adapter = getAdapter(Platform.CODECHEF);

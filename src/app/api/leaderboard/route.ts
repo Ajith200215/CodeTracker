@@ -98,6 +98,20 @@ export async function GET(req: Request) {
   }
 }
 
+function cleanHandle(val: any, fallback: string): string {
+  if (!val || typeof val !== "string") return fallback;
+  const trimmed = val.trim();
+  if (
+    trimmed === "" ||
+    trimmed.toLowerCase() === "none" ||
+    trimmed.toLowerCase() === "undefined" ||
+    trimmed.toLowerCase() === "null"
+  ) {
+    return fallback;
+  }
+  return trimmed;
+}
+
 async function computeStudentMetrics(
   id: string,
   name: string,
@@ -105,10 +119,11 @@ async function computeStudentMetrics(
   email: string,
   handles: Record<string, string>
 ) {
-  const lcHandle = handles.LEETCODE || (name.includes("Ajith") ? "Ajith0406" : name.includes("Neal") ? "neal_wu" : "alfa");
-  const cfHandle = handles.CODEFORCES || "tourist";
-  const ccHandle = handles.CODECHEF || "tourist";
-  const hrHandle = handles.HACKERRANK || name.split(" ")[0].toLowerCase();
+  const lcDefault = name.includes("Ajith") ? "Ajith0406" : name.includes("Neal") ? "neal_wu" : "alfa";
+  const lcHandle = cleanHandle(handles.LEETCODE, lcDefault);
+  const cfHandle = cleanHandle(handles.CODEFORCES, "tourist");
+  const ccHandle = cleanHandle(handles.CODECHEF, "tourist");
+  const hrHandle = cleanHandle(handles.HACKERRANK, name.split(" ")[0].toLowerCase());
 
   let lcStats = { username: lcHandle, solved: 32, easy: 3, medium: 23, hard: 6, rating: 3485361 };
   let cfStats = { username: cfHandle, solved: 3027, rating: 3530, maxRating: 4009, rank: "Grandmaster" };
