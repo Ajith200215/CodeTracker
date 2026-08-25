@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 import { getAdapter } from "@/lib/adapters";
-import { Platform } from "@prisma/client";
+import { Platform, Role } from "@prisma/client";
 import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
+
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
@@ -24,39 +25,37 @@ export async function GET() {
       } catch (e) {}
     }
 
-    let emailPrefix = "";
-    if (session?.user?.email) {
-      emailPrefix = session.user.email.split("@")[0].replace(".", "_");
-    }
-
     let handles: Record<string, string> = {
       LEETCODE: defaultLeetcode,
-      CODEFORCES: emailPrefix || "tourist",
-      CODECHEF: emailPrefix || "tourist",
+      CODEFORCES: "tourist",
+      CODECHEF: "tourist",
     };
 
     if (session?.user?.email) {
-      const user = await db.user.findUnique({
+      // Ensure User exists in DB
+      let user = await db.user.findUnique({
         where: { email: session.user.email },
         include: { platformHandles: true },
       });
 
-      if (user) {
-        if (user.platformHandles.length > 0) {
-          user.platformHandles.forEach((h) => {
+      if (!user) {
+        user = await db.user.create({
+          data: {
+            email: session.user.email,
+            name: session.user.name || session.user.email.split("@")[0],
+            role: Role.STUDENT,
+            regNo: "2026-CS-0142",
+          },
+          include: { platformHandles: true },
+        }).catch(() => null);
+      }
+
+      if (user && user.platformHandles.length > 0) {
+        user.platformHandles.forEach((h) => {
+          if (h.username) {
             handles[h.platform] = h.username;
-          });
-        } else {
-          // Auto-bind default detected handle for new logged in student
-          await db.platformHandle.createMany({
-            data: [
-              { userId: user.id, platform: Platform.LEETCODE, username: defaultLeetcode },
-              { userId: user.id, platform: Platform.CODEFORCES, username: handles.CODEFORCES },
-              { userId: user.id, platform: Platform.CODECHEF, username: handles.CODECHEF },
-            ],
-            skipDuplicates: true,
-          }).catch(() => {});
-        }
+          }
+        });
       }
     }
 
@@ -73,7 +72,7 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json().catch(() => ({}));
-    const handles = body.handles || {
+    const inputHandles = body.handles || {
       LEETCODE: body.leetcode || "",
       CODEFORCES: body.codeforces || "",
       CODECHEF: body.codechef || "",
@@ -81,9 +80,20 @@ export async function POST(req: Request) {
 
     const session = await getServerSession(authOptions);
     if (session?.user?.email) {
-      const user = await db.user.findUnique({
+      let user = await db.user.findUnique({
         where: { email: session.user.email },
       });
+
+      if (!user) {
+        user = await db.user.create({
+          data: {
+            email: session.user.email,
+            name: session.user.name || session.user.email.split("@")[0],
+            role: Role.STUDENT,
+            regNo: "2026-CS-0142",
+          },
+        }).catch(() => null);
+      }
 
       if (user) {
         const platformMappings: Record<string, Platform> = {
@@ -95,7 +105,7 @@ export async function POST(req: Request) {
           CODECHEF: Platform.CODECHEF,
         };
 
-        for (const [key, val] of Object.entries(handles)) {
+        for (const [key, val] of Object.entries(inputHandles)) {
           const platformEnum = platformMappings[key];
           const usernameStr = (val as string)?.trim();
           if (platformEnum && usernameStr) {
@@ -118,7 +128,7 @@ export async function POST(req: Request) {
       }
     }
 
-    return fetchAndAggregateStats(handles);
+    return fetchAndAggregateStats(inputHandles);
   } catch (error: any) {
     console.error("Error in POST /api/sync:", error);
     return NextResponse.json(
@@ -133,7 +143,7 @@ async function fetchAndAggregateStats(handles: Record<string, any>) {
   let aggregatedTotalSolved = 0;
 
   // Fetch LeetCode live stats
-  const leetcodeHandle = handles.LEETCODE || handles.leetcode || "";
+  const leetcodeHandle = handles.LEETCODE || handles.leetcode || "Ajith0406";
   if (leetcodeHandle) {
     try {
       const adapter = getAdapter(Platform.LEETCODE);
@@ -154,12 +164,10 @@ async function fetchAndAggregateStats(handles: Record<string, any>) {
       console.warn("LeetCode fetch error:", e.message);
       results.leetcode = { username: leetcodeHandle, solved: 0, easy: 0, medium: 0, hard: 0, rating: 0 };
     }
-  } else {
-    results.leetcode = { username: "None", solved: 0, easy: 0, medium: 0, hard: 0, rating: 0 };
   }
 
   // Fetch Codeforces live stats
-  const codeforcesHandle = handles.CODEFORCES || handles.codeforces || "";
+  const codeforcesHandle = handles.CODEFORCES || handles.codeforces || "tourist";
   if (codeforcesHandle) {
     try {
       const adapter = getAdapter(Platform.CODEFORCES);
@@ -178,12 +186,10 @@ async function fetchAndAggregateStats(handles: Record<string, any>) {
       console.warn("Codeforces fetch error:", e.message);
       results.codeforces = { username: codeforcesHandle, solved: 0, rating: 0, maxRating: 0, rank: "N/A" };
     }
-  } else {
-    results.codeforces = { username: "None", solved: 0, rating: 0, maxRating: 0, rank: "N/A" };
   }
 
   // Fetch CodeChef live stats
-  const codechefHandle = handles.CODECHEF || handles.codechef || "";
+  const codechefHandle = handles.CODECHEF || handles.codechef || "tourist";
   if (codechefHandle) {
     try {
       const adapter = getAdapter(Platform.CODECHEF);
@@ -200,8 +206,6 @@ async function fetchAndAggregateStats(handles: Record<string, any>) {
     } catch (e: any) {
       results.codechef = { username: codechefHandle, solved: 0, rating: 0, stars: "0★" };
     }
-  } else {
-    results.codechef = { username: "None", solved: 0, rating: 0, stars: "0★" };
   }
 
   // Calculate aggregated CodeScore rating formula
