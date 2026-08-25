@@ -1,6 +1,6 @@
 import React from "react";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authOptions";
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 import { StudentDashboardView } from "@/components/dashboard/StudentDashboardView";
