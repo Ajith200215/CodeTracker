@@ -33,6 +33,34 @@ export default function Home() {
     }
   }, [session]);
 
+  // Handle Hash Routing for Browser Back/Forward navigation
+  useEffect(() => {
+    const hash = window.location.hash.replace('#', '');
+    if (hash && hash !== activeTab) {
+      setActiveTab(hash);
+    }
+
+    const handleHashChange = () => {
+      const currentHash = window.location.hash.replace('#', '');
+      setActiveTab(currentHash || 'home');
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  // Update URL hash when activeTab changes programmatically
+  useEffect(() => {
+    const currentHash = window.location.hash.replace('#', '');
+    if (currentHash !== activeTab) {
+      if (activeTab === 'home') {
+        window.history.pushState(null, '', window.location.pathname + window.location.search);
+      } else {
+        window.history.pushState(null, '', `#${activeTab}`);
+      }
+    }
+  }, [activeTab]);
+
   const handleRoleToggle = (role: "STUDENT" | "TEACHER") => {
     setCurrentRole(role);
     if (role === "TEACHER" && activeTab === "dashboard") {
