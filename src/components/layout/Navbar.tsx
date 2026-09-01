@@ -65,9 +65,6 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={() => setActiveTab("home")}
             className="flex items-center gap-2.5 cursor-pointer group"
           >
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#6C5CE7] to-[#8B8CF6] flex items-center justify-center text-white shadow-md shadow-[#8B8CF6]/30 group-hover:scale-105 transition-transform">
-              <Code2 className="w-5.5 h-5.5 stroke-[2.5]" />
-            </div>
             <div className="flex flex-col">
               <div className="flex items-center gap-1">
                 <span className="font-serif-display text-2xl font-bold tracking-tight text-[#1E1F2B] dark:text-white">
