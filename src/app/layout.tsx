@@ -45,6 +45,9 @@ export default function RootLayout({
                 // Dark mode temporarily disabled by user request. Defaulting to light mode.
                 document.documentElement.classList.remove('dark');
                 localStorage.setItem('theme', 'light');
+                
+                // Disable right-click globally to prevent inspection
+                document.addEventListener('contextmenu', event => event.preventDefault());
               } catch (_) {}
             `,
           }}
