@@ -345,7 +345,7 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
                     required
                     value={studentLoginId}
                     onChange={(e) => setStudentLoginId(e.target.value)}
-                    placeholder="e.g. RA2111003010142 or student@srmist.edu.in"
+                    placeholder="e.g. RA2411003011067 or student@srmist.edu.in"
                     autoComplete="off"
                     data-lpignore="true"
                     className="w-full bg-slate-50 dark:bg-gray-900 border border-slate-200 dark:border-white/10 rounded-xl p-3 text-slate-900 dark:text-slate-100 font-mono focus:outline-none focus:border-[#8B8CF6]"
@@ -404,7 +404,7 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
                       required
                       value={raNumber}
                       onChange={(e) => setRaNumber(e.target.value)}
-                      placeholder="RA2111003010142"
+                      placeholder="RA2411003011067"
                       className="w-full bg-slate-50 dark:bg-gray-900 border border-slate-200 dark:border-white/10 rounded-xl p-2.5 font-mono text-slate-900 dark:text-slate-100 focus:outline-none focus:border-[#8B8CF6]"
                     />
                   </div>
