@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, use } from "react";
 import Editor from "@monaco-editor/react";
 import { Play, Send, CheckCircle2, XCircle, Code2, Terminal, ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -13,7 +13,10 @@ const STARTER_CODES: Record<string, string> = {
   sql: `SELECT * FROM users WHERE active = 1 ORDER BY created_at DESC;`,
 };
 
-export default function CodingArenaPage({ params }: { params: { slug: string } }) {
+export default function CodingArenaPage({ params }: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = use(params);
+  const slug = resolvedParams.slug;
+
   const [language, setLanguage] = useState("python");
   const [code, setCode] = useState(STARTER_CODES["python"]);
   const [running, setRunning] = useState(false);
@@ -67,7 +70,7 @@ export default function CodingArenaPage({ params }: { params: { slug: string } }
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          problemId: params.slug,
+          problemId: slug,
           language,
           code,
         }),
@@ -93,7 +96,7 @@ export default function CodingArenaPage({ params }: { params: { slug: string } }
           </Link>
           <div className="flex items-center gap-2 font-bold text-slate-200">
             <Code2 className="w-5 h-5 text-indigo-400" />
-            <span className="capitalize">{params.slug.replace(/-/g, " ")}</span>
+            <span className="capitalize">{slug.replace(/-/g, " ")}</span>
           </div>
           <span className="text-xs bg-emerald-950 text-emerald-400 border border-emerald-800 px-2 py-0.5 rounded font-medium">
             EASY

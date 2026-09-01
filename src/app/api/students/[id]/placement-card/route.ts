@@ -4,11 +4,12 @@ import { calculateCodeScore } from "@/lib/platforms/stats-aggregator";
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const student = await prisma.user.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         platformHandles: {
           include: {
