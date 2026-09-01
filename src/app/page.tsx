@@ -64,7 +64,7 @@ export default function Home() {
           <main>
             <HeroSection
               onStart={() => setActiveTab(currentRole === "TEACHER" ? "monitor" : "dashboard")}
-              onWatchDemo={() => setActiveTab("exam")}
+              onWatchDemo={() => {}}
             />
             <WhatWeOffer
               onSelectFeature={(feat) => {
