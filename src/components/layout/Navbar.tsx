@@ -84,7 +84,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               { id: "home", label: "Home" },
               { id: "dashboard", label: "Dashboard" },
               { id: "leaderboard", label: "Leaderboard" },
-              { id: "classrooms", label: "Classrooms", locked: true },
+              { id: "classrooms", label: "Classrooms" },
               { id: "exam", label: "Live Exam", locked: true },
               { id: "monitor", label: "Proctor Monitor", teacherOnly: true, locked: true },
             ]
