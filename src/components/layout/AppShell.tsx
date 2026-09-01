@@ -19,7 +19,8 @@ import {
   Menu,
   X,
   Mail,
-  Trophy
+  Trophy,
+  Lock
 } from "lucide-react";
 
 interface AppShellProps {
@@ -71,16 +72,16 @@ export const AppShell: React.FC<AppShellProps> = ({
   const studentNavItems = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
     { id: "leaderboard", label: "Leaderboard 🏆", icon: Trophy },
-    { id: "classrooms", label: "Classrooms", icon: BookOpen },
-    { id: "tests", label: "Tests", icon: GraduationCap },
+    { id: "classrooms", label: "Classrooms", icon: BookOpen, locked: true },
+    { id: "tests", label: "Proctored Exam", icon: GraduationCap, locked: true },
     { id: "feedback", label: "Feedback", icon: MessageSquareQuote },
   ];
 
   const teacherNavItems = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
     { id: "leaderboard", label: "Leaderboard 🏆", icon: Trophy },
-    { id: "classrooms", label: "Classrooms", icon: BookOpen },
-    { id: "tests", label: "Tests", icon: GraduationCap },
+    { id: "classrooms", label: "Classrooms", icon: BookOpen, locked: true },
+    { id: "tests", label: "Proctored Exam", icon: GraduationCap, locked: true },
     { id: "monitor", label: "Monitor", icon: ShieldAlert },
   ];
 
@@ -127,19 +128,29 @@ export const AppShell: React.FC<AppShellProps> = ({
             {navItems.map((item) => {
               const isActive = activeNav === item.id;
               const Icon = item.icon;
+              const isLocked = (item as any).locked;
               return (
                 <button
                   key={item.id}
-                  onClick={() => setActiveNav(item.id)}
+                  onClick={() => {
+                    if (isLocked) return; // Prevent navigation if locked
+                    setActiveNav(item.id);
+                  }}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-xs font-bold transition-all ${
-                    isActive
-                      ? "bg-[#6C5CE7] text-white shadow-md shadow-[#6C5CE7]/25"
-                      : "text-[#5A5C75] hover:bg-[#F0F2FF] hover:text-[#1E1F2B]"
+                    isLocked 
+                      ? "opacity-60 cursor-not-allowed text-[#6A6C88] bg-[#F6F7FF]/50" 
+                      : isActive
+                        ? "bg-[#6C5CE7] text-white shadow-md shadow-[#6C5CE7]/25"
+                        : "text-[#5A5C75] hover:bg-[#F0F2FF] hover:text-[#1E1F2B]"
                   }`}
                 >
                   <Icon className="w-4 h-4" />
                   <span>{item.label}</span>
-                  {isActive && <ChevronRight className="w-3.5 h-3.5 ml-auto text-white/80" />}
+                  {isLocked ? (
+                    <Lock className="w-3.5 h-3.5 ml-auto text-slate-400" />
+                  ) : isActive ? (
+                    <ChevronRight className="w-3.5 h-3.5 ml-auto text-white/80" />
+                  ) : null}
                 </button>
               );
             })}
