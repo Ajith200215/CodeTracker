@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Sparkles, Award } from "lucide-react";
+import { Sparkles, Award, Github } from "lucide-react";
 
 export const TeacherRoster: React.FC = () => {
   const teachers = [
@@ -76,9 +76,12 @@ export const TeacherRoster: React.FC = () => {
                 </div>
 
                 {/* Teacher Info */}
-                <h3 className="font-serif-display text-2xl font-bold text-white mb-1 group-hover:text-white/80 transition-colors">
-                  {teacher.name}
-                </h3>
+                <div className="flex items-center gap-2 mb-1">
+                  <h3 className="font-serif-display text-2xl font-bold text-white group-hover:text-white/80 transition-colors">
+                    {teacher.name}
+                  </h3>
+                  <Github className="w-5 h-5 text-white/70 group-hover:text-white transition-colors" />
+                </div>
                 <p className="text-xs font-bold text-white/80 uppercase tracking-wider mb-1">
                   {teacher.role}
                 </p>
