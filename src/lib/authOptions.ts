@@ -20,27 +20,51 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       name: "College Account Sign In",
       credentials: {
-        email: { label: "Email", type: "email", placeholder: "student@college.edu" },
+        loginId: { label: "Login ID", type: "text" },
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
         role: { label: "Role", type: "text" },
+        name: { label: "Name", type: "text" },
+        regNo: { label: "RegNo", type: "text" },
+        branch: { label: "Branch", type: "text" },
       },
       async authorize(credentials) {
-        if (!credentials?.email) return null;
+        const idInput = (credentials?.loginId || credentials?.email || "").trim();
+        if (!idInput) return null;
 
-        const email = credentials.email.toLowerCase().trim();
-        let user = await db.user.findUnique({
-          where: { email },
+        const assignedRole = credentials?.role === "TEACHER" ? Role.TEACHER : Role.STUDENT;
+
+        // Search user by email or regNo
+        let user = await db.user.findFirst({
+          where: {
+            OR: [
+              { email: idInput.toLowerCase() },
+              { regNo: idInput },
+            ],
+          },
         });
 
         if (!user) {
-          const assignedRole = credentials.role === "TEACHER" ? Role.TEACHER : Role.STUDENT;
+          const userEmail = idInput.includes("@") ? idInput.toLowerCase() : `${idInput.toLowerCase()}@srmist.edu.in`;
+          const regNoVal = credentials?.regNo || (assignedRole === Role.STUDENT ? idInput : undefined);
+
           user = await db.user.create({
             data: {
-              email,
-              name: email.split("@")[0].replace(".", " "),
+              email: userEmail,
+              name: credentials?.name || idInput.split("@")[0].replace(".", " "),
               role: assignedRole,
-              regNo: assignedRole === Role.STUDENT ? "2026-CS-0142" : undefined,
+              regNo: regNoVal,
+              branch: credentials?.branch || "CSE Core",
             },
           });
+        } else if (credentials?.regNo || credentials?.branch) {
+          await db.user.update({
+            where: { id: user.id },
+            data: {
+              regNo: credentials?.regNo || user.regNo,
+              branch: credentials?.branch || user.branch,
+            },
+          }).catch(() => null);
         }
 
         return {
