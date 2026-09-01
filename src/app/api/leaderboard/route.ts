@@ -32,40 +32,22 @@ export async function GET(req: Request) {
       take: 50,
     }).catch(() => []);
 
-    // Roster fallback if DB is empty or has 1 user
-    const sampleRoster = [
-      { id: "s1", name: "Gennady Korotkevich", regNo: "2026-CS-0101", email: "tourist@college.edu", handles: { LEETCODE: "tourist", CODEFORCES: "tourist", CODECHEF: "tourist" } },
-      { id: "s2", name: "Ajith Kumar", regNo: "2026-CS-0142", email: "ajith@college.edu", handles: { LEETCODE: "Ajith0406", CODEFORCES: "tourist", CODECHEF: "tourist" } },
-      { id: "s3", name: "Neal Wu", regNo: "2026-CS-0088", email: "neal.wu@college.edu", handles: { LEETCODE: "neal_wu", CODEFORCES: "neal_wu", CODECHEF: "tourist" } },
-      { id: "s4", name: "Sarah Hessy", regNo: "2026-CS-0045", email: "sarah.hessy@college.edu", handles: { LEETCODE: "sarah_h", CODEFORCES: "tourist", CODECHEF: "tourist" } },
-      { id: "s5", name: "Alex Chen", regNo: "2026-CS-0032", email: "alex.chen@college.edu", handles: { LEETCODE: "alfa", CODEFORCES: "tourist", CODECHEF: "tourist" } },
-      { id: "s6", name: "Priya Sharma", regNo: "2026-CS-0119", email: "priya.sharma@college.edu", handles: { LEETCODE: "priya_s", CODEFORCES: "tourist", CODECHEF: "tourist" } },
-      { id: "s7", name: "David Kim", regNo: "2026-CS-0074", email: "david.kim@college.edu", handles: { LEETCODE: "dkim", CODEFORCES: "tourist", CODECHEF: "tourist" } },
-    ];
-
     let leaderboardEntries: any[] = [];
 
-    if (dbStudents.length > 0) {
-      for (const student of dbStudents) {
-        const studentHandles: Record<string, string> = {};
-        student.platformHandles.forEach((h) => {
-          studentHandles[h.platform] = h.username;
-        });
+    for (const student of dbStudents) {
+      const studentHandles: Record<string, string> = {};
+      student.platformHandles.forEach((h) => {
+        studentHandles[h.platform] = h.username;
+      });
 
-        const entry = await computeStudentMetrics(
-          student.id,
-          student.name,
-          student.regNo || "2026-CS-0142",
-          student.email,
-          studentHandles
-        );
-        leaderboardEntries.push(entry);
-      }
-    } else {
-      for (const s of sampleRoster) {
-        const entry = await computeStudentMetrics(s.id, s.name, s.regNo, s.email, s.handles);
-        leaderboardEntries.push(entry);
-      }
+      const entry = await computeStudentMetrics(
+        student.id,
+        student.name,
+        student.regNo || "N/A",
+        student.email,
+        studentHandles
+      );
+      leaderboardEntries.push(entry);
     }
 
     // Sort leaderboard based on sortBy parameter
@@ -119,16 +101,15 @@ async function computeStudentMetrics(
   email: string,
   handles: Record<string, string>
 ) {
-  const lcDefault = name.includes("Ajith") ? "Ajith0406" : name.includes("Neal") ? "neal_wu" : "alfa";
-  const lcHandle = cleanHandle(handles.LEETCODE, lcDefault);
-  const cfHandle = cleanHandle(handles.CODEFORCES, "tourist");
-  const ccHandle = cleanHandle(handles.CODECHEF, "tourist");
-  const hrHandle = cleanHandle(handles.HACKERRANK, name.split(" ")[0].toLowerCase());
+  const lcHandle = cleanHandle(handles.LEETCODE, "");
+  const cfHandle = cleanHandle(handles.CODEFORCES, "");
+  const ccHandle = cleanHandle(handles.CODECHEF, "");
+  const hrHandle = cleanHandle(handles.HACKERRANK, "");
 
-  let lcStats = { username: lcHandle, solved: 32, easy: 3, medium: 23, hard: 6, rating: 3485361 };
-  let cfStats = { username: cfHandle, solved: 3027, rating: 3530, maxRating: 4009, rank: "Grandmaster" };
-  let ccStats = { username: ccHandle, solved: 632, rating: 3355, stars: "5★" };
-  let hrStats = { username: hrHandle, solved: 45, rating: 500, rank: "3★ Badges" };
+  let lcStats = { username: lcHandle || "N/A", solved: 0, easy: 0, medium: 0, hard: 0, rating: 0 };
+  let cfStats = { username: cfHandle || "N/A", solved: 0, rating: 0, maxRating: 0, rank: "N/A" };
+  let ccStats = { username: ccHandle || "N/A", solved: 0, rating: 0, stars: "N/A" };
+  let hrStats = { username: hrHandle || "N/A", solved: 0, rating: 0, rank: "N/A" };
 
   try {
     const lcAdapter = getAdapter(Platform.LEETCODE);
@@ -136,7 +117,7 @@ async function computeStudentMetrics(
       const stats = await lcAdapter.fetchStats(lcHandle);
       lcStats = {
         username: lcHandle,
-        solved: stats.totalSolved,
+        solved: stats.totalSolved || 0,
         easy: stats.easySolved || 0,
         medium: stats.mediumSolved || 0,
         hard: stats.hardSolved || 0,
@@ -151,10 +132,10 @@ async function computeStudentMetrics(
       const stats = await cfAdapter.fetchStats(cfHandle);
       cfStats = {
         username: cfHandle,
-        solved: stats.totalSolved,
+        solved: stats.totalSolved || 0,
         rating: stats.rating || 0,
         maxRating: stats.maxRating || 0,
-        rank: stats.rank || "Rated",
+        rank: stats.rank || "N/A",
       };
     }
   } catch (e) {}
@@ -165,9 +146,9 @@ async function computeStudentMetrics(
       const stats = await ccAdapter.fetchStats(ccHandle);
       ccStats = {
         username: ccHandle,
-        solved: stats.totalSolved,
+        solved: stats.totalSolved || 0,
         rating: stats.rating || 0,
-        stars: (stats as any).stars || "3★",
+        stars: (stats as any).stars || "N/A",
       };
     }
   } catch (e) {}

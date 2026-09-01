@@ -32,7 +32,7 @@ interface LeaderboardEntry {
 }
 
 export const UnifiedLeaderboardView: React.FC = () => {
-  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
+  const [rawLeaderboard, setRawLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<"codeScore" | "totalSolved" | "leetcode" | "codeforces" | "codechef">("codeScore");
@@ -40,10 +40,10 @@ export const UnifiedLeaderboardView: React.FC = () => {
   const fetchLeaderboard = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/leaderboard?sortBy=${sortBy}&q=${encodeURIComponent(searchQuery)}`);
+      const res = await fetch(`/api/leaderboard`);
       const data = await res.json();
       if (data.success && Array.isArray(data.leaderboard)) {
-        setLeaderboard(data.leaderboard);
+        setRawLeaderboard(data.leaderboard);
       }
     } catch (err) {
       console.error("Failed to fetch leaderboard:", err);
@@ -54,10 +54,34 @@ export const UnifiedLeaderboardView: React.FC = () => {
 
   useEffect(() => {
     fetchLeaderboard();
-  }, [sortBy, searchQuery]);
+  }, []);
 
-  const top3 = leaderboard.slice(0, 3);
-  const restLeaderboard = leaderboard.slice(3);
+  const processedLeaderboard = React.useMemo(() => {
+    let filtered = rawLeaderboard;
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      filtered = filtered.filter(s => 
+        s.name.toLowerCase().includes(q) || 
+        s.regNo.toLowerCase().includes(q) ||
+        s.email.toLowerCase().includes(q)
+      );
+    }
+    
+    const sorted = [...filtered].sort((a, b) => {
+      if (sortBy === "totalSolved") return b.totalSolved - a.totalSolved;
+      if (sortBy === "leetcode") return b.leetcode.solved - a.leetcode.solved;
+      if (sortBy === "codeforces") return b.codeforces.rating - a.codeforces.rating;
+      if (sortBy === "codechef") return b.codechef.rating - a.codechef.rating;
+      return b.codeScore - a.codeScore;
+    });
+
+    return sorted.map((entry, index) => ({
+      ...entry,
+      rank: index + 1
+    }));
+  }, [rawLeaderboard, searchQuery, sortBy]);
+
+  const top3 = processedLeaderboard.slice(0, 3);
 
   return (
     <div className="py-8 px-4 lg:px-12 max-w-7xl mx-auto space-y-8">
@@ -222,7 +246,7 @@ export const UnifiedLeaderboardView: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-[#8B8CF6]/10 text-xs font-semibold">
-              {leaderboard.map((student) => (
+              {processedLeaderboard.map((student) => (
                 <tr key={student.id} className="hover:bg-[#F0F2FF]/60 transition-colors">
                   <td className="p-4 pl-6">
                     <span className={`w-7 h-7 rounded-full inline-flex items-center justify-center font-extrabold font-mono text-xs ${
