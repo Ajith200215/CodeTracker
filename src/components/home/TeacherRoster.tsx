@@ -44,21 +44,21 @@ export const TeacherRoster: React.FC = () => {
   ];
 
   return (
-    <section className="py-20 px-4 lg:px-12 bg-[#9B9DF6] text-white relative overflow-hidden">
+    <section className="py-20 px-4 lg:px-12 bg-[#9B9DF6] text-[#1E1F2B] dark:text-white relative overflow-hidden">
       {/* Decorative Wavy Lines & Sparkles */}
-      <div className="absolute top-8 left-10 text-white/30">
+      <div className="absolute top-8 left-10 text-[#1E1F2B] dark:text-white/30">
         <Sparkles className="w-12 h-12" />
       </div>
-      <div className="absolute bottom-8 right-10 text-white/20">
+      <div className="absolute bottom-8 right-10 text-[#1E1F2B] dark:text-white/20">
         <Award className="w-16 h-16" />
       </div>
 
       <div className="max-w-7xl mx-auto text-center">
         {/* Section Title */}
-        <h2 className="font-serif-display text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-3">
+        <h2 className="font-serif-display text-4xl sm:text-5xl font-extrabold text-[#1E1F2B] dark:text-white tracking-tight mb-3">
           Meet our team
         </h2>
-        <p className="text-sm sm:text-base text-white/90 font-medium max-w-xl mx-auto mb-14 leading-relaxed">
+        <p className="text-sm sm:text-base text-[#1E1F2B] dark:text-white/90 font-medium max-w-xl mx-auto mb-14 leading-relaxed">
           Discover the developers and mentors at CodeTracker who are ready to 
           accompany students on their learning journey.
         </p>
@@ -80,7 +80,7 @@ export const TeacherRoster: React.FC = () => {
                 {/* Circular Avatar Container */}
                 <div className="relative mb-6">
                   <div className={`w-44 h-44 rounded-full ${teacher.bgClass} flex items-center justify-center shadow-xl transition-transform group-hover:scale-105 border-4 border-white`}>
-                    <span className="text-5xl font-extrabold text-white font-serif-display">
+                    <span className="text-5xl font-extrabold text-[#1E1F2B] dark:text-white font-serif-display">
                       {teacher.name.split(" ").map(n => n[0]).join("").slice(0, 2)}
                     </span>
                   </div>
@@ -88,15 +88,15 @@ export const TeacherRoster: React.FC = () => {
 
                 {/* Teacher Info */}
                 <div className="flex items-center gap-2 mb-1">
-                  <h3 className="font-serif-display text-2xl font-bold text-white group-hover:text-white/80 transition-colors">
+                  <h3 className="font-serif-display text-2xl font-bold text-[#1E1F2B] dark:text-white group-hover:text-[#1E1F2B] dark:text-white/80 transition-colors">
                     {teacher.name}
                   </h3>
-                  <GithubIcon className="w-5 h-5 text-white/70 group-hover:text-white transition-colors" />
+                  <GithubIcon className="w-5 h-5 text-[#1E1F2B] dark:text-white/70 group-hover:text-[#1E1F2B] dark:text-white transition-colors" />
                 </div>
-                <p className="text-xs font-bold text-white/80 uppercase tracking-wider mb-1">
+                <p className="text-xs font-bold text-[#1E1F2B] dark:text-white/80 uppercase tracking-wider mb-1">
                   {teacher.role}
                 </p>
-                <span className="text-[11px] font-semibold text-white/70 bg-white/10 px-3 py-1 rounded-full">
+                <span className="text-[11px] font-semibold text-[#1E1F2B] dark:text-white/70 bg-white dark:bg-[#18181f]/10 px-3 py-1 rounded-full">
                   {teacher.subject}
                 </span>
               </a>

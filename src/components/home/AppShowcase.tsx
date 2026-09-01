@@ -23,10 +23,10 @@ export const AppShowcase: React.FC<AppShowcaseProps> = ({ onOpenApp }) => {
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="font-serif-display text-4xl sm:text-5xl font-extrabold text-[#1E1F2B] tracking-tight">
+          <h2 className="font-serif-display text-4xl sm:text-5xl font-extrabold text-[#1E1F2B] dark:text-white tracking-tight">
             CodeTracker mobile & web app
           </h2>
-          <p className="text-sm sm:text-base text-[#5A5C75] font-medium mt-3 leading-relaxed">
+          <p className="text-sm sm:text-base text-[#5A5C75] dark:text-slate-400 font-medium mt-3 leading-relaxed">
             CodeTracker is an interactive coding progress app designed specifically for 
             colleges, with advanced analytics and live proctoring features.
           </p>
@@ -35,9 +35,9 @@ export const AppShowcase: React.FC<AppShowcaseProps> = ({ onOpenApp }) => {
         {/* 2 Top Showcase Cards Side-by-Side */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           {/* Card 1: Friendly User Interface */}
-          <div className="bg-white rounded-[36px] p-8 border border-[#8B8CF6]/20 shadow-xl shadow-[#8B8CF6]/10 flex flex-col justify-between relative overflow-hidden">
+          <div className="bg-white dark:bg-[#18181f] rounded-[36px] p-8 border border-[#8B8CF6]/20 shadow-xl shadow-[#8B8CF6]/10 flex flex-col justify-between relative overflow-hidden">
             <div className="text-center mb-6">
-              <h3 className="font-serif-display text-2xl font-bold text-[#1E1F2B]">
+              <h3 className="font-serif-display text-2xl font-bold text-[#1E1F2B] dark:text-white">
                 Very friendly user interface
               </h3>
             </div>
@@ -55,13 +55,13 @@ export const AppShowcase: React.FC<AppShowcaseProps> = ({ onOpenApp }) => {
               </div>
 
               {/* Central App Card Preview */}
-              <div className="bg-white p-5 rounded-2xl border border-[#8B8CF6]/30 shadow-lg w-full max-w-xs text-left">
+              <div className="bg-white dark:bg-[#18181f] p-5 rounded-2xl border border-[#8B8CF6]/30 shadow-lg w-full max-w-xs text-left">
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-8 h-8 rounded-full bg-[#8B8CF6]/20 flex items-center justify-center text-[#6C5CE7]">
                     <ShieldCheck className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className="text-xs font-bold text-[#1E1F2B]">Proctor Status</div>
+                    <div className="text-xs font-bold text-[#1E1F2B] dark:text-white">Proctor Status</div>
                     <div className="text-[10px] text-[#4ADE80] font-bold">0 Warnings (Clean)</div>
                   </div>
                 </div>
@@ -73,9 +73,9 @@ export const AppShowcase: React.FC<AppShowcaseProps> = ({ onOpenApp }) => {
           </div>
 
           {/* Card 2: Complete Learning & Practice Media */}
-          <div className="bg-white rounded-[36px] p-8 border border-[#8B8CF6]/20 shadow-xl shadow-[#8B8CF6]/10 flex flex-col justify-between relative overflow-hidden">
+          <div className="bg-white dark:bg-[#18181f] rounded-[36px] p-8 border border-[#8B8CF6]/20 shadow-xl shadow-[#8B8CF6]/10 flex flex-col justify-between relative overflow-hidden">
             <div className="text-center mb-6">
-              <h3 className="font-serif-display text-2xl font-bold text-[#1E1F2B]">
+              <h3 className="font-serif-display text-2xl font-bold text-[#1E1F2B] dark:text-white">
                 Complete coding & analytics media
               </h3>
             </div>
@@ -83,12 +83,12 @@ export const AppShowcase: React.FC<AppShowcaseProps> = ({ onOpenApp }) => {
             {/* Inner Practice Showcase */}
             <div className="bg-[#FFF4F2] rounded-3xl p-6 relative min-h-[260px] flex items-center justify-center">
               {/* Floating Code Practice Badge */}
-              <div className="bg-white/90 backdrop-blur-md p-4 rounded-2xl border border-[#F8A195]/40 shadow-lg w-full max-w-xs text-left">
+              <div className="bg-white dark:bg-[#18181f]/90 backdrop-blur-md p-4 rounded-2xl border border-[#F8A195]/40 shadow-lg w-full max-w-xs text-left">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-extrabold text-[#1E1F2B]">Drawing & Logic</span>
+                  <span className="text-xs font-extrabold text-[#1E1F2B] dark:text-white">Drawing & Logic</span>
                   <Code2 className="w-4 h-4 text-[#F8A195]" />
                 </div>
-                <div className="text-2xl font-black text-[#1E1F2B] font-serif-display">
+                <div className="text-2xl font-black text-[#1E1F2B] dark:text-white font-serif-display">
                   Practice
                 </div>
                 <div className="mt-3 flex items-center gap-1.5 text-xs text-[#F8A195] font-bold">
@@ -103,7 +103,7 @@ export const AppShowcase: React.FC<AppShowcaseProps> = ({ onOpenApp }) => {
         {/* Bottom Banner Card (Matching Warm Coral Edulite Download Banner) */}
         <div className="bg-[#F8A195] rounded-[36px] p-8 sm:p-10 text-white flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl shadow-[#F8A195]/25">
           <div>
-            <h3 className="font-serif-display text-3xl font-extrabold text-[#1E1F2B] mb-2">
+            <h3 className="font-serif-display text-3xl font-extrabold text-[#1E1F2B] dark:text-white mb-2">
               Launch the app now
             </h3>
             <p className="text-sm font-semibold text-white/90 max-w-lg">

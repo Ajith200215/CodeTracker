@@ -35,8 +35,24 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${jakartaSans.variable} ${playfairDisplay.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col font-sans bg-[#F6F7FF] text-[#1E1F2B] selection:bg-[#8B8CF6] selection:text-white">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                  document.documentElement.classList.add('dark')
+                } else {
+                  document.documentElement.classList.remove('dark')
+                }
+              } catch (_) {}
+            `,
+          }}
+        />
+      </head>
+      <body className="min-h-full flex flex-col font-sans bg-[#F6F7FF] dark:bg-[#09090b] text-[#1E1F2B] dark:text-[#E2E8F0] selection:bg-[#8B8CF6] selection:text-white transition-colors duration-300">
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

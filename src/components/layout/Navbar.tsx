@@ -34,6 +34,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     if (typeof document !== "undefined") {
       const isDark = document.documentElement.classList.toggle("dark");
       setIsDarkMode(isDark);
+      localStorage.setItem("theme", isDark ? "dark" : "light");
     }
   };
 
