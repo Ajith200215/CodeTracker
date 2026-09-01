@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Code2, Globe, Share2, MessageSquare, Send } from "lucide-react";
+import { Code2, Globe } from "lucide-react";
 
 export const Footer: React.FC = () => {
   return (
@@ -24,7 +24,7 @@ export const Footer: React.FC = () => {
           </p>
 
           <div className="flex items-center gap-3 pt-2">
-            {[Globe, Share2, MessageSquare, Send].map((Icon, idx) => (
+            {[Globe].map((Icon, idx) => (
               <a
                 key={idx}
                 href="#"
