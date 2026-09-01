@@ -3,9 +3,9 @@ import { db } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(req: Request, { params }: { params: { section: string } }) {
+export async function GET(req: Request, { params }: { params: Promise<{ section: string }> }) {
   try {
-    const { section } = params;
+    const { section } = await params;
     if (!section) {
       return NextResponse.json({ error: "Section is required" }, { status: 400 });
     }
