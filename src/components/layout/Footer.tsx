@@ -6,7 +6,7 @@ import { Code2, Globe } from "lucide-react";
 export const Footer: React.FC = () => {
   return (
     <footer className="bg-[#161723] text-white pt-16 pb-12 px-4 lg:px-12 border-t border-white/10">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-white/10">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10 pb-12 border-b border-white/10">
         {/* Brand & Socials Column */}
         <div className="md:col-span-5 space-y-5">
           <div className="flex items-center gap-2.5">

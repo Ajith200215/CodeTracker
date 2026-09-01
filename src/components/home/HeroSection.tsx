@@ -28,7 +28,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStart, onWatchDemo }
       <div className="absolute top-12 left-1/4 w-72 h-72 bg-[#8B8CF6]/15 rounded-full blur-3xl animate-pulse-glow pointer-events-none"></div>
       <div className="absolute bottom-10 right-10 w-96 h-96 bg-[#F8A195]/15 rounded-full blur-3xl animate-pulse-glow pointer-events-none"></div>
 
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
         {/* Left Content Column */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -47,7 +47,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStart, onWatchDemo }
           </div>
 
           {/* Main Serif Headline matching Edulite typography */}
-          <h1 className="font-serif-display text-5xl sm:text-6xl lg:text-7xl font-extrabold text-[#1E1F2B] dark:text-white leading-[1.08] tracking-tight">
+          <h1 className="font-serif-display text-4xl sm:text-5xl lg:text-7xl font-extrabold text-[#1E1F2B] dark:text-white leading-[1.08] tracking-tight">
             Turn coding <br />
             progress into{" "}
             <span className="relative inline-block text-[#6C5CE7]">
@@ -75,10 +75,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStart, onWatchDemo }
           </p>
 
           {/* Action CTA Buttons */}
-          <div className="flex flex-wrap items-center gap-4 pt-2">
+          <div className="flex flex-col sm:flex-row items-center gap-4 pt-2 w-full sm:w-auto">
             <button
               onClick={onStart}
-              className="px-8 py-4 rounded-full bg-[#6C5CE7] hover:bg-[#5A4AD1] text-white font-bold text-sm shadow-lg shadow-[#6C5CE7]/35 transition-all hover:scale-105 flex items-center gap-2"
+              className="w-full sm:w-auto px-8 py-4 rounded-full bg-[#6C5CE7] hover:bg-[#5A4AD1] text-white font-bold text-sm shadow-lg shadow-[#6C5CE7]/35 transition-all hover:scale-105 flex items-center justify-center gap-2"
             >
               <span>Get Started</span>
               <ArrowRight className="w-4 h-4" />
@@ -86,7 +86,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStart, onWatchDemo }
 
             <button
               onClick={onWatchDemo}
-              className="px-7 py-4 rounded-full bg-white dark:bg-gray-800 hover:bg-[#F0F2FF] dark:bg-gray-900 text-[#1E1F2B] dark:text-white font-bold text-sm border border-[#8B8CF6]/30 shadow-xs transition-all hover:scale-105 flex items-center gap-3"
+              className="w-full sm:w-auto px-7 py-4 rounded-full bg-white dark:bg-gray-800 hover:bg-[#F0F2FF] dark:bg-gray-900 text-[#1E1F2B] dark:text-white font-bold text-sm border border-[#8B8CF6]/30 shadow-xs transition-all hover:scale-105 flex items-center justify-center gap-3"
             >
               <div className="w-7 h-7 rounded-full bg-[#8B8CF6]/20 flex items-center justify-center text-[#6C5CE7]">
                 <Play className="w-3.5 h-3.5 fill-current ml-0.5" />

@@ -79,8 +79,8 @@ export const TeacherRoster: React.FC = () => {
               >
                 {/* Circular Avatar Container */}
                 <div className="relative mb-6">
-                  <div className={`w-44 h-44 rounded-full ${teacher.bgClass} flex items-center justify-center shadow-xl transition-transform group-hover:scale-105 border-4 border-white dark:border-gray-800 dark:!bg-gray-800`}>
-                    <span className="text-5xl font-extrabold text-white font-serif-display">
+                  <div className={`w-36 h-36 md:w-44 md:h-44 rounded-full ${teacher.bgClass} flex items-center justify-center shadow-xl transition-transform group-hover:scale-105 border-4 border-white dark:border-gray-800 dark:!bg-gray-800`}>
+                    <span className="text-4xl md:text-5xl font-extrabold text-white font-serif-display">
                       {teacher.name.split(" ").map(n => n[0]).join("").slice(0, 2)}
                     </span>
                   </div>
