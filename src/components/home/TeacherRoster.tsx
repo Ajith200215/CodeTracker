@@ -19,6 +19,7 @@ export const TeacherRoster: React.FC = () => {
       image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80",
       bgClass: "bg-[#8B8CF6]",
       subject: "C TECH",
+      github: "https://github.com/Sharveswar007",
     },
     {
       name: "Srivattsa R",
@@ -26,6 +27,7 @@ export const TeacherRoster: React.FC = () => {
       image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&auto=format&fit=crop&q=80",
       bgClass: "bg-[#6C5CE7]",
       subject: "C TECH",
+      github: "https://github.com/Vattsa-11",
     },
   ];
 
@@ -42,10 +44,10 @@ export const TeacherRoster: React.FC = () => {
       <div className="max-w-7xl mx-auto text-center">
         {/* Section Title */}
         <h2 className="font-serif-display text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-3">
-          Meet our team
+          Meet our teachers
         </h2>
         <p className="text-sm sm:text-base text-white/90 font-medium max-w-xl mx-auto mb-14 leading-relaxed">
-          Discover the developers and mentors at CodeTracker who are ready to 
+          Discover the teachers and coding mentors at CodeTracker who are ready to
           accompany students on their learning journey.
         </p>
 
@@ -81,5 +83,15 @@ export const TeacherRoster: React.FC = () => {
         </div>
       </div>
     </section>
+  );
+};
+{ teacher.subject }
+                </span >
+              </a >
+            </motion.div >
+          ))}
+        </div >
+      </div >
+    </section >
   );
 };
