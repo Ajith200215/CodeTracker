@@ -49,7 +49,7 @@ export const Footer: React.FC = () => {
         <div className="md:col-span-2 space-y-3">
           <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">Solutions</h4>
           <ul className="space-y-2 text-xs text-slate-300 font-medium">
-            <li><a href="#" className="hover:text-white transition-colors">For Colleges</a></li>
+            <li><a href="https://www.srmist.edu.in/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">For Colleges</a></li>
             <li><a href="#" className="hover:text-white transition-colors">Brain Training</a></li>
             <li><a href="#" className="hover:text-white transition-colors">E-Learning</a></li>
             <li><a href="#" className="hover:text-white transition-colors">Online Modules</a></li>
