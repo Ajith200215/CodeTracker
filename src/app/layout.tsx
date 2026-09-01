@@ -42,11 +42,9 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               try {
-                if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                  document.documentElement.classList.add('dark')
-                } else {
-                  document.documentElement.classList.remove('dark')
-                }
+                // Dark mode temporarily disabled by user request. Defaulting to light mode.
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
               } catch (_) {}
             `,
           }}

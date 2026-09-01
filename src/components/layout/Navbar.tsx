@@ -119,10 +119,10 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Theme Switcher & Login */}
           <div className="flex items-center gap-3">
-            {/* Dark Mode Toggle */}
+            {/* Dark Mode Toggle (Hidden per user request, easily re-enabled) */}
             <button
               onClick={toggleDarkMode}
-              className="p-2 rounded-full bg-white dark:bg-gray-800 border border-[#8B8CF6]/25 dark:border-gray-700 text-[#6A6C88] dark:text-gray-300 hover:text-[#1E1F2B] dark:hover:text-white transition-all shadow-xs"
+              className="hidden p-2 rounded-full bg-white dark:bg-gray-800 border border-[#8B8CF6]/25 dark:border-gray-700 text-[#6A6C88] dark:text-gray-300 hover:text-[#1E1F2B] dark:hover:text-white transition-all shadow-xs"
               aria-label="Toggle Dark Mode"
             >
               {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
