@@ -44,7 +44,7 @@ export const TeacherRoster: React.FC = () => {
   ];
 
   return (
-    <section className="py-20 px-4 lg:px-12 bg-[#9B9DF6] dark:bg-gray-900 text-white relative overflow-hidden">
+    <section id="team" className="py-20 px-4 lg:px-12 bg-[#9B9DF6] dark:bg-gray-900 text-white relative overflow-hidden">
       {/* Decorative Wavy Lines & Sparkles */}
       <div className="absolute top-8 left-10 text-white/30">
         <Sparkles className="w-12 h-12" />
