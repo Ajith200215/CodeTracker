@@ -7,25 +7,25 @@ import { Sparkles, Award, BookOpen, ShieldCheck } from "lucide-react";
 export const TeacherRoster: React.FC = () => {
   const teachers = [
     {
-      name: "Dr. Yukari Samo",
-      role: "Data Structures & Algo Lead",
+      name: "Ajith S",
+      role: "DEVELOPER",
       image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&auto=format&fit=crop&q=80",
       bgClass: "bg-[#F8A195]",
-      subject: "Computer Science Dept.",
+      subject: "C TECH",
     },
     {
-      name: "Prof. Alex Chen",
-      role: "Competitive Coding Coach",
+      name: "Sharveswar M",
+      role: "DEVELOPER",
       image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80",
       bgClass: "bg-[#8B8CF6]",
-      subject: "Algorithms & Logic",
+      subject: "C TECH",
     },
     {
-      name: "Elena Rostova",
-      role: "Exam & Proctor Administrator",
+      name: "Srivattsa R",
+      role: "DEVELOPER",
       image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&auto=format&fit=crop&q=80",
       bgClass: "bg-[#6C5CE7]",
-      subject: "Proctor Security",
+      subject: "C TECH",
     },
   ];
 
@@ -42,10 +42,10 @@ export const TeacherRoster: React.FC = () => {
       <div className="max-w-7xl mx-auto text-center">
         {/* Section Title */}
         <h2 className="font-serif-display text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-3">
-          Meet our teachers
+          Meet our team
         </h2>
         <p className="text-sm sm:text-base text-white/90 font-medium max-w-xl mx-auto mb-14 leading-relaxed">
-          Discover the teachers and coding mentors at CodeTracker who are ready to 
+          Discover the developers and mentors at CodeTracker who are ready to 
           accompany students on their learning journey.
         </p>
 
@@ -59,12 +59,10 @@ export const TeacherRoster: React.FC = () => {
             >
               {/* Circular Avatar Container */}
               <div className="relative mb-6">
-                <div className={`w-44 h-44 rounded-full ${teacher.bgClass} p-1.5 shadow-xl transition-transform group-hover:scale-105`}>
-                  <img
-                    src={teacher.image}
-                    alt={teacher.name}
-                    className="w-full h-full rounded-full object-cover border-4 border-white"
-                  />
+                <div className={`w-44 h-44 rounded-full ${teacher.bgClass} flex items-center justify-center shadow-xl transition-transform group-hover:scale-105 border-4 border-white`}>
+                  <span className="text-5xl font-extrabold text-white font-serif-display">
+                    {teacher.name.split(" ").map(n => n[0]).join("").slice(0, 2)}
+                  </span>
                 </div>
               </div>
 
