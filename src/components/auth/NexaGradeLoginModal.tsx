@@ -84,15 +84,19 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
           return;
         }
 
+        const loginIdentifier = studentLoginId.trim();
+        const targetEmail = loginIdentifier.includes("@") ? loginIdentifier : `${loginIdentifier}@srmist.edu.in`;
+
         const res = await signIn("credentials", {
-          loginId: studentLoginId.trim(),
+          loginId: loginIdentifier,
+          email: targetEmail,
           password: studentLoginPw,
           role: "STUDENT",
           redirect: false,
         });
 
         if (res?.error) {
-          setErrorMsg("Invalid Student credentials");
+          setErrorMsg("Invalid Student credentials. If you haven't created an account, click 'Create New Account'.");
         } else {
           onSuccess("STUDENT");
           onClose();
@@ -111,19 +115,36 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
           return;
         }
 
+        // 1. Register user via dedicated API endpoint
+        const regRes = await fetch("/api/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: studentEmail.trim(),
+            name: studentName.trim(),
+            regNo: raNumber.trim(),
+            branch: studentBranch,
+            role: "STUDENT",
+          }),
+        });
+
+        const regData = await regRes.json();
+        if (!regRes.ok || regData.error) {
+          setErrorMsg(regData.error || "Failed to register student account");
+          setIsSubmitting(false);
+          return;
+        }
+
+        // 2. Authenticate session
         const res = await signIn("credentials", {
           loginId: raNumber.trim(),
           email: studentEmail.trim(),
-          name: studentName.trim(),
-          regNo: raNumber.trim(),
-          branch: studentBranch,
-          password: studentPassword,
           role: "STUDENT",
           redirect: false,
         });
 
         if (res?.error) {
-          setErrorMsg("Failed to register student account");
+          setErrorMsg("Account registered! Please switch to Sign In tab to log in.");
         } else {
           onSuccess("STUDENT");
           onClose();
@@ -149,15 +170,19 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
           return;
         }
 
+        const loginIdentifier = facultyLoginId.trim();
+        const targetEmail = loginIdentifier.includes("@") ? loginIdentifier : `${loginIdentifier}@srmist.edu.in`;
+
         const res = await signIn("credentials", {
-          loginId: facultyLoginId.trim(),
+          loginId: loginIdentifier,
+          email: targetEmail,
           password: facultyLoginPw,
           role: "TEACHER",
           redirect: false,
         });
 
         if (res?.error) {
-          setErrorMsg("Invalid Faculty credentials");
+          setErrorMsg("Invalid Faculty credentials. If you haven't created an account, click 'Create New Account'.");
         } else {
           onSuccess("TEACHER");
           onClose();
@@ -176,17 +201,33 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
           return;
         }
 
+        const regRes = await fetch("/api/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: facultyEmail.trim(),
+            name: facultyName.trim(),
+            regNo: facultyId.trim(),
+            role: "TEACHER",
+          }),
+        });
+
+        const regData = await regRes.json();
+        if (!regRes.ok || regData.error) {
+          setErrorMsg(regData.error || "Failed to register faculty account");
+          setIsSubmitting(false);
+          return;
+        }
+
         const res = await signIn("credentials", {
           loginId: facultyId.trim(),
           email: facultyEmail.trim(),
-          name: facultyName.trim(),
-          password: facultyPassword,
           role: "TEACHER",
           redirect: false,
         });
 
         if (res?.error) {
-          setErrorMsg("Failed to register faculty account");
+          setErrorMsg("Faculty account registered! Please switch to Sign In tab to log in.");
         } else {
           onSuccess("TEACHER");
           onClose();
