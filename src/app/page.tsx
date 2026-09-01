@@ -14,6 +14,7 @@ import { StudentDashboardView } from "@/components/dashboard/StudentDashboardVie
 import { UnifiedLeaderboardView } from "@/components/leaderboard/UnifiedLeaderboardView";
 import { ExamAttemptView } from "@/components/exam/ExamAttemptView";
 import { TeacherMonitorView } from "@/components/monitor/TeacherMonitorView";
+import { ClassroomsView } from "@/components/classrooms/ClassroomsView";
 
 export default function Home() {
   const { data: session } = useSession();
@@ -98,9 +99,10 @@ export default function Home() {
       setActiveNav={setActiveTab}
     >
       {activeTab === "leaderboard" && <UnifiedLeaderboardView />}
+      {activeTab === "classrooms" && <ClassroomsView />}
       
       {/* Locked Views for Unauthenticated Users */}
-      {!session?.user && activeTab !== "leaderboard" && (
+      {!session?.user && activeTab !== "leaderboard" && activeTab !== "classrooms" && (
         <div className="flex flex-col items-center justify-center h-full min-h-[60vh] bg-white dark:bg-gray-800 rounded-3xl border border-[#8B8CF6]/20 shadow-xl p-8 text-center">
           <div className="w-16 h-16 rounded-full bg-[#F0F2FF] dark:bg-gray-700 flex items-center justify-center text-[#6C5CE7] dark:text-[#8B8CF6] mb-5">
             <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -123,14 +125,6 @@ export default function Home() {
             <StudentDashboardView onStartExam={() => setActiveTab("exam")} />
           )}
           {activeTab === "monitor" && <TeacherMonitorView />}
-          {activeTab === "classrooms" && (
-            <div className="bg-white dark:bg-gray-800 p-8 rounded-3xl border border-[#8B8CF6]/20 shadow-xl space-y-4">
-              <h2 className="font-serif-display text-2xl font-bold dark:text-white">Classroom Roster</h2>
-              <p className="text-xs text-[#5A5C75] dark:text-gray-400">
-                Classrooms enrolled: Section A1 (Computer Science & Engineering)
-              </p>
-            </div>
-          )}
           {activeTab === "tests" && (
             <div className="bg-white dark:bg-gray-800 p-8 rounded-3xl border border-[#8B8CF6]/20 shadow-xl space-y-4">
               <h2 className="font-serif-display text-2xl font-bold dark:text-white">Available Tests</h2>

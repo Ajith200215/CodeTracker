@@ -67,6 +67,57 @@ export async function POST(req: Request) {
           },
         });
       }
+
+      // --- Auto-Classroom & Enrollment Logic ---
+      if (cleanSection && user.id) {
+        // Find or create a default teacher to own the classroom (as required by schema)
+        let defaultTeacher = await db.user.findFirst({ where: { role: Role.TEACHER } });
+        if (!defaultTeacher) {
+          defaultTeacher = await db.user.create({
+            data: {
+              email: `system.teacher_${Date.now()}@srmist.edu.in`,
+              name: "System Auto Teacher",
+              role: Role.TEACHER,
+              password: "dummy",
+            }
+          });
+        }
+
+        let classroom = await db.classroom.findFirst({
+          where: { name: cleanSection }
+        });
+
+        if (!classroom) {
+          classroom = await db.classroom.create({
+            data: {
+              name: cleanSection,
+              section: cleanSection,
+              teacherId: defaultTeacher.id
+            }
+          });
+        }
+
+        // Enroll user if not already enrolled
+        const existingEnrollment = await db.enrollment.findUnique({
+          where: {
+            studentId_classroomId: {
+              studentId: user.id,
+              classroomId: classroom.id
+            }
+          }
+        });
+
+        if (!existingEnrollment) {
+          await db.enrollment.create({
+            data: {
+              studentId: user.id,
+              classroomId: classroom.id
+            }
+          });
+        }
+      }
+      // --- End Auto-Classroom Logic ---
+
     } catch (dbErr: any) {
       console.warn("[Register Route] Database warning, using memory fallback:", dbErr?.message);
     }

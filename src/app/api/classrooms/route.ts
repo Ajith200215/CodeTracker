@@ -83,3 +83,23 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
+
+export async function GET() {
+  try {
+    const classrooms = await db.classroom.findMany({
+      include: {
+        _count: {
+          select: { enrollments: true },
+        },
+      },
+      orderBy: {
+        name: 'asc'
+      }
+    });
+
+    return NextResponse.json({ success: true, classrooms });
+  } catch (error: any) {
+    console.error("[Classrooms GET Error]:", error);
+    return NextResponse.json({ error: "Failed to fetch classrooms" }, { status: 500 });
+  }
+}
