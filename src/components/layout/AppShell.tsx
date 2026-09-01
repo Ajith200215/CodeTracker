@@ -74,7 +74,7 @@ export const AppShell: React.FC<AppShellProps> = ({
     { id: "home", label: "Home", icon: Home },
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
     { id: "leaderboard", label: "Leaderboard", icon: Trophy },
-    { id: "classrooms", label: "Classrooms", icon: BookOpen, locked: true },
+    { id: "classrooms", label: "Classrooms", icon: BookOpen },
     { id: "tests", label: "Proctored Exam", icon: GraduationCap, locked: true },
     { id: "feedback", label: "Feedback", icon: MessageSquareQuote, locked: true },
   ];
@@ -83,7 +83,7 @@ export const AppShell: React.FC<AppShellProps> = ({
     { id: "home", label: "Home", icon: Home },
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
     { id: "leaderboard", label: "Leaderboard", icon: Trophy },
-    { id: "classrooms", label: "Classrooms", icon: BookOpen, locked: true },
+    { id: "classrooms", label: "Classrooms", icon: BookOpen },
     { id: "tests", label: "Proctored Exam", icon: GraduationCap, locked: true },
     { id: "monitor", label: "Monitor", icon: ShieldAlert },
   ];
