@@ -29,6 +29,26 @@ model User {
   testAttempts      TestAttempt[]
   proctorFlags      ProctorFlag[]
   retestRequests    RetestRequest[]
+  submissions       Submission[]
+  placementCards    PlacementCard[]
+
+  collegeId         String?
+  college           College?         @relation(fields: [collegeId], references: [id])
+  branch            String?
+  passoutYear       Int?
+}
+
+model College {
+  id           String        @id @default(cuid())
+  name         String
+  slug         String        @unique
+  logoUrl      String?
+  scoreWeights Json?
+  createdAt    DateTime      @default(now())
+
+  users        User[]
+  classrooms   Classroom[]
+  contests     LiveContest[]
 }
 
 model Classroom {
@@ -38,6 +58,9 @@ model Classroom {
   teacherId String
   teacher   User     @relation("TeacherClassrooms", fields: [teacherId], references: [id])
   createdAt DateTime @default(now())
+
+  collegeId String?
+  college   College? @relation(fields: [collegeId], references: [id])
 
   enrollments Enrollment[]
   tests       Test[]
@@ -61,31 +84,116 @@ enum Platform {
   HACKERRANK
   NEETCODE
   CODECHEF
+  ATCODER
 }
 
 model PlatformHandle {
-  id       String   @id @default(cuid())
-  userId   String
-  platform Platform
-  username String
-  verified Boolean  @default(false)
-  user     User     @relation(fields: [userId], references: [id])
+  id        String                 @id @default(cuid())
+  userId    String
+  platform  Platform
+  username  String
+  verified  Boolean                @default(false)
+  user      User                   @relation(fields: [userId], references: [id])
+  snapshots PlatformStatSnapshot[]
 
   @@unique([userId, platform])
 }
 
 model PlatformStatSnapshot {
-  id           String   @id @default(cuid())
+  id           String         @id @default(cuid())
   handleId     String
+  handle       PlatformHandle @relation(fields: [handleId], references: [id])
   totalSolved  Int
   easySolved   Int?
   mediumSolved Int?
   hardSolved   Int?
   rating       Int?
   raw          Json
-  fetchedAt    DateTime @default(now())
+  fetchedAt    DateTime       @default(now())
 
   @@index([handleId, fetchedAt])
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+model Problem {
+  id          String     @id @default(cuid())
+  title       String
+  slug        String     @unique
+  statement   String
+  difficulty  Difficulty @default(MEDIUM)
+  tags        String[]
+  starterCode Json?
+  testCases   Json?
+  createdAt   DateTime   @default(now())
+
+  contestProblems ContestProblem[]
+  submissions     Submission[]
+}
+
+model LiveContest {
+  id          String           @id @default(cuid())
+  collegeId   String
+  title       String
+  description String?
+  startsAt    DateTime
+  endsAt      DateTime
+  isPublished Boolean          @default(false)
+  college     College          @relation(fields: [collegeId], references: [id])
+  problems    ContestProblem[]
+  submissions Submission[]
+}
+
+model ContestProblem {
+  id        String      @id @default(cuid())
+  contestId String
+  problemId String
+  points    Int         @default(100)
+  order     Int         @default(0)
+  contest   LiveContest @relation(fields: [contestId], references: [id])
+  problem   Problem     @relation(fields: [problemId], references: [id])
+}
+
+model Submission {
+  id          String       @id @default(cuid())
+  userId      String
+  problemId   String
+  contestId   String?
+  language    String
+  code        String
+  status      String
+  passedCases Int
+  totalCases  Int
+  runtimeMs   Float?
+  memoryKb    Float?
+  createdAt   DateTime     @default(now())
+  user        User         @relation(fields: [userId], references: [id])
+  problem     Problem      @relation(fields: [problemId], references: [id])
+  contest     LiveContest? @relation(fields: [contestId], references: [id])
+}
+
+model RecruiterAccess {
+  id        String   @id @default(cuid())
+  collegeId String
+  token     String   @unique
+  company   String
+  email     String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model PlacementCard {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String   @default("Standard Resume Card")
+  cardData  Json
+  isDefault Boolean  @default(true)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model Feedback {
