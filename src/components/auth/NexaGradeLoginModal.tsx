@@ -332,6 +332,10 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
         {/* Student Form */}
         {portalRole === "STUDENT" ? (
           <form onSubmit={handleStudentSubmit} className="space-y-3.5 text-left text-xs" autoComplete="off">
+            {/* Hidden fields to defeat Chrome's aggressive autofill */}
+            <input type="text" name="fakeusernameremembered" className="absolute w-0 h-0 opacity-0 -z-10" tabIndex={-1} autoComplete="username" />
+            <input type="password" name="fakepasswordremembered" className="absolute w-0 h-0 opacity-0 -z-10" tabIndex={-1} autoComplete="current-password" />
+            
             {mode === "login" ? (
               <>
                 <div>
