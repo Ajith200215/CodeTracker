@@ -331,7 +331,7 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
 
         {/* Student Form */}
         {portalRole === "STUDENT" ? (
-          <form onSubmit={handleStudentSubmit} className="space-y-3.5 text-left text-xs">
+          <form onSubmit={handleStudentSubmit} className="space-y-3.5 text-left text-xs" autoComplete="off">
             {mode === "login" ? (
               <>
                 <div>
@@ -344,6 +344,8 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
                     value={studentLoginId}
                     onChange={(e) => setStudentLoginId(e.target.value)}
                     placeholder="e.g. RA2111003010142 or student@srmist.edu.in"
+                    autoComplete="off"
+                    data-lpignore="true"
                     className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-3 text-slate-900 dark:text-slate-100 font-mono focus:outline-none focus:border-amber-500"
                   />
                 </div>
@@ -359,6 +361,8 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
                       value={studentLoginPw}
                       onChange={(e) => setStudentLoginPw(e.target.value)}
                       placeholder="Enter password"
+                      autoComplete="new-password"
+                      data-lpignore="true"
                       className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-3 pr-10 text-slate-900 dark:text-slate-100 font-mono focus:outline-none focus:border-amber-500"
                     />
                     <button
