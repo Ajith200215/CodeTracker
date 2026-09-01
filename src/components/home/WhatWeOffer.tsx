@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Sparkles, Gamepad2, LineChart, ShieldCheck, Terminal, Lightbulb } from "lucide-react";
+import { Sparkles, Gamepad2, LineChart, ShieldCheck, Terminal, Lightbulb, Lock } from "lucide-react";
 
 interface WhatWeOfferProps {
   onSelectFeature: (featureId: string) => void;
@@ -55,11 +55,9 @@ export const WhatWeOffer: React.FC<WhatWeOfferProps> = ({ onSelectFeature }) => 
             </div>
           </motion.div>
 
-          {/* Card 2: ACTIVE HIGHLIGHTED CARD (Soft Periwinkle Theme Matching Reference) */}
+          {/* Card 2: ACTIVE HIGHLIGHTED CARD (Locked) */}
           <motion.div
-            whileHover={{ scale: 1.02 }}
-            onClick={() => onSelectFeature("exam")}
-            className="bg-[#8B8CF6] rounded-3xl p-8 text-white shadow-xl shadow-[#8B8CF6]/20 cursor-pointer transition-all flex flex-col justify-between relative overflow-hidden"
+            className="bg-[#8B8CF6] rounded-3xl p-8 text-white shadow-xl shadow-[#8B8CF6]/20 flex flex-col justify-between relative overflow-hidden opacity-80 cursor-not-allowed"
           >
             {/* Sparkle badge accent */}
             <div className="absolute top-4 right-4 text-white/40">
@@ -78,16 +76,15 @@ export const WhatWeOffer: React.FC<WhatWeOfferProps> = ({ onSelectFeature }) => 
                 integration, and automated Judge0 test cases.
               </p>
             </div>
-            <div className="mt-8 text-xs font-extrabold text-white uppercase tracking-wider bg-white/20 backdrop-blur-md px-4 py-2 rounded-full inline-block self-start">
-              Launch Exam Sandbox →
+            <div className="mt-8 text-xs font-extrabold text-white/70 uppercase tracking-wider bg-white/10 backdrop-blur-md px-4 py-2 rounded-full inline-flex items-center gap-1.5 self-start">
+              <span>Launch Exam Sandbox</span>
+              <Lock className="w-3.5 h-3.5" />
             </div>
           </motion.div>
 
-          {/* Card 3: Real-Time Proctor Monitor */}
+          {/* Card 3: Real-Time Proctor Monitor (Locked) */}
           <motion.div
-            whileHover={{ y: -6 }}
-            onClick={() => onSelectFeature("monitor")}
-            className="bg-[#212335] rounded-3xl p-8 border border-white/10 cursor-pointer transition-all flex flex-col justify-between"
+            className="bg-[#212335] rounded-3xl p-8 border border-white/10 flex flex-col justify-between opacity-70 cursor-not-allowed"
           >
             <div>
               <div className="w-14 h-14 rounded-full bg-[#2C2E46] flex items-center justify-center text-white mb-6">
@@ -101,8 +98,9 @@ export const WhatWeOffer: React.FC<WhatWeOfferProps> = ({ onSelectFeature }) => 
                 exits, and can approve instant retest requests.
               </p>
             </div>
-            <div className="mt-8 text-xs font-bold text-[#F8A195] uppercase tracking-wider">
-              Teacher Dashboard →
+            <div className="mt-8 text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+              <span>Teacher Dashboard</span>
+              <Lock className="w-3.5 h-3.5" />
             </div>
           </motion.div>
         </div>
