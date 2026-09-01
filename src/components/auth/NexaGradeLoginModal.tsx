@@ -125,6 +125,7 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
             regNo: raNumber.trim(),
             branch: studentBranch,
             role: "STUDENT",
+            password: studentPassword,
           }),
         });
 
@@ -209,6 +210,7 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
             name: facultyName.trim(),
             regNo: facultyId.trim(),
             role: "TEACHER",
+            password: facultyPassword,
           }),
         });
 
