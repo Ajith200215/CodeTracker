@@ -37,6 +37,7 @@ model User {
   collegeId         String?
   college           College?         @relation(fields: [collegeId], references: [id])
   branch            String?
+  section           String?
   passoutYear       Int?
 }
 

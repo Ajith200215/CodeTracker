@@ -124,6 +124,7 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
             name: studentName.trim(),
             regNo: raNumber.trim(),
             branch: studentBranch,
+            section: studentSection.trim().toUpperCase(),
             role: "STUDENT",
             password: studentPassword,
           }),
@@ -389,7 +390,7 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
                     <label className="font-bold text-slate-700 dark:text-slate-300 mb-1 block">
                       RA Number
@@ -417,6 +418,20 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
                         <option key={b} value={b}>{b}</option>
                       ))}
                     </select>
+                  </div>
+
+                  <div>
+                    <label className="font-bold text-slate-700 dark:text-slate-300 mb-1 block">
+                      Section
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={studentSection}
+                      onChange={(e) => setStudentSection(e.target.value)}
+                      placeholder="e.g. Q1, Q2, Y1"
+                      className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-2.5 font-mono text-slate-900 dark:text-slate-100 focus:outline-none focus:border-amber-500 uppercase"
+                    />
                   </div>
                 </div>
 

@@ -13,11 +13,12 @@ function hashPassword(pw?: string): string | null {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { email, name, regNo, branch, role, password } = body;
+    const { email, name, regNo, branch, section, role, password } = body;
 
     const cleanEmail = (email || "").toLowerCase().trim();
     const cleanRegNo = (regNo || "").trim();
     const cleanName = (name || "").trim();
+    const cleanSection = (section || "").trim();
     const hashedPassword = hashPassword(password);
 
     if (!cleanEmail && !cleanRegNo) {
@@ -47,6 +48,7 @@ export async function POST(req: Request) {
             name: cleanName || user.name,
             regNo: cleanRegNo || user.regNo,
             branch: branch || user.branch,
+            section: cleanSection || user.section,
             role: userRole,
             ...(hashedPassword ? { password: hashedPassword } : {}),
           },
@@ -60,6 +62,7 @@ export async function POST(req: Request) {
             role: userRole,
             regNo: cleanRegNo || (userRole === Role.STUDENT ? "2026-CS-0142" : undefined),
             branch: branch || "CSE Core",
+            section: cleanSection || "A1",
             passoutYear: 2026,
           },
         });
@@ -76,6 +79,7 @@ export async function POST(req: Request) {
         user.name = cleanName || user.name;
         user.regNo = cleanRegNo || user.regNo;
         user.branch = branch || user.branch;
+        user.section = cleanSection || user.section;
         user.role = userRole;
         if (hashedPassword) user.password = hashedPassword;
       } else {
@@ -87,6 +91,7 @@ export async function POST(req: Request) {
           role: userRole,
           regNo: cleanRegNo || "2026-CS-0142",
           branch: branch || "CSE Core",
+          section: cleanSection || "A1",
         };
         memoryUsers.set(targetEmail, user);
         if (cleanRegNo) memoryUsers.set(cleanRegNo, user);
