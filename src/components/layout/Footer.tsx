@@ -10,9 +10,7 @@ export const Footer: React.FC = () => {
         {/* Brand & Socials Column */}
         <div className="md:col-span-5 space-y-5">
           <div className="flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-2xl bg-[#6C5CE7] flex items-center justify-center text-white shadow-md">
-              <Code2 className="w-5.5 h-5.5" />
-            </div>
+
             <span className="font-serif-display text-2xl font-bold tracking-tight text-white">
               Code<span className="text-[#8B8CF6]">Tracker</span>
             </span>

@@ -258,9 +258,7 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
 
         {/* Brand Header */}
         <div className="text-center space-y-2">
-          <div className="w-12 h-12 rounded-2xl bg-[#6C5CE7] text-white flex items-center justify-center mx-auto shadow-lg shadow-[#6C5CE7]/25">
-            <Code2 className="w-6 h-6" />
-          </div>
+
           <h2 className="text-2xl font-black tracking-tight text-[#1E1F2B] dark:text-white">
             Login Portal
           </h2>
