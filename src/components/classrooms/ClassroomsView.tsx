@@ -15,6 +15,7 @@ interface StudentStat {
   name: string;
   regNo: string;
   totalSolved: number;
+  platforms: Record<string, number>;
 }
 
 export const ClassroomsView: React.FC = () => {
@@ -50,19 +51,31 @@ export const ClassroomsView: React.FC = () => {
       const res = await fetch(`/api/classrooms/${encodeURIComponent(sectionName)}`);
       const data = await res.json();
       if (data.success && data.classroom) {
-        // Compute stats for each student
         const stats: StudentStat[] = data.classroom.enrollments.map((enr: any) => {
           let total = 0;
+          const platforms: Record<string, number> = {
+            LEETCODE: 0,
+            HACKERRANK: 0,
+            CODEFORCES: 0,
+            GEEKSFORGEEKS: 0,
+            CODECHEF: 0
+          };
+
           enr.student.platformHandles.forEach((handle: any) => {
             if (handle.snapshots && handle.snapshots.length > 0) {
-              total += handle.snapshots[0].totalSolved || 0;
+              const solved = handle.snapshots[0].totalSolved || 0;
+              total += solved;
+              if (handle.platform in platforms) {
+                platforms[handle.platform] = solved;
+              }
             }
           });
           return {
             studentId: enr.student.id,
             name: enr.student.name,
             regNo: enr.student.regNo || "N/A",
-            totalSolved: total
+            totalSolved: total,
+            platforms
           };
         });
         
@@ -81,13 +94,13 @@ export const ClassroomsView: React.FC = () => {
     if (!sectionData.length) return;
     
     // Headers
-    let csvContent = "Rank,Registration No,Student Name,Total Solved\n";
+    let csvContent = "Rank,Registration No,Student Name,Total Solved,LeetCode,HackerRank,Codeforces,GeeksForGeeks,CodeChef\n";
     
     // Rows
     sectionData.forEach((student, index) => {
       // Escape names with quotes if they contain commas
       const safeName = student.name.includes(',') ? `"${student.name}"` : student.name;
-      csvContent += `${index + 1},${student.regNo},${safeName},${student.totalSolved}\n`;
+      csvContent += `${index + 1},${student.regNo},${safeName},${student.totalSolved},${student.platforms.LEETCODE},${student.platforms.HACKERRANK},${student.platforms.CODEFORCES},${student.platforms.GEEKSFORGEEKS},${student.platforms.CODECHEF}\n`;
     });
 
     // Create Blob & Download
@@ -143,7 +156,12 @@ export const ClassroomsView: React.FC = () => {
                   <th className="px-6 py-4 text-xs font-extrabold text-[#5A5C75] dark:text-gray-400 uppercase tracking-wider">Rank</th>
                   <th className="px-6 py-4 text-xs font-extrabold text-[#5A5C75] dark:text-gray-400 uppercase tracking-wider">Student</th>
                   <th className="px-6 py-4 text-xs font-extrabold text-[#5A5C75] dark:text-gray-400 uppercase tracking-wider">Reg. No</th>
-                  <th className="px-6 py-4 text-xs font-extrabold text-[#5A5C75] dark:text-gray-400 uppercase tracking-wider text-right">Total Solved</th>
+                  <th className="px-4 py-4 text-xs font-extrabold text-[#5A5C75] dark:text-gray-400 uppercase tracking-wider text-center" title="LeetCode">LC</th>
+                  <th className="px-4 py-4 text-xs font-extrabold text-[#5A5C75] dark:text-gray-400 uppercase tracking-wider text-center" title="HackerRank">HR</th>
+                  <th className="px-4 py-4 text-xs font-extrabold text-[#5A5C75] dark:text-gray-400 uppercase tracking-wider text-center" title="Codeforces">CF</th>
+                  <th className="px-4 py-4 text-xs font-extrabold text-[#5A5C75] dark:text-gray-400 uppercase tracking-wider text-center" title="GeeksForGeeks">GFG</th>
+                  <th className="px-4 py-4 text-xs font-extrabold text-[#5A5C75] dark:text-gray-400 uppercase tracking-wider text-center" title="CodeChef">CC</th>
+                  <th className="px-6 py-4 text-xs font-extrabold text-[#5A5C75] dark:text-gray-400 uppercase tracking-wider text-right">Total</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
@@ -171,6 +189,21 @@ export const ClassroomsView: React.FC = () => {
                       </td>
                       <td className="px-6 py-4 text-sm font-medium text-[#5A5C75] dark:text-gray-400">
                         {student.regNo}
+                      </td>
+                      <td className="px-4 py-4 text-center text-sm font-semibold text-gray-600 dark:text-gray-300">
+                        {student.platforms.LEETCODE}
+                      </td>
+                      <td className="px-4 py-4 text-center text-sm font-semibold text-gray-600 dark:text-gray-300">
+                        {student.platforms.HACKERRANK}
+                      </td>
+                      <td className="px-4 py-4 text-center text-sm font-semibold text-gray-600 dark:text-gray-300">
+                        {student.platforms.CODEFORCES}
+                      </td>
+                      <td className="px-4 py-4 text-center text-sm font-semibold text-gray-600 dark:text-gray-300">
+                        {student.platforms.GEEKSFORGEEKS}
+                      </td>
+                      <td className="px-4 py-4 text-center text-sm font-semibold text-gray-600 dark:text-gray-300">
+                        {student.platforms.CODECHEF}
                       </td>
                       <td className="px-6 py-4 text-right">
                         <span className="inline-flex items-center justify-center px-3 py-1 rounded-full bg-[#E5E7EB] dark:bg-gray-700 text-[#1E1F2B] dark:text-white font-bold text-sm">
