@@ -58,7 +58,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <>
-      <header className="sticky top-0 z-50 bg-[#F6F7FF]/90 dark:bg-[#09090b]/90 backdrop-blur-md border-b border-[#8B8CF6]/15 dark:border-[#27272a] px-4 lg:px-12 py-3.5 transition-all">
+      <header className="sticky top-0 z-50 bg-[#F6F7FF]/90 dark:bg-gray-900/90 backdrop-blur-md border-b border-[#8B8CF6]/15 dark:border-gray-700 px-4 lg:px-12 py-3.5 transition-all">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
           {/* Brand Logo */}
           <div 
@@ -82,7 +82,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1 bg-white/80 dark:bg-[#111115]/80 p-1.5 rounded-full border border-[#8B8CF6]/20 dark:border-[#27272a] shadow-sm">
+          <nav className="hidden md:flex items-center gap-1 bg-white/80 dark:bg-gray-800/80 p-1.5 rounded-full border border-[#8B8CF6]/20 dark:border-gray-700 shadow-sm">
             {[
               { id: "home", label: "Home" },
               { id: "dashboard", label: "Dashboard" },
@@ -107,7 +107,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         ? "opacity-60 cursor-not-allowed text-[#6A6C88] dark:text-slate-500"
                         : isActive
                           ? "bg-[#6C5CE7] text-white shadow-md shadow-[#6C5CE7]/25"
-                          : "text-[#5A5C75] dark:text-slate-400 hover:text-[#1E1F2B] dark:hover:text-white hover:bg-[#8B8CF6]/10 dark:hover:bg-[#27272a]"
+                          : "text-[#5A5C75] dark:text-gray-400 hover:text-[#1E1F2B] dark:hover:text-white hover:bg-[#8B8CF6]/10 dark:hover:bg-[#27272a]"
                     }`}
                   >
                     <span>{item.label}</span>
@@ -122,7 +122,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Dark Mode Toggle */}
             <button
               onClick={toggleDarkMode}
-              className="p-2 rounded-full bg-white dark:bg-[#111115] border border-[#8B8CF6]/25 dark:border-[#27272a] text-[#6A6C88] dark:text-slate-300 hover:text-[#1E1F2B] dark:hover:text-white transition-all shadow-xs"
+              className="p-2 rounded-full bg-white dark:bg-gray-800 border border-[#8B8CF6]/25 dark:border-gray-700 text-[#6A6C88] dark:text-gray-300 hover:text-[#1E1F2B] dark:hover:text-white transition-all shadow-xs"
               aria-label="Toggle Dark Mode"
             >
               {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
@@ -132,7 +132,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             {session?.user ? (
               <button
                 onClick={() => signOut()}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-full border border-[#8B8CF6]/30 dark:border-[#27272a] text-xs font-bold text-[#1E1F2B] dark:text-white hover:bg-[#F0F2FF] dark:hover:bg-[#27272a] transition-all"
+                className="flex items-center gap-1.5 px-4 py-2 rounded-full border border-[#8B8CF6]/30 dark:border-gray-700 text-xs font-bold text-[#1E1F2B] dark:text-white hover:bg-[#F0F2FF] dark:hover:bg-[#27272a] transition-all"
               >
                 <LogOut className="w-3.5 h-3.5 text-[#6C5CE7]" />
                 <span>Sign Out ({session.user.name?.split(" ")[0]})</span>

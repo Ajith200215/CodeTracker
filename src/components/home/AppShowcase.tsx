@@ -26,7 +26,7 @@ export const AppShowcase: React.FC<AppShowcaseProps> = ({ onOpenApp }) => {
           <h2 className="font-serif-display text-4xl sm:text-5xl font-extrabold text-[#1E1F2B] dark:text-white tracking-tight">
             CodeTracker mobile & web app
           </h2>
-          <p className="text-sm sm:text-base text-[#5A5C75] dark:text-slate-400 font-medium mt-3 leading-relaxed">
+          <p className="text-sm sm:text-base text-[#5A5C75] dark:text-gray-400 font-medium mt-3 leading-relaxed">
             CodeTracker is an interactive coding progress app designed specifically for 
             colleges, with advanced analytics and live proctoring features.
           </p>
@@ -35,7 +35,7 @@ export const AppShowcase: React.FC<AppShowcaseProps> = ({ onOpenApp }) => {
         {/* 2 Top Showcase Cards Side-by-Side */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           {/* Card 1: Friendly User Interface */}
-          <div className="bg-white dark:bg-[#18181f] rounded-[36px] p-8 border border-[#8B8CF6]/20 shadow-xl shadow-[#8B8CF6]/10 flex flex-col justify-between relative overflow-hidden">
+          <div className="bg-white dark:bg-gray-800 rounded-[36px] p-8 border border-[#8B8CF6]/20 shadow-xl shadow-[#8B8CF6]/10 flex flex-col justify-between relative overflow-hidden">
             <div className="text-center mb-6">
               <h3 className="font-serif-display text-2xl font-bold text-[#1E1F2B] dark:text-white">
                 Very friendly user interface
@@ -55,7 +55,7 @@ export const AppShowcase: React.FC<AppShowcaseProps> = ({ onOpenApp }) => {
               </div>
 
               {/* Central App Card Preview */}
-              <div className="bg-white dark:bg-[#18181f] p-5 rounded-2xl border border-[#8B8CF6]/30 shadow-lg w-full max-w-xs text-left">
+              <div className="bg-white dark:bg-gray-800 p-5 rounded-2xl border border-[#8B8CF6]/30 shadow-lg w-full max-w-xs text-left">
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-8 h-8 rounded-full bg-[#8B8CF6]/20 flex items-center justify-center text-[#6C5CE7]">
                     <ShieldCheck className="w-4 h-4" />
@@ -73,7 +73,7 @@ export const AppShowcase: React.FC<AppShowcaseProps> = ({ onOpenApp }) => {
           </div>
 
           {/* Card 2: Complete Learning & Practice Media */}
-          <div className="bg-white dark:bg-[#18181f] rounded-[36px] p-8 border border-[#8B8CF6]/20 shadow-xl shadow-[#8B8CF6]/10 flex flex-col justify-between relative overflow-hidden">
+          <div className="bg-white dark:bg-gray-800 rounded-[36px] p-8 border border-[#8B8CF6]/20 shadow-xl shadow-[#8B8CF6]/10 flex flex-col justify-between relative overflow-hidden">
             <div className="text-center mb-6">
               <h3 className="font-serif-display text-2xl font-bold text-[#1E1F2B] dark:text-white">
                 Complete coding & analytics media
@@ -83,7 +83,7 @@ export const AppShowcase: React.FC<AppShowcaseProps> = ({ onOpenApp }) => {
             {/* Inner Practice Showcase */}
             <div className="bg-[#FFF4F2] rounded-3xl p-6 relative min-h-[260px] flex items-center justify-center">
               {/* Floating Code Practice Badge */}
-              <div className="bg-white dark:bg-[#18181f]/90 backdrop-blur-md p-4 rounded-2xl border border-[#F8A195]/40 shadow-lg w-full max-w-xs text-left">
+              <div className="bg-white dark:bg-gray-800/90 backdrop-blur-md p-4 rounded-2xl border border-[#F8A195]/40 shadow-lg w-full max-w-xs text-left">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-xs font-extrabold text-[#1E1F2B] dark:text-white">Drawing & Logic</span>
                   <Code2 className="w-4 h-4 text-[#F8A195]" />

@@ -23,7 +23,7 @@ interface HeroSectionProps {
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ onStart, onWatchDemo }) => {
   return (
-    <section className="relative overflow-hidden pt-8 pb-16 lg:py-20 px-4 lg:px-12 bg-gradient-to-b from-[#F6F7FF] via-[#F0F2FF] to-[#F6F7FF] dark:from-[#09090b] dark:via-[#111115] dark:to-[#09090b]">
+    <section className="relative overflow-hidden pt-8 pb-16 lg:py-20 px-4 lg:px-12 bg-gradient-to-b from-[#F6F7FF] via-[#F0F2FF] to-[#F6F7FF] dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       {/* Decorative Background Sparkles & Soft Glowing Blobs */}
       <div className="absolute top-12 left-1/4 w-72 h-72 bg-[#8B8CF6]/15 rounded-full blur-3xl animate-pulse-glow pointer-events-none"></div>
       <div className="absolute bottom-10 right-10 w-96 h-96 bg-[#F8A195]/15 rounded-full blur-3xl animate-pulse-glow pointer-events-none"></div>
@@ -37,7 +37,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStart, onWatchDemo }
           className="lg:col-span-6 flex flex-col items-start space-y-6 text-left"
         >
           {/* Top Pill Badge */}
-          <div className="inline-flex items-center gap-2 bg-white dark:bg-[#18181f] px-4 py-2 rounded-full border border-[#8B8CF6]/25 shadow-xs">
+          <div className="inline-flex items-center gap-2 bg-white dark:bg-gray-800 px-4 py-2 rounded-full border border-[#8B8CF6]/25 shadow-xs">
             <div className="w-5 h-5 rounded-full bg-[#6C5CE7] flex items-center justify-center text-white">
               <Puzzle className="w-3 h-3 fill-current" />
             </div>
@@ -69,7 +69,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStart, onWatchDemo }
             </span>
           </h1>
 
-          <p className="text-base sm:text-lg text-[#5A5C75] dark:text-slate-400 max-w-xl font-medium leading-relaxed">
+          <p className="text-base sm:text-lg text-[#5A5C75] dark:text-gray-400 max-w-xl font-medium leading-relaxed">
             Real-time platform stats sync across LeetCode & Codeforces, automated 
             CodeScore rating, and browser-proctored college coding exams.
           </p>
@@ -86,7 +86,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStart, onWatchDemo }
 
             <button
               onClick={onWatchDemo}
-              className="px-7 py-4 rounded-full bg-white dark:bg-[#18181f] hover:bg-[#F0F2FF] dark:bg-[#161723] text-[#1E1F2B] dark:text-white font-bold text-sm border border-[#8B8CF6]/30 shadow-xs transition-all hover:scale-105 flex items-center gap-3"
+              className="px-7 py-4 rounded-full bg-white dark:bg-gray-800 hover:bg-[#F0F2FF] dark:bg-gray-900 text-[#1E1F2B] dark:text-white font-bold text-sm border border-[#8B8CF6]/30 shadow-xs transition-all hover:scale-105 flex items-center gap-3"
             >
               <div className="w-7 h-7 rounded-full bg-[#8B8CF6]/20 flex items-center justify-center text-[#6C5CE7]">
                 <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
@@ -106,10 +106,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStart, onWatchDemo }
           className="lg:col-span-6 relative flex justify-center"
         >
           {/* Main Mobile App Frame */}
-          <div className="w-full max-w-sm bg-white dark:bg-[#18181f] rounded-[40px] p-5 shadow-2xl shadow-[#6C5CE7]/20 border-4 border-white ring-1 ring-[#8B8CF6]/20 relative animate-float">
+          <div className="w-full max-w-sm bg-white dark:bg-gray-800 rounded-[40px] p-5 shadow-2xl shadow-[#6C5CE7]/20 border-4 border-white ring-1 ring-[#8B8CF6]/20 relative animate-float">
             
             {/* Phone Top Notch / Status Bar */}
-            <div className="flex items-center justify-between px-3 py-1 mb-4 text-xs font-bold text-slate-800 dark:text-slate-300">
+            <div className="flex items-center justify-between px-3 py-1 mb-4 text-xs font-bold text-slate-800 dark:text-gray-300">
               <span>9:41</span>
               <div className="flex items-center gap-1.5">
                 <div className="w-2.5 h-2.5 rounded-full bg-slate-800"></div>
@@ -162,7 +162,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStart, onWatchDemo }
                   className={`flex items-center gap-1.5 px-3 py-2 rounded-2xl text-xs font-bold whitespace-nowrap transition-all ${
                     plat.active
                       ? "bg-[#6C5CE7] text-white shadow-xs"
-                      : "bg-[#F6F7FF] dark:bg-[#111115] text-[#5A5C75] dark:text-slate-400 border border-[#8B8CF6]/15"
+                      : "bg-[#F6F7FF] dark:bg-gray-800 text-[#5A5C75] dark:text-gray-400 border border-[#8B8CF6]/15"
                   }`}
                 >
                   <plat.icon className="w-3.5 h-3.5" />
@@ -179,7 +179,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStart, onWatchDemo }
 
             <div className="grid grid-cols-2 gap-3">
               {/* Practice Card 1 */}
-              <div className="bg-[#FFF6F4] dark:bg-[#212335] rounded-2xl p-3 border border-[#F8A195]/30 flex flex-col justify-between">
+              <div className="bg-[#FFF6F4] dark:bg-gray-800 rounded-2xl p-3 border border-[#F8A195]/30 flex flex-col justify-between">
                 <span className="text-[11px] font-extrabold text-[#1E1F2B] dark:text-white leading-tight">
                   Graph Practice
                 </span>
@@ -190,7 +190,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStart, onWatchDemo }
               </div>
 
               {/* Practice Card 2 */}
-              <div className="bg-[#F0F2FF] dark:bg-[#161723] rounded-2xl p-3 border border-[#8B8CF6]/30 flex flex-col justify-between">
+              <div className="bg-[#F0F2FF] dark:bg-gray-900 rounded-2xl p-3 border border-[#8B8CF6]/30 flex flex-col justify-between">
                 <span className="text-[11px] font-extrabold text-[#1E1F2B] dark:text-white leading-tight">
                   Dynamic Prog.
                 </span>
@@ -203,7 +203,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStart, onWatchDemo }
           </div>
 
           {/* Floating Decorative Sparkles & Badges around mobile frame */}
-          <div className="absolute -top-4 -right-4 bg-white dark:bg-[#18181f] p-3 rounded-2xl border border-[#8B8CF6]/25 shadow-lg flex items-center gap-2 animate-float-reverse">
+          <div className="absolute -top-4 -right-4 bg-white dark:bg-gray-800 p-3 rounded-2xl border border-[#8B8CF6]/25 shadow-lg flex items-center gap-2 animate-float-reverse">
             <div className="w-3 h-3 rounded-full bg-[#4ADE80]"></div>
             <span className="text-xs font-extrabold text-[#1E1F2B] dark:text-white">Proctoring Active</span>
           </div>
