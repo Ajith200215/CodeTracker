@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { Sparkles, Code2, ShieldAlert, GraduationCap, ChevronRight, LogIn, LogOut, User, X, Mail } from "lucide-react";
+import { Sparkles, Code2, ShieldAlert, GraduationCap, ChevronRight, LogIn, LogOut, User, X, Mail, Sun, Moon } from "lucide-react";
 import { NexaGradeLoginModal } from "../auth/NexaGradeLoginModal";
 
 interface NavbarProps {
@@ -22,6 +22,20 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [inputEmail, setInputEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    if (typeof document !== "undefined") {
+      setIsDarkMode(document.documentElement.classList.contains("dark"));
+    }
+  }, []);
+
+  const toggleDarkMode = () => {
+    if (typeof document !== "undefined") {
+      const isDark = document.documentElement.classList.toggle("dark");
+      setIsDarkMode(isDark);
+    }
+  };
 
   const handleEmailSignIn = async (emailToUse: string, roleToUse: "STUDENT" | "TEACHER") => {
     const trimmedEmail = emailToUse.trim();
@@ -43,7 +57,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <>
-      <header className="sticky top-0 z-50 bg-[#F6F7FF]/90 backdrop-blur-md border-b border-[#8B8CF6]/15 px-4 lg:px-12 py-3.5 transition-all">
+      <header className="sticky top-0 z-50 bg-[#F6F7FF]/90 dark:bg-[#09090b]/90 backdrop-blur-md border-b border-[#8B8CF6]/15 dark:border-[#27272a] px-4 lg:px-12 py-3.5 transition-all">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
           {/* Brand Logo */}
           <div 
@@ -55,7 +69,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
             <div className="flex flex-col">
               <div className="flex items-center gap-1">
-                <span className="font-serif-display text-2xl font-bold tracking-tight text-[#1E1F2B]">
+                <span className="font-serif-display text-2xl font-bold tracking-tight text-[#1E1F2B] dark:text-white">
                   Code<span className="text-[#6C5CE7]">Tracker</span>
                 </span>
                 <span className="w-2 h-2 rounded-full bg-[#F8A195]"></span>
@@ -67,7 +81,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1 bg-white/80 p-1.5 rounded-full border border-[#8B8CF6]/20 shadow-sm">
+          <nav className="hidden md:flex items-center gap-1 bg-white/80 dark:bg-[#111115]/80 p-1.5 rounded-full border border-[#8B8CF6]/20 dark:border-[#27272a] shadow-sm">
             {[
               { id: "home", label: "Home" },
               { id: "dashboard", label: "Dashboard" },
@@ -86,7 +100,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     className={`px-5 py-2 rounded-full text-xs font-bold transition-all ${
                       isActive
                         ? "bg-[#6C5CE7] text-white shadow-md shadow-[#6C5CE7]/25"
-                        : "text-[#5A5C75] hover:text-[#1E1F2B] hover:bg-[#8B8CF6]/10"
+                        : "text-[#5A5C75] dark:text-slate-400 hover:text-[#1E1F2B] dark:hover:text-white hover:bg-[#8B8CF6]/10 dark:hover:bg-[#27272a]"
                     }`}
                   >
                     {item.label}
@@ -95,40 +109,22 @@ export const Navbar: React.FC<NavbarProps> = ({
               })}
           </nav>
 
-          {/* Role Switcher, Login & Open Portal */}
+          {/* Theme Switcher & Login */}
           <div className="flex items-center gap-3">
-            {/* Role Toggle Pill (Student / Teacher) */}
-            <div className="bg-white p-1 rounded-full border border-[#8B8CF6]/25 flex items-center shadow-xs">
-              <button
-                onClick={() => onRoleToggle("STUDENT")}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
-                  currentRole === "STUDENT"
-                    ? "bg-[#8B8CF6] text-white shadow-xs"
-                    : "text-[#6A6C88] hover:text-[#1E1F2B]"
-                }`}
-              >
-                <GraduationCap className="w-3.5 h-3.5" />
-                <span>Student</span>
-              </button>
-
-              <button
-                onClick={() => onRoleToggle("TEACHER")}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
-                  currentRole === "TEACHER"
-                    ? "bg-[#1E1F2B] text-white shadow-xs"
-                    : "text-[#6A6C88] hover:text-[#1E1F2B]"
-                }`}
-              >
-                <ShieldAlert className="w-3.5 h-3.5 text-[#F8A195]" />
-                <span>Teacher</span>
-              </button>
-            </div>
+            {/* Dark Mode Toggle */}
+            <button
+              onClick={toggleDarkMode}
+              className="p-2 rounded-full bg-white dark:bg-[#111115] border border-[#8B8CF6]/25 dark:border-[#27272a] text-[#6A6C88] dark:text-slate-300 hover:text-[#1E1F2B] dark:hover:text-white transition-all shadow-xs"
+              aria-label="Toggle Dark Mode"
+            >
+              {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </button>
 
             {/* Logged in User Pill or Portal Login Button */}
             {session?.user ? (
               <button
                 onClick={() => signOut()}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-full border border-[#8B8CF6]/30 text-xs font-bold text-[#1E1F2B] hover:bg-[#F0F2FF] transition-all"
+                className="flex items-center gap-1.5 px-4 py-2 rounded-full border border-[#8B8CF6]/30 dark:border-[#27272a] text-xs font-bold text-[#1E1F2B] dark:text-white hover:bg-[#F0F2FF] dark:hover:bg-[#27272a] transition-all"
               >
                 <LogOut className="w-3.5 h-3.5 text-[#6C5CE7]" />
                 <span>Sign Out ({session.user.name?.split(" ")[0]})</span>
@@ -136,20 +132,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             ) : (
               <button
                 onClick={() => setShowLoginModal(true)}
-                className="flex items-center gap-1.5 px-5 py-2 rounded-full border-2 border-[#6C5CE7] text-[#6C5CE7] hover:bg-[#6C5CE7] hover:text-white text-xs font-extrabold transition-all shadow-xs"
+                className="flex items-center gap-1.5 px-5 py-2 rounded-full border-2 border-[#6C5CE7] text-[#6C5CE7] dark:hover:bg-[#6C5CE7] hover:bg-[#6C5CE7] hover:text-white text-xs font-extrabold transition-all shadow-xs"
               >
                 <LogIn className="w-3.5 h-3.5" />
                 <span>Portal Login</span>
               </button>
             )}
-
-            <button
-              onClick={() => setActiveTab(currentRole === "TEACHER" ? "monitor" : "dashboard")}
-              className="hidden sm:flex items-center gap-2 bg-[#1E1F2B] hover:bg-[#2C2E40] text-white px-5 py-2.5 rounded-full text-xs font-bold shadow-md transition-all hover:scale-[1.02]"
-            >
-              <span>Open Portal</span>
-              <ChevronRight className="w-3.5 h-3.5 text-[#F8A195]" />
-            </button>
           </div>
         </div>
       </header>
