@@ -44,7 +44,7 @@ export const TeacherRoster: React.FC = () => {
   ];
 
   return (
-    <section className="py-20 px-4 lg:px-12 bg-[#9B9DF6] text-white relative overflow-hidden">
+    <section className="py-20 px-4 lg:px-12 bg-[#9B9DF6] dark:bg-black text-white relative overflow-hidden">
       {/* Decorative Wavy Lines & Sparkles */}
       <div className="absolute top-8 left-10 text-white/30">
         <Sparkles className="w-12 h-12" />
@@ -79,7 +79,7 @@ export const TeacherRoster: React.FC = () => {
               >
                 {/* Circular Avatar Container */}
                 <div className="relative mb-6">
-                  <div className={`w-44 h-44 rounded-full ${teacher.bgClass} flex items-center justify-center shadow-xl transition-transform group-hover:scale-105 border-4 border-white`}>
+                  <div className={`w-44 h-44 rounded-full ${teacher.bgClass} flex items-center justify-center shadow-xl transition-transform group-hover:scale-105 border-4 border-white dark:border-gray-800 dark:!bg-gray-800`}>
                     <span className="text-5xl font-extrabold text-white font-serif-display">
                       {teacher.name.split(" ").map(n => n[0]).join("").slice(0, 2)}
                     </span>

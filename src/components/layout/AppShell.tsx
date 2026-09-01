@@ -91,23 +91,23 @@ export const AppShell: React.FC<AppShellProps> = ({
   const navItems = currentRole === "STUDENT" ? studentNavItems : teacherNavItems;
 
   return (
-    <div className="min-h-screen bg-[#F6F7FF] flex flex-col lg:flex-row text-[#1E1F2B]">
+    <div className="min-h-screen bg-[#F6F7FF] dark:bg-black flex flex-col lg:flex-row text-[#1E1F2B] dark:text-white">
       {/* Sidebar Navigation */}
-      <aside className={`fixed lg:static inset-y-0 left-0 z-40 w-64 bg-white border-r border-[#8B8CF6]/15 flex flex-col justify-between transition-transform duration-300 ${
+      <aside className={`fixed lg:static inset-y-0 left-0 z-40 w-64 bg-white dark:bg-gray-900 border-r border-[#8B8CF6]/15 dark:border-gray-800 flex flex-col justify-between transition-transform duration-300 ${
         sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
       }`}>
         <div>
           {/* Brand Header */}
-          <div className="p-6 border-b border-[#8B8CF6]/15 flex items-center justify-between">
+          <div className="p-6 border-b border-[#8B8CF6]/15 dark:border-gray-800 flex items-center justify-between">
             <div 
               onClick={() => setActiveNav("home")}
               className="flex items-center gap-2.5 cursor-pointer"
             >
-              <div className="w-10 h-10 rounded-2xl bg-[#6C5CE7] flex items-center justify-center text-white shadow-md shadow-[#6C5CE7]/30">
+              <div className="w-10 h-10 rounded-2xl bg-[#6C5CE7] flex items-center justify-center text-white shadow-md shadow-[#6C5CE7]/30 dark:shadow-none">
                 <Code2 className="w-5.5 h-5.5" />
               </div>
               <div>
-                <span className="font-serif-display text-xl font-bold text-[#1E1F2B]">
+                <span className="font-serif-display text-xl font-bold text-[#1E1F2B] dark:text-white">
                   Code<span className="text-[#6C5CE7]">Tracker</span>
                 </span>
                 <span className="block text-[10px] font-bold text-[#8B8CF6] uppercase tracking-wider -mt-1">
@@ -117,7 +117,7 @@ export const AppShell: React.FC<AppShellProps> = ({
             </div>
             <button 
               onClick={() => setSidebarOpen(false)} 
-              className="lg:hidden text-slate-400 hover:text-slate-600"
+              className="lg:hidden text-slate-400 dark:text-gray-500 hover:text-slate-600 hover:dark:text-gray-300"
             >
               <X className="w-5 h-5" />
             </button>
@@ -125,7 +125,7 @@ export const AppShell: React.FC<AppShellProps> = ({
 
           {/* Navigation Items */}
           <nav className="p-4 space-y-1.5">
-            <div className="px-3 py-2 text-[10px] font-extrabold uppercase tracking-wider text-[#6A6C88]">
+            <div className="px-3 py-2 text-[10px] font-extrabold uppercase tracking-wider text-[#6A6C88] dark:text-gray-400">
               {currentRole} Menu
             </div>
             {navItems.map((item) => {
@@ -141,16 +141,16 @@ export const AppShell: React.FC<AppShellProps> = ({
                   }}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-xs font-bold transition-all ${
                     isLocked 
-                      ? "opacity-60 cursor-not-allowed text-[#6A6C88] bg-[#F6F7FF]/50" 
+                      ? "opacity-60 cursor-not-allowed text-[#6A6C88] dark:text-gray-400 bg-[#F6F7FF] dark:bg-black/50" 
                       : isActive
-                        ? "bg-[#6C5CE7] text-white shadow-md shadow-[#6C5CE7]/25"
-                        : "text-[#5A5C75] hover:bg-[#F0F2FF] hover:text-[#1E1F2B]"
+                        ? "bg-[#6C5CE7] dark:bg-black text-white shadow-md shadow-[#6C5CE7]/25 dark:shadow-none"
+                        : "text-[#5A5C75] dark:text-gray-300 hover:bg-[#F0F2FF] hover:dark:bg-gray-800 dark:bg-gray-800 hover:text-[#1E1F2B] hover:dark:text-white"
                   }`}
                 >
                   <Icon className="w-4 h-4" />
                   <span>{item.label}</span>
                   {isLocked ? (
-                    <Lock className="w-3.5 h-3.5 ml-auto text-slate-400" />
+                    <Lock className="w-3.5 h-3.5 ml-auto text-slate-400 dark:text-gray-500" />
                   ) : isActive ? (
                     <ChevronRight className="w-3.5 h-3.5 ml-auto text-white/80" />
                   ) : null}
@@ -161,16 +161,16 @@ export const AppShell: React.FC<AppShellProps> = ({
         </div>
 
         {/* Logged-in User Card */}
-        <div className="p-4 border-t border-[#8B8CF6]/15 bg-[#F6F7FF]">
-          <div className="flex items-center gap-3 bg-white p-3 rounded-2xl border border-[#8B8CF6]/15">
+        <div className="p-4 border-t border-[#8B8CF6]/15 dark:border-gray-800 bg-[#F6F7FF] dark:bg-black">
+          <div className="flex items-center gap-3 bg-white dark:bg-gray-900 p-3 rounded-2xl border border-[#8B8CF6]/15 dark:border-gray-800">
             <img
               src={user.avatar}
               alt={user.name}
               className="w-9 h-9 rounded-full object-cover border-2 border-[#8B8CF6]"
             />
             <div className="flex-1 min-w-0">
-              <div className="text-xs font-bold text-[#1E1F2B] truncate">{user.name}</div>
-              <div className="text-[10px] text-[#6A6C88] truncate">{user.email}</div>
+              <div className="text-xs font-bold text-[#1E1F2B] dark:text-white truncate">{user.name}</div>
+              <div className="text-[10px] text-[#6A6C88] dark:text-gray-400 truncate">{user.email}</div>
             </div>
           </div>
         </div>
@@ -179,30 +179,30 @@ export const AppShell: React.FC<AppShellProps> = ({
       {/* Main Content Area with Topbar */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Topbar showing logged-in user name & role badge */}
-        <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-[#8B8CF6]/15 px-6 py-3.5 flex items-center justify-between gap-4">
+        <header className="sticky top-0 z-30 bg-white dark:bg-gray-900/90 backdrop-blur-md border-b border-[#8B8CF6]/15 dark:border-gray-800 px-6 py-3.5 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="lg:hidden p-2 rounded-xl bg-[#F0F2FF] text-[#1E1F2B]"
+              className="lg:hidden p-2 rounded-xl bg-[#F0F2FF] dark:bg-gray-800 text-[#1E1F2B] dark:text-white"
             >
               <Menu className="w-5 h-5" />
             </button>
 
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="font-serif-display text-xl font-bold text-[#1E1F2B]">
+                <h2 className="font-serif-display text-xl font-bold text-[#1E1F2B] dark:text-white">
                   {navItems.find((n) => n.id === activeNav)?.label || "Portal"}
                 </h2>
                 <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${
                   currentRole === "STUDENT"
-                    ? "bg-[#8B8CF6]/20 text-[#6C5CE7] border border-[#8B8CF6]/30"
+                    ? "bg-[#8B8CF6]/20 text-[#6C5CE7] border border-[#8B8CF6]/30 dark:border-gray-700"
                     : "bg-[#1E1F2B] text-[#F8A195]"
                 }`}>
                   {currentRole} BADGE
                 </span>
               </div>
-              <p className="text-[11px] text-[#6A6C88] font-medium hidden sm:block">
-                Logged in as <strong className="text-[#1E1F2B]">{user.name}</strong>
+              <p className="text-[11px] text-[#6A6C88] dark:text-gray-400 font-medium hidden sm:block">
+                Logged in as <strong className="text-[#1E1F2B] dark:text-white">{user.name}</strong>
               </p>
             </div>
           </div>
@@ -212,7 +212,7 @@ export const AppShell: React.FC<AppShellProps> = ({
             {session?.user ? (
               <button
                 onClick={() => signOut()}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-full border border-[#8B8CF6]/30 text-xs font-bold text-[#1E1F2B] hover:bg-[#F0F2FF] transition-all"
+                className="flex items-center gap-1.5 px-4 py-2 rounded-full border border-[#8B8CF6]/30 dark:border-gray-700 text-xs font-bold text-[#1E1F2B] dark:text-white hover:bg-[#F0F2FF] hover:dark:bg-gray-800 dark:bg-gray-800 transition-all"
               >
                 <LogOut className="w-3.5 h-3.5 text-[#6C5CE7]" />
                 <span>Sign Out ({session.user.name?.split(" ")[0]})</span>
@@ -227,7 +227,7 @@ export const AppShell: React.FC<AppShellProps> = ({
               </button>
             )}
 
-            <button className="w-9 h-9 rounded-full bg-[#F6F7FF] border border-[#8B8CF6]/20 flex items-center justify-center text-[#6C5CE7] hover:bg-[#8B8CF6]/20 transition-all relative">
+            <button className="w-9 h-9 rounded-full bg-[#F6F7FF] dark:bg-black border border-[#8B8CF6]/20 dark:border-gray-700 flex items-center justify-center text-[#6C5CE7] hover:bg-[#8B8CF6]/20 transition-all relative">
               <Bell className="w-4 h-4" />
               <span className="w-2 h-2 rounded-full bg-[#F8A195] absolute top-1 right-1"></span>
             </button>
@@ -242,41 +242,41 @@ export const AppShell: React.FC<AppShellProps> = ({
 
       {/* Login Modal Overlay */}
       {showLoginModal && (
-        <div className="fixed inset-0 z-50 bg-[#161723]/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-[36px] p-8 max-w-md w-full border border-[#8B8CF6]/20 shadow-2xl relative space-y-5 text-center">
+        <div className="fixed inset-0 z-50 bg-[#161723]/60 dark:bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-gray-900 rounded-[36px] p-8 max-w-md w-full border border-[#8B8CF6]/20 dark:border-gray-700 shadow-2xl relative space-y-5 text-center">
             <button
               onClick={() => setShowLoginModal(false)}
-              className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#F6F7FF] hover:bg-[#EAEBFF] flex items-center justify-center text-slate-500"
+              className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#F6F7FF] dark:bg-black hover:bg-[#EAEBFF] hover:dark:bg-gray-700 flex items-center justify-center text-slate-500 dark:text-gray-400"
             >
               <X className="w-4 h-4" />
             </button>
 
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-[#6C5CE7] to-[#8B8CF6] text-white flex items-center justify-center mx-auto shadow-lg shadow-[#6C5CE7]/30">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-[#6C5CE7] to-[#8B8CF6] text-white flex items-center justify-center mx-auto shadow-lg shadow-[#6C5CE7]/30 dark:shadow-none">
               <Code2 className="w-7 h-7" />
             </div>
 
             <div>
-              <h2 className="font-serif-display text-3xl font-extrabold text-[#1E1F2B]">
+              <h2 className="font-serif-display text-3xl font-extrabold text-[#1E1F2B] dark:text-white">
                 Account Sign In
               </h2>
-              <p className="text-xs text-[#5A5C75] font-medium mt-1">
+              <p className="text-xs text-[#5A5C75] dark:text-gray-300 font-medium mt-1">
                 Enter your college email or choose 1-click test credentials.
               </p>
             </div>
 
             {/* Email Direct Sign In Input */}
             <div className="space-y-2 text-left">
-              <label className="text-[11px] font-extrabold uppercase text-[#6A6C88] tracking-wider">
+              <label className="text-[11px] font-extrabold uppercase text-[#6A6C88] dark:text-gray-400 tracking-wider">
                 College Email Address
               </label>
-              <div className="flex items-center gap-2 bg-[#F6F7FF] p-2.5 px-4 rounded-2xl border border-[#8B8CF6]/30">
+              <div className="flex items-center gap-2 bg-[#F6F7FF] dark:bg-black p-2.5 px-4 rounded-2xl border border-[#8B8CF6]/30 dark:border-gray-700">
                 <Mail className="w-4 h-4 text-[#8B8CF6]" />
                 <input
                   type="email"
                   value={inputEmail}
                   onChange={(e) => setInputEmail(e.target.value)}
                   placeholder="student@college.edu"
-                  className="bg-transparent outline-none w-full text-xs font-semibold text-[#1E1F2B]"
+                  className="bg-transparent outline-none w-full text-xs font-semibold text-[#1E1F2B] dark:text-white"
                 />
               </div>
               <button
@@ -290,16 +290,16 @@ export const AppShell: React.FC<AppShellProps> = ({
             </div>
 
             <div className="relative flex py-1 items-center">
-              <div className="flex-grow border-t border-slate-200"></div>
+              <div className="flex-grow border-t border-slate-200 dark:border-gray-700"></div>
               <span className="flex-shrink mx-3 text-[10px] font-bold uppercase text-[#8B8CF6]">
                 Or Google / Quick Demo
               </span>
-              <div className="flex-grow border-t border-slate-200"></div>
+              <div className="flex-grow border-t border-slate-200 dark:border-gray-700"></div>
             </div>
 
             <button
               onClick={() => signIn("google")}
-              className="w-full py-3 rounded-full bg-white border-2 border-[#8B8CF6]/30 hover:border-[#6C5CE7] text-[#1E1F2B] font-extrabold text-xs shadow-sm flex items-center justify-center gap-3 transition-all"
+              className="w-full py-3 rounded-full bg-white dark:bg-gray-900 border-2 border-[#8B8CF6]/30 dark:border-gray-700 hover:border-[#6C5CE7] text-[#1E1F2B] dark:text-white font-extrabold text-xs shadow-sm flex items-center justify-center gap-3 transition-all"
             >
               <svg className="w-4 h-4" viewBox="0 0 24 24">
                 <path
@@ -326,13 +326,13 @@ export const AppShell: React.FC<AppShellProps> = ({
             <div className="grid grid-cols-2 gap-3 pt-1">
               <button
                 onClick={() => handleEmailSignIn("sarah.hessy@college.edu", "STUDENT")}
-                className="p-3 rounded-2xl bg-[#F0F2FF] hover:bg-[#E5E8FF] border border-[#8B8CF6]/30 text-left transition-all"
+                className="p-3 rounded-2xl bg-[#F0F2FF] dark:bg-gray-800 hover:bg-[#E5E8FF] hover:dark:bg-gray-700 border border-[#8B8CF6]/30 dark:border-gray-700 text-left transition-all"
               >
                 <div className="flex items-center gap-1.5 text-xs font-bold text-[#6C5CE7]">
                   <GraduationCap className="w-3.5 h-3.5" />
                   <span>Student Login</span>
                 </div>
-                <div className="text-[10px] font-semibold text-[#5A5C75] mt-0.5">
+                <div className="text-[10px] font-semibold text-[#5A5C75] dark:text-gray-300 mt-0.5">
                   sarah.hessy@college.edu
                 </div>
               </button>
