@@ -4,114 +4,84 @@ import { Platform, Role } from "@prisma/client";
 import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authOptions";
+import { calculateCodeScore } from "@/lib/platforms/stats-aggregator";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-function cleanHandle(val: any, fallback: string): string {
-  if (!val || typeof val !== "string") return fallback;
-  const trimmed = val.trim();
-  if (
-    trimmed === "" ||
-    trimmed.toLowerCase() === "none" ||
-    trimmed.toLowerCase() === "undefined" ||
-    trimmed.toLowerCase() === "null"
-  ) {
-    return fallback;
-  }
-  return trimmed;
-}
+const PLATFORMS_LIST: Platform[] = [
+  Platform.LEETCODE,
+  Platform.CODEFORCES,
+  Platform.CODECHEF,
+  Platform.GEEKSFORGEEKS,
+  Platform.HACKERRANK,
+  Platform.ATCODER,
+  Platform.NEETCODE,
+];
 
 export async function GET() {
   const session = await getServerSession(authOptions).catch(() => null);
 
-  let handles: Record<string, string> = {
+  const handles: Record<string, string> = {
     LEETCODE: "",
     CODEFORCES: "",
     CODECHEF: "",
+    GEEKSFORGEEKS: "",
+    HACKERRANK: "",
+    ATCODER: "",
+    NEETCODE: "",
   };
-
-  let hasUserHandles = false;
 
   if (session?.user?.email) {
     const userEmail = session.user.email.toLowerCase().trim();
-    const emailPrefix = userEmail.split("@")[0];
 
     try {
       let user = await db.user.findUnique({
         where: { email: userEmail },
-        include: { platformHandles: true },
+        include: { platformHandles: true, college: true },
       }).catch(() => null);
 
       if (!user) {
         user = await db.user.create({
           data: {
             email: userEmail,
-            name: session.user.name || emailPrefix,
+            name: session.user.name || userEmail.split("@")[0],
             role: Role.STUDENT,
             regNo: "2026-CS-0142",
           },
-          include: { platformHandles: true },
+          include: { platformHandles: true, college: true },
         }).catch(() => null);
       }
 
-      if (user) {
-        if (user.platformHandles && user.platformHandles.length > 0) {
-          user.platformHandles.forEach((h) => {
-            const cleaned = cleanHandle(h.username, "");
-            if (cleaned) {
-              handles[h.platform] = cleaned;
-              hasUserHandles = true;
-            }
-          });
-        }
-
-        // Auto-fetch on email login: if user has no handles saved yet, derive and save default handle
-        if (!hasUserHandles) {
-          const isAjith = emailPrefix.includes("ajith") || emailPrefix.includes("sajith");
-          const autoLcHandle = isAjith ? "Ajith0406" : emailPrefix;
-          const autoCfHandle = "tourist";
-          const autoCcHandle = "tourist";
-
-          handles.LEETCODE = autoLcHandle;
-          handles.CODEFORCES = autoCfHandle;
-          handles.CODECHEF = autoCcHandle;
-          hasUserHandles = true;
-
-          // Save derived handles to DB so they persist for this user account
-          await db.platformHandle.createMany({
-            data: [
-              { userId: user.id, platform: Platform.LEETCODE, username: autoLcHandle },
-              { userId: user.id, platform: Platform.CODEFORCES, username: autoCfHandle },
-              { userId: user.id, platform: Platform.CODECHEF, username: autoCcHandle },
-            ],
-            skipDuplicates: true,
-          }).catch((err) => console.warn("Failed auto-seeding handles:", err));
-        }
+      if (user && user.platformHandles) {
+        user.platformHandles.forEach((h) => {
+          if (h.username && h.username.trim() !== "") {
+            handles[h.platform] = h.username.trim();
+          }
+        });
       }
     } catch (dbError) {
-      console.warn("DB interaction warning in GET /api/sync:", dbError);
+      console.warn("DB error in GET /api/sync:", dbError);
     }
   }
 
-  // Fallback defaults if no session user
-  if (!hasUserHandles) {
-    handles.LEETCODE = "Ajith0406";
-    handles.CODEFORCES = "tourist";
-    handles.CODECHEF = "tourist";
-  }
-
-  return fetchAndAggregateStats(handles);
+  return fetchAndAggregateAllStats(handles);
 }
 
 export async function POST(req: Request) {
   let inputHandles: Record<string, string> = {};
   try {
     const body = await req.json().catch(() => ({}));
-    inputHandles = body.handles || {
-      LEETCODE: body.leetcode || "",
-      CODEFORCES: body.codeforces || "",
-      CODECHEF: body.codechef || "",
+    const raw = body.handles || body;
+
+    inputHandles = {
+      LEETCODE: (raw.leetcode || raw.LEETCODE || "").trim(),
+      CODEFORCES: (raw.codeforces || raw.CODEFORCES || "").trim(),
+      CODECHEF: (raw.codechef || raw.CODECHEF || "").trim(),
+      GEEKSFORGEEKS: (raw.geeksforgeeks || raw.GEEKSFORGEEKS || raw.gfg || "").trim(),
+      HACKERRANK: (raw.hackerrank || raw.HACKERRANK || "").trim(),
+      ATCODER: (raw.atcoder || raw.ATCODER || "").trim(),
+      NEETCODE: (raw.neetcode || raw.NEETCODE || "").trim(),
     };
 
     const session = await getServerSession(authOptions).catch(() => null);
@@ -132,33 +102,32 @@ export async function POST(req: Request) {
       }
 
       if (user) {
-        const platformMappings: Record<string, Platform> = {
-          leetcode: Platform.LEETCODE,
-          LEETCODE: Platform.LEETCODE,
-          codeforces: Platform.CODEFORCES,
-          CODEFORCES: Platform.CODEFORCES,
-          codechef: Platform.CODECHEF,
-          CODECHEF: Platform.CODECHEF,
-        };
+        for (const platform of PLATFORMS_LIST) {
+          const usernameStr = inputHandles[platform] || "";
 
-        for (const [key, val] of Object.entries(inputHandles)) {
-          const platformEnum = platformMappings[key];
-          const usernameStr = (val as string)?.trim();
-          if (platformEnum && usernameStr && usernameStr.toLowerCase() !== "none") {
+          if (usernameStr !== "") {
             await db.platformHandle.upsert({
               where: {
                 userId_platform: {
                   userId: user.id,
-                  platform: platformEnum,
+                  platform,
                 },
               },
               update: { username: usernameStr },
               create: {
                 userId: user.id,
-                platform: platformEnum,
+                platform,
                 username: usernameStr,
               },
-            }).catch((err) => console.warn("Failed to save handle:", err));
+            }).catch((err) => console.warn(`Failed upserting ${platform}:`, err));
+          } else {
+            // If user explicitly saved empty string, delete handle to persist empty state
+            await db.platformHandle.deleteMany({
+              where: {
+                userId: user.id,
+                platform,
+              },
+            }).catch(() => null);
           }
         }
       }
@@ -167,102 +136,89 @@ export async function POST(req: Request) {
     console.warn("Warning in POST /api/sync:", err);
   }
 
-  return fetchAndAggregateStats(inputHandles);
+  return fetchAndAggregateAllStats(inputHandles);
 }
 
-async function fetchAndAggregateStats(handles: Record<string, any>) {
+async function fetchAndAggregateAllStats(handles: Record<string, string>) {
   const results: Record<string, any> = {};
-  let aggregatedTotalSolved = 0;
+  const snapshotsForScore: any[] = [];
+  let totalSolvedCount = 0;
 
-  // Fetch LeetCode live stats
-  const rawLc = handles.LEETCODE || handles.leetcode;
-  const leetcodeHandle = cleanHandle(rawLc, "");
-  if (leetcodeHandle) {
+  for (const platform of PLATFORMS_LIST) {
+    const handleStr = (handles[platform] || "").trim();
+
+    if (!handleStr) {
+      results[platform.toLowerCase()] = {
+        username: "",
+        solved: 0,
+        easy: 0,
+        medium: 0,
+        hard: 0,
+        rating: 0,
+        rank: "Unlinked",
+      };
+      continue;
+    }
+
     try {
-      const adapter = getAdapter(Platform.LEETCODE);
+      const adapter = getAdapter(platform);
       if (adapter) {
-        const stats = await adapter.fetchStats(leetcodeHandle);
-        results.leetcode = {
-          username: leetcodeHandle,
-          solved: stats.totalSolved,
+        const stats = await adapter.fetchStats(handleStr);
+        const solved = stats.totalSolved || 0;
+        totalSolvedCount += solved;
+
+        results[platform.toLowerCase()] = {
+          username: handleStr,
+          solved,
           easy: stats.easySolved || 0,
           medium: stats.mediumSolved || 0,
           hard: stats.hardSolved || 0,
           rating: stats.rating || 0,
-          rank: stats.rank || "N/A",
+          maxRating: stats.maxRating || stats.rating || 0,
+          rank: stats.rank || (stats as any).stars || "API Verified",
+          stars: (stats as any).stars || undefined,
         };
-        aggregatedTotalSolved += stats.totalSolved;
+
+        snapshotsForScore.push({
+          platform,
+          totalSolved: solved,
+          easySolved: stats.easySolved,
+          mediumSolved: stats.mediumSolved,
+          hardSolved: stats.hardSolved,
+          rating: stats.rating,
+        });
+      } else {
+        // Platform without active adapter (e.g. NeetCode manual)
+        results[platform.toLowerCase()] = {
+          username: handleStr,
+          solved: 0,
+          rating: 0,
+          rank: "Manual Handle Saved",
+        };
       }
     } catch (e: any) {
-      console.warn("LeetCode fetch error:", e.message);
-      results.leetcode = { username: leetcodeHandle, solved: 0, easy: 0, medium: 0, hard: 0, rating: 0 };
+      console.warn(`Fetch error for platform ${platform}:`, e.message);
+      results[platform.toLowerCase()] = {
+        username: handleStr,
+        solved: 0,
+        easy: 0,
+        medium: 0,
+        hard: 0,
+        rating: 0,
+        rank: "Error",
+      };
     }
-  } else {
-    results.leetcode = { username: "", solved: 0, easy: 0, medium: 0, hard: 0, rating: 0 };
   }
 
-  // Fetch Codeforces live stats
-  const rawCf = handles.CODEFORCES || handles.codeforces;
-  const codeforcesHandle = cleanHandle(rawCf, "");
-  if (codeforcesHandle) {
-    try {
-      const adapter = getAdapter(Platform.CODEFORCES);
-      if (adapter) {
-        const stats = await adapter.fetchStats(codeforcesHandle);
-        results.codeforces = {
-          username: codeforcesHandle,
-          solved: stats.totalSolved,
-          rating: stats.rating || 0,
-          maxRating: stats.maxRating || 0,
-          rank: stats.rank || "N/A",
-        };
-        aggregatedTotalSolved += stats.totalSolved;
-      }
-    } catch (e: any) {
-      console.warn("Codeforces fetch error:", e.message);
-      results.codeforces = { username: codeforcesHandle, solved: 0, rating: 0, maxRating: 0, rank: "N/A" };
-    }
-  } else {
-    results.codeforces = { username: "", solved: 0, rating: 0, maxRating: 0, rank: "N/A" };
-  }
-
-  // Fetch CodeChef live stats
-  const rawCc = handles.CODECHEF || handles.codechef;
-  const codechefHandle = cleanHandle(rawCc, "");
-  if (codechefHandle) {
-    try {
-      const adapter = getAdapter(Platform.CODECHEF);
-      if (adapter) {
-        const stats = await adapter.fetchStats(codechefHandle);
-        results.codechef = {
-          username: codechefHandle,
-          solved: stats.totalSolved,
-          rating: stats.rating || 0,
-          stars: (stats as any).stars || "0★",
-        };
-        aggregatedTotalSolved += stats.totalSolved;
-      }
-    } catch (e: any) {
-      results.codechef = { username: codechefHandle, solved: 0, rating: 0, stars: "0★" };
-    }
-  } else {
-    results.codechef = { username: "", solved: 0, rating: 0, stars: "0★" };
-  }
-
-  // Calculate aggregated CodeScore rating formula
-  const leetcodeRating = results.leetcode?.rating || 0;
-  const codeforcesRating = results.codeforces?.rating || 0;
-  const codeScore = Math.round(aggregatedTotalSolved * 1.5 + leetcodeRating * 0.3 + codeforcesRating * 0.4);
+  const codeScore = calculateCodeScore(snapshotsForScore);
 
   return NextResponse.json({
     success: true,
     timestamp: new Date().toISOString(),
     stats: {
-      leetcode: results.leetcode,
-      codeforces: results.codeforces,
-      codechef: results.codechef,
-      totalSolved: aggregatedTotalSolved,
-      codeScore: codeScore || 0,
+      ...results,
+      totalSolved: totalSolvedCount,
+      codeScore,
     },
   });
 }
