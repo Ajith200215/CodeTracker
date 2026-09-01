@@ -258,11 +258,11 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
 
         {/* Brand Header */}
         <div className="text-center space-y-2">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-emerald-400 text-white flex items-center justify-center mx-auto shadow-lg shadow-indigo-500/25">
+          <div className="w-12 h-12 rounded-2xl bg-[#6C5CE7] text-white flex items-center justify-center mx-auto shadow-lg shadow-[#6C5CE7]/25">
             <Code2 className="w-6 h-6" />
           </div>
-          <h2 className="text-2xl font-black tracking-tight">
-            NexaGrade Portal Login
+          <h2 className="text-2xl font-black tracking-tight text-[#1E1F2B] dark:text-white">
+            Login Portal
           </h2>
           <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
             SRM IST Competitive Coding Ranking & Performance Portal
@@ -302,7 +302,7 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
             onClick={() => { setMode("login"); setErrorMsg(null); }}
             className={`pb-1 transition border-b-2 ${
               mode === "login"
-                ? "border-blue-500 dark:border-amber-400 text-blue-600 dark:text-amber-400 font-extrabold"
+                ? "border-[#6C5CE7] dark:border-amber-400 text-[#6C5CE7] dark:text-amber-400 font-extrabold"
                 : "border-transparent text-slate-400 hover:text-slate-200"
             }`}
           >
@@ -313,7 +313,7 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
             onClick={() => { setMode("register"); setErrorMsg(null); }}
             className={`pb-1 transition border-b-2 ${
               mode === "register"
-                ? "border-blue-500 dark:border-amber-400 text-blue-600 dark:text-amber-400 font-extrabold"
+                ? "border-[#6C5CE7] dark:border-amber-400 text-[#6C5CE7] dark:text-amber-400 font-extrabold"
                 : "border-transparent text-slate-400 hover:text-slate-200"
             }`}
           >
@@ -483,7 +483,7 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-emerald-500 dark:bg-none dark:bg-amber-500 hover:dark:bg-amber-400 text-white dark:text-black font-extrabold text-xs shadow-lg transition-all"
+              className="w-full py-3.5 rounded-xl bg-[#6C5CE7] hover:bg-[#5A4AD1] dark:bg-amber-500 hover:dark:bg-amber-400 text-white dark:text-black font-extrabold text-xs shadow-lg shadow-[#6C5CE7]/30 transition-all"
             >
               {isSubmitting ? "Authenticating..." : mode === "login" ? "Sign In to Student Portal" : "Register Student Account"}
             </button>
