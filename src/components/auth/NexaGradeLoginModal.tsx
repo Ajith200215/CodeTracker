@@ -276,7 +276,7 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
             onClick={() => { setPortalRole("STUDENT"); setErrorMsg(null); }}
             className={`py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 ${
               portalRole === "STUDENT"
-                ? "bg-white dark:bg-amber-500 text-slate-900 dark:text-black shadow-sm"
+                ? "bg-white dark:bg-[#6C5CE7] text-slate-900 dark:text-white shadow-sm"
                 : "text-slate-500 hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
@@ -302,7 +302,7 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
             onClick={() => { setMode("login"); setErrorMsg(null); }}
             className={`pb-1 transition border-b-2 ${
               mode === "login"
-                ? "border-[#6C5CE7] dark:border-amber-400 text-[#6C5CE7] dark:text-amber-400 font-extrabold"
+                ? "border-[#6C5CE7] dark:border-amber-400 text-[#6C5CE7] dark:text-[#8B8CF6] font-extrabold"
                 : "border-transparent text-slate-400 hover:text-slate-200"
             }`}
           >
@@ -313,7 +313,7 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
             onClick={() => { setMode("register"); setErrorMsg(null); }}
             className={`pb-1 transition border-b-2 ${
               mode === "register"
-                ? "border-[#6C5CE7] dark:border-amber-400 text-[#6C5CE7] dark:text-amber-400 font-extrabold"
+                ? "border-[#6C5CE7] dark:border-amber-400 text-[#6C5CE7] dark:text-[#8B8CF6] font-extrabold"
                 : "border-transparent text-slate-400 hover:text-slate-200"
             }`}
           >
@@ -350,7 +350,7 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
                     placeholder="e.g. RA2111003010142 or student@srmist.edu.in"
                     autoComplete="off"
                     data-lpignore="true"
-                    className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-3 text-slate-900 dark:text-slate-100 font-mono focus:outline-none focus:border-amber-500"
+                    className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-3 text-slate-900 dark:text-slate-100 font-mono focus:outline-none focus:border-[#8B8CF6]"
                   />
                 </div>
 
@@ -367,7 +367,7 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
                       placeholder="Enter password"
                       autoComplete="new-password"
                       data-lpignore="true"
-                      className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-3 pr-10 text-slate-900 dark:text-slate-100 font-mono focus:outline-none focus:border-amber-500"
+                      className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-3 pr-10 text-slate-900 dark:text-slate-100 font-mono focus:outline-none focus:border-[#8B8CF6]"
                     />
                     <button
                       type="button"
@@ -392,7 +392,7 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
                     value={studentName}
                     onChange={(e) => setStudentName(e.target.value)}
                     placeholder="Full Name"
-                    className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-2.5 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-amber-500"
+                    className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-2.5 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-[#8B8CF6]"
                   />
                 </div>
 
@@ -407,7 +407,7 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
                       value={raNumber}
                       onChange={(e) => setRaNumber(e.target.value)}
                       placeholder="RA2111003010142"
-                      className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-2.5 font-mono text-slate-900 dark:text-slate-100 focus:outline-none focus:border-amber-500"
+                      className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-2.5 font-mono text-slate-900 dark:text-slate-100 focus:outline-none focus:border-[#8B8CF6]"
                     />
                   </div>
 
@@ -418,7 +418,7 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
                     <select
                       value={studentBranch}
                       onChange={(e) => setStudentBranch(e.target.value)}
-                      className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-2.5 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-amber-500"
+                      className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-2.5 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-[#8B8CF6]"
                     >
                       {BRANCHES.map((b) => (
                         <option key={b} value={b}>{b}</option>
@@ -436,7 +436,7 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
                       value={studentSection}
                       onChange={(e) => setStudentSection(e.target.value)}
                       placeholder="e.g. Q1, Q2, Y1"
-                      className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-2.5 font-mono text-slate-900 dark:text-slate-100 focus:outline-none focus:border-amber-500 uppercase"
+                      className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-2.5 font-mono text-slate-900 dark:text-slate-100 focus:outline-none focus:border-[#8B8CF6] uppercase"
                     />
                   </div>
                 </div>
@@ -451,7 +451,7 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
                     value={studentEmail}
                     onChange={(e) => setStudentEmail(e.target.value)}
                     placeholder="name@srmist.edu.in"
-                    className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-2.5 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-amber-500"
+                    className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-2.5 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-[#8B8CF6]"
                   />
                   <span className="text-[10px] text-slate-400 mt-0.5 block">Domain restricted: @srmist.edu.in</span>
                 </div>
@@ -467,7 +467,7 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
                       value={studentPassword}
                       onChange={(e) => setStudentPassword(e.target.value)}
                       placeholder="Password"
-                      className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-2.5 font-mono text-slate-900 dark:text-slate-100 focus:outline-none focus:border-amber-500"
+                      className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-2.5 font-mono text-slate-900 dark:text-slate-100 focus:outline-none focus:border-[#8B8CF6]"
                     />
                   </div>
 
@@ -481,7 +481,7 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
                       value={studentConfirm}
                       onChange={(e) => setStudentConfirm(e.target.value)}
                       placeholder="Confirm"
-                      className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-2.5 font-mono text-slate-900 dark:text-slate-100 focus:outline-none focus:border-amber-500"
+                      className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-2.5 font-mono text-slate-900 dark:text-slate-100 focus:outline-none focus:border-[#8B8CF6]"
                     />
                   </div>
                 </div>
@@ -491,7 +491,7 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-3.5 rounded-xl bg-[#6C5CE7] hover:bg-[#5A4AD1] dark:bg-amber-500 hover:dark:bg-amber-400 text-white dark:text-black font-extrabold text-xs shadow-lg shadow-[#6C5CE7]/30 transition-all"
+              className="w-full py-3.5 rounded-xl bg-[#6C5CE7] hover:bg-[#5A4AD1] dark:bg-[#6C5CE7] hover:dark:bg-[#5A4AD1] text-white dark:text-white font-extrabold text-xs shadow-lg shadow-[#6C5CE7]/30 transition-all"
             >
               {isSubmitting ? "Authenticating..." : mode === "login" ? "Sign In to Student Portal" : "Register Student Account"}
             </button>
@@ -511,7 +511,7 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
                     value={facultyLoginId}
                     onChange={(e) => setFacultyLoginId(e.target.value)}
                     placeholder="e.g. EMP-1049 or faculty@srmist.edu.in"
-                    className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-3 text-slate-900 dark:text-slate-100 font-mono focus:outline-none focus:border-amber-500"
+                    className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-3 text-slate-900 dark:text-slate-100 font-mono focus:outline-none focus:border-[#8B8CF6]"
                   />
                 </div>
 
@@ -526,7 +526,7 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
                       value={facultyLoginPw}
                       onChange={(e) => setFacultyLoginPw(e.target.value)}
                       placeholder="Enter faculty password"
-                      className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-3 pr-10 text-slate-900 dark:text-slate-100 font-mono focus:outline-none focus:border-amber-500"
+                      className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-3 pr-10 text-slate-900 dark:text-slate-100 font-mono focus:outline-none focus:border-[#8B8CF6]"
                     />
                     <button
                       type="button"
@@ -551,7 +551,7 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
                     value={facultyName}
                     onChange={(e) => setFacultyName(e.target.value)}
                     placeholder="Dr. Full Name"
-                    className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-2.5 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-amber-500"
+                    className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-2.5 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-[#8B8CF6]"
                   />
                 </div>
 
@@ -566,7 +566,7 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
                       value={facultyId}
                       onChange={(e) => setFacultyId(e.target.value)}
                       placeholder="EMP-1049"
-                      className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-2.5 font-mono text-slate-900 dark:text-slate-100 focus:outline-none focus:border-amber-500"
+                      className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-2.5 font-mono text-slate-900 dark:text-slate-100 focus:outline-none focus:border-[#8B8CF6]"
                     />
                   </div>
 
@@ -580,7 +580,7 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
                       value={facultyEmail}
                       onChange={(e) => setFacultyEmail(e.target.value)}
                       placeholder="faculty@srmist.edu.in"
-                      className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-2.5 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-amber-500"
+                      className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-2.5 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-[#8B8CF6]"
                     />
                   </div>
                 </div>
@@ -596,7 +596,7 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
                       value={facultyPassword}
                       onChange={(e) => setFacultyPassword(e.target.value)}
                       placeholder="Password"
-                      className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-2.5 font-mono text-slate-900 dark:text-slate-100 focus:outline-none focus:border-amber-500"
+                      className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-2.5 font-mono text-slate-900 dark:text-slate-100 focus:outline-none focus:border-[#8B8CF6]"
                     />
                   </div>
 
@@ -610,7 +610,7 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
                       value={facultyConfirm}
                       onChange={(e) => setFacultyConfirm(e.target.value)}
                       placeholder="Confirm"
-                      className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-2.5 font-mono text-slate-900 dark:text-slate-100 focus:outline-none focus:border-amber-500"
+                      className="w-full bg-slate-50 dark:bg-[#18181f] border border-slate-200 dark:border-[#27272a] rounded-xl p-2.5 font-mono text-slate-900 dark:text-slate-100 focus:outline-none focus:border-[#8B8CF6]"
                     />
                   </div>
                 </div>
@@ -620,7 +620,7 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-3.5 rounded-xl bg-slate-900 dark:bg-amber-500 text-white dark:text-black font-extrabold text-xs shadow-lg transition-all"
+              className="w-full py-3.5 rounded-xl bg-slate-900 dark:bg-[#6C5CE7] text-white dark:text-white font-extrabold text-xs shadow-lg transition-all"
             >
               {isSubmitting ? "Authenticating..." : mode === "login" ? "Sign In to Faculty Portal" : "Register Faculty Account"}
             </button>
