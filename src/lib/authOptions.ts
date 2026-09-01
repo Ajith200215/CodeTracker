@@ -45,61 +45,31 @@ export const authOptions: NextAuthOptions = {
             ? rawEmail 
             : (rawId.includes("@") ? rawId.toLowerCase() : `${rawId.toLowerCase()}@srmist.edu.in`);
 
-          if (!emailToUse && !rawId) return null;
+          if (!emailToUse && !rawId) throw new Error("Email or Login ID required");
 
-          const assignedRole = credentials?.role === "TEACHER" ? Role.TEACHER : Role.STUDENT;
-          const regNoVal = credentials?.regNo || (assignedRole === Role.STUDENT ? (rawId || "2026-CS-0142") : undefined);
-          const nameVal = credentials?.name?.trim() || emailToUse.split("@")[0].replace(".", " ");
+          // Find the user in the database
+          const user = await db.user.findFirst({
+            where: {
+              OR: [
+                { email: emailToUse },
+                ...(rawId && !rawId.includes("@") ? [{ regNo: rawId }] : []),
+              ],
+            },
+          });
 
-          let user: any = null;
-
-          try {
-            user = await db.user.findFirst({
-              where: {
-                OR: [
-                  { email: emailToUse },
-                  ...(regNoVal ? [{ regNo: regNoVal }] : []),
-                ],
-              },
-            });
-
-            if (!user) {
-              user = await db.user.create({
-                data: {
-                  email: emailToUse,
-                  name: nameVal,
-                  password: hashedPassword,
-                  role: assignedRole,
-                  regNo: regNoVal,
-                  branch: credentials?.branch || "CSE Core",
-                  passoutYear: 2026,
-                },
-              });
-            } else {
-              // Update user password / regNo / branch if needed
-              user = await db.user.update({
-                where: { id: user.id },
-                data: {
-                  name: credentials?.name ? nameVal : user.name,
-                  regNo: regNoVal || user.regNo,
-                  branch: credentials?.branch || user.branch,
-                  role: assignedRole,
-                  ...(hashedPassword ? { password: hashedPassword } : {}),
-                },
-              });
-            }
-          } catch (dbErr) {
-            console.warn("Prisma error in authorize, serving session fallback:", dbErr);
+          // 1. If user doesn't exist, they MUST register first
+          if (!user) {
+            throw new Error("Account not found. Please register first.");
           }
 
-          if (!user) {
-            user = {
-              id: `usr_${Date.now()}`,
-              name: nameVal,
-              email: emailToUse,
-              role: assignedRole,
-              regNo: regNoVal,
-            };
+          // 2. If user exists, verify password
+          // If the user registered via Google, they might not have a password
+          if (!user.password) {
+             throw new Error("Please sign in with Google or reset your password.");
+          }
+
+          if (user.password !== hashedPassword) {
+             throw new Error("Invalid password.");
           }
 
           return {
@@ -108,14 +78,9 @@ export const authOptions: NextAuthOptions = {
             email: user.email,
             role: user.role,
           };
-        } catch (error) {
+        } catch (error: any) {
           console.error("[Auth Authorize Error]:", error);
-          return {
-            id: `usr_fallback`,
-            name: "Student",
-            email: "student@srmist.edu.in",
-            role: Role.STUDENT,
-          };
+          throw new Error(error.message || "Authentication failed");
         }
       },
     }),
