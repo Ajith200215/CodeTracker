@@ -29,50 +29,64 @@ export const authOptions: NextAuthOptions = {
         branch: { label: "Branch", type: "text" },
       },
       async authorize(credentials) {
-        const idInput = (credentials?.loginId || credentials?.email || "").trim();
-        if (!idInput) return null;
+        try {
+          const rawId = (credentials?.loginId || "").trim();
+          const rawEmail = (credentials?.email || "").trim().toLowerCase();
 
-        const assignedRole = credentials?.role === "TEACHER" ? Role.TEACHER : Role.STUDENT;
+          // Determine target email
+          const emailToUse = rawEmail 
+            ? rawEmail 
+            : (rawId.includes("@") ? rawId.toLowerCase() : `${rawId.toLowerCase()}@srmist.edu.in`);
 
-        // Search user by email or regNo
-        let user = await db.user.findFirst({
-          where: {
-            OR: [
-              { email: idInput.toLowerCase() },
-              { regNo: idInput },
-            ],
-          },
-        });
+          if (!emailToUse && !rawId) return null;
 
-        if (!user) {
-          const userEmail = idInput.includes("@") ? idInput.toLowerCase() : `${idInput.toLowerCase()}@srmist.edu.in`;
-          const regNoVal = credentials?.regNo || (assignedRole === Role.STUDENT ? idInput : undefined);
+          const assignedRole = credentials?.role === "TEACHER" ? Role.TEACHER : Role.STUDENT;
+          const regNoVal = credentials?.regNo || (assignedRole === Role.STUDENT ? (rawId || "2026-CS-0142") : undefined);
+          const nameVal = credentials?.name?.trim() || emailToUse.split("@")[0].replace(".", " ");
 
-          user = await db.user.create({
-            data: {
-              email: userEmail,
-              name: credentials?.name || idInput.split("@")[0].replace(".", " "),
-              role: assignedRole,
-              regNo: regNoVal,
-              branch: credentials?.branch || "CSE Core",
+          // Search existing user by email or regNo
+          let user = await db.user.findFirst({
+            where: {
+              OR: [
+                { email: emailToUse },
+                ...(regNoVal ? [{ regNo: regNoVal }] : []),
+              ],
             },
           });
-        } else if (credentials?.regNo || credentials?.branch) {
-          await db.user.update({
-            where: { id: user.id },
-            data: {
-              regNo: credentials?.regNo || user.regNo,
-              branch: credentials?.branch || user.branch,
-            },
-          }).catch(() => null);
-        }
 
-        return {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-        };
+          if (!user) {
+            user = await db.user.create({
+              data: {
+                email: emailToUse,
+                name: nameVal,
+                role: assignedRole,
+                regNo: regNoVal,
+                branch: credentials?.branch || "CSE Core",
+              },
+            });
+          } else {
+            // Update profile info if newly registered
+            user = await db.user.update({
+              where: { id: user.id },
+              data: {
+                name: credentials?.name ? nameVal : user.name,
+                regNo: regNoVal || user.regNo,
+                branch: credentials?.branch || user.branch,
+                role: assignedRole,
+              },
+            });
+          }
+
+          return {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+          };
+        } catch (error) {
+          console.error("[Auth Authorize Error]:", error);
+          return null;
+        }
       },
     }),
   ],
