@@ -97,7 +97,10 @@ export default function Home() {
       activeNav={activeTab}
       setActiveNav={setActiveTab}
     >
-      {!session?.user ? (
+      {activeTab === "leaderboard" && <UnifiedLeaderboardView />}
+      
+      {/* Locked Views for Unauthenticated Users */}
+      {!session?.user && activeTab !== "leaderboard" && (
         <div className="flex flex-col items-center justify-center h-full min-h-[60vh] bg-white dark:bg-gray-800 rounded-3xl border border-[#8B8CF6]/20 shadow-xl p-8 text-center">
           <div className="w-16 h-16 rounded-full bg-[#F0F2FF] dark:bg-gray-700 flex items-center justify-center text-[#6C5CE7] dark:text-[#8B8CF6] mb-5">
             <svg xmlns="http://www.w3.org/2000/svg" className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -108,15 +111,17 @@ export default function Home() {
             Please login to view the stats
           </h2>
           <p className="text-sm text-[#5A5C75] dark:text-gray-400 font-medium max-w-sm mx-auto leading-relaxed">
-            You need to be authenticated with your college account to access the dashboard, leaderboard, and coding assessments.
+            You need to be authenticated with your college account to access the dashboard and coding assessments.
           </p>
         </div>
-      ) : (
+      )}
+
+      {/* Authenticated Views */}
+      {session?.user && (
         <>
           {activeTab === "dashboard" && (
             <StudentDashboardView onStartExam={() => setActiveTab("exam")} />
           )}
-          {activeTab === "leaderboard" && <UnifiedLeaderboardView />}
           {activeTab === "monitor" && <TeacherMonitorView />}
           {activeTab === "classrooms" && (
             <div className="bg-white dark:bg-gray-800 p-8 rounded-3xl border border-[#8B8CF6]/20 shadow-xl space-y-4">
