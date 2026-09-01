@@ -42,17 +42,7 @@ export async function POST(req: Request) {
       });
 
       if (user) {
-        user = await db.user.update({
-          where: { id: user.id },
-          data: {
-            name: cleanName || user.name,
-            regNo: cleanRegNo || user.regNo,
-            branch: branch || user.branch,
-            section: cleanSection || user.section,
-            role: userRole,
-            ...(hashedPassword ? { password: hashedPassword } : {}),
-          },
-        });
+        return NextResponse.json({ error: "An account is already registered with this Email or Registration Number." }, { status: 400 });
       } else {
         user = await db.user.create({
           data: {
@@ -127,12 +117,7 @@ export async function POST(req: Request) {
       user = memoryUsers.get(targetEmail) || memoryUsers.get(cleanRegNo);
 
       if (user) {
-        user.name = cleanName || user.name;
-        user.regNo = cleanRegNo || user.regNo;
-        user.branch = branch || user.branch;
-        user.section = cleanSection || user.section;
-        user.role = userRole;
-        if (hashedPassword) user.password = hashedPassword;
+        return NextResponse.json({ error: "An account is already registered with this Email or Registration Number." }, { status: 400 });
       } else {
         user = {
           id: `usr_${Date.now()}`,
