@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { 
   Sparkles, 
@@ -13,7 +13,8 @@ import {
   CheckCircle2, 
   Zap,
   TrendingUp,
-  Brain
+  Brain,
+  X
 } from "lucide-react";
 
 interface HeroSectionProps {
@@ -22,6 +23,8 @@ interface HeroSectionProps {
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ onStart, onWatchDemo }) => {
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
+
   return (
     <section className="relative overflow-hidden pt-8 pb-16 lg:py-20 px-4 lg:px-12 bg-gradient-to-b from-[#F6F7FF] via-[#F0F2FF] to-[#F6F7FF] dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       {/* Decorative Background Sparkles & Soft Glowing Blobs */}
@@ -85,7 +88,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStart, onWatchDemo }
             </button>
 
             <button
-              onClick={onWatchDemo}
+              onClick={() => setIsVideoOpen(true)}
               className="w-full sm:w-auto px-7 py-4 rounded-full bg-white dark:bg-gray-800 hover:bg-[#F0F2FF] dark:bg-gray-900 text-[#1E1F2B] dark:text-white font-bold text-sm border border-[#8B8CF6]/30 shadow-xs transition-all hover:scale-105 flex items-center justify-center gap-3"
             >
               <div className="w-7 h-7 rounded-full bg-[#8B8CF6]/20 flex items-center justify-center text-[#6C5CE7]">
@@ -217,6 +220,30 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStart, onWatchDemo }
           </div>
         </motion.div>
       </div>
+
+      {/* Video Modal Overlay */}
+      {isVideoOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-300">
+          <div className="relative w-full max-w-5xl bg-black rounded-3xl overflow-hidden shadow-2xl border border-gray-800 scale-in-center">
+            <button 
+              onClick={() => setIsVideoOpen(false)}
+              className="absolute top-4 right-4 z-10 w-10 h-10 bg-black/50 hover:bg-black/80 rounded-full flex items-center justify-center text-white backdrop-blur-md transition-all"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <div className="relative pt-[56.25%] w-full h-0">
+              <iframe 
+                className="absolute top-0 left-0 w-full h-full"
+                src="https://www.youtube.com/embed/Sklc_fQBmcs?autoplay=1" 
+                title="Platform Demo Video"
+                frameBorder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowFullScreen
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
