@@ -57,10 +57,8 @@ export const Footer: React.FC = () => {
         <div className="md:col-span-3 space-y-3">
           <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">Support & Contact</h4>
           <ul className="space-y-2 text-xs text-slate-300 font-medium">
-            <li><a href="#" className="hover:text-white transition-colors">Media Kit</a></li>
-            <li><a href="#" className="hover:text-white transition-colors">Support Center</a></li>
-            <li><a href="#" className="hover:text-white transition-colors">Contact Us</a></li>
-            <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
+            <li><button onClick={(e) => e.preventDefault()} className="hover:text-white transition-colors cursor-pointer">Contact Us</button></li>
+            <li><a href="/privacy" className="hover:text-white transition-colors">Privacy Policy</a></li>
           </ul>
         </div>
       </div>
