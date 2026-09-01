@@ -104,9 +104,6 @@ export const AppShell: React.FC<AppShellProps> = ({
               onClick={() => setActiveNav("home")}
               className="flex items-center gap-2.5 cursor-pointer"
             >
-              <div className="w-10 h-10 rounded-2xl bg-[#6C5CE7] flex items-center justify-center text-white shadow-md shadow-[#6C5CE7]/30 dark:shadow-none">
-                <Code2 className="w-5.5 h-5.5" />
-              </div>
               <div>
                 <span className="font-serif-display text-xl font-bold text-[#1E1F2B] dark:text-white">
                   Code<span className="text-[#6C5CE7]">Tracker</span>
