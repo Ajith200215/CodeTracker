@@ -233,11 +233,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStart, onWatchDemo }
             </button>
             <div className="relative pt-[56.25%] w-full h-0">
               <iframe 
-                className="absolute top-0 left-0 w-full h-full"
-                src="https://www.youtube.com/embed/Sklc_fQBmcs?autoplay=1" 
+                className="absolute top-0 left-0 w-full h-full rounded-2xl"
+                src="https://drive.google.com/file/d/1v7KGuBPgwpAEtIlxJOppy05W3RKFPCb3/preview" 
                 title="Platform Demo Video"
                 frameBorder="0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allow="autoplay" 
                 allowFullScreen
               ></iframe>
             </div>
