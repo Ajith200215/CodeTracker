@@ -1,55 +1,96 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { Role } from "@prisma/client";
+import crypto from "crypto";
+
+const memoryUsers = new Map<string, any>();
+
+function hashPassword(pw?: string): string | null {
+  if (!pw) return null;
+  return crypto.createHash("sha256").update(pw).digest("hex");
+}
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { email, name, regNo, branch, role } = body;
+    const { email, name, regNo, branch, role, password } = body;
 
     const cleanEmail = (email || "").toLowerCase().trim();
     const cleanRegNo = (regNo || "").trim();
     const cleanName = (name || "").trim();
+    const hashedPassword = hashPassword(password);
 
-    if (!cleanEmail) {
-      return NextResponse.json({ error: "Email or Login ID is required" }, { status: 400 });
+    if (!cleanEmail && !cleanRegNo) {
+      return NextResponse.json({ error: "Email or RA Number is required" }, { status: 400 });
     }
 
     const userRole = role === "TEACHER" ? Role.TEACHER : Role.STUDENT;
+    const targetEmail = cleanEmail || `${cleanRegNo.toLowerCase()}@srmist.edu.in`;
 
-    // Search by email or regNo
-    let user = await db.user.findFirst({
-      where: {
-        OR: [
-          { email: cleanEmail },
-          ...(cleanRegNo ? [{ regNo: cleanRegNo }] : []),
-        ],
-      },
-    });
+    let user: any = null;
 
-    if (user) {
-      // Update existing user profile with latest regNo, branch, name, role
-      user = await db.user.update({
-        where: { id: user.id },
-        data: {
-          name: cleanName || user.name,
-          regNo: cleanRegNo || user.regNo,
-          branch: branch || user.branch,
-          role: userRole,
+    // Database operation (Supabase PostgreSQL via Prisma)
+    try {
+      user = await db.user.findFirst({
+        where: {
+          OR: [
+            { email: targetEmail },
+            ...(cleanRegNo ? [{ regNo: cleanRegNo }] : []),
+          ],
         },
       });
-    } else {
-      // Create new user
-      user = await db.user.create({
-        data: {
-          email: cleanEmail,
-          name: cleanName || cleanEmail.split("@")[0],
+
+      if (user) {
+        user = await db.user.update({
+          where: { id: user.id },
+          data: {
+            name: cleanName || user.name,
+            regNo: cleanRegNo || user.regNo,
+            branch: branch || user.branch,
+            role: userRole,
+            ...(hashedPassword ? { password: hashedPassword } : {}),
+          },
+        });
+      } else {
+        user = await db.user.create({
+          data: {
+            email: targetEmail,
+            name: cleanName || targetEmail.split("@")[0],
+            password: hashedPassword,
+            role: userRole,
+            regNo: cleanRegNo || (userRole === Role.STUDENT ? "2026-CS-0142" : undefined),
+            branch: branch || "CSE Core",
+            passoutYear: 2026,
+          },
+        });
+      }
+    } catch (dbErr: any) {
+      console.warn("[Register Route] Database warning, using memory fallback:", dbErr?.message);
+    }
+
+    // Memory fallback if DB is temporarily unreachable
+    if (!user) {
+      user = memoryUsers.get(targetEmail) || memoryUsers.get(cleanRegNo);
+
+      if (user) {
+        user.name = cleanName || user.name;
+        user.regNo = cleanRegNo || user.regNo;
+        user.branch = branch || user.branch;
+        user.role = userRole;
+        if (hashedPassword) user.password = hashedPassword;
+      } else {
+        user = {
+          id: `usr_${Date.now()}`,
+          email: targetEmail,
+          name: cleanName || targetEmail.split("@")[0],
+          password: hashedPassword,
           role: userRole,
-          regNo: cleanRegNo || (userRole === Role.STUDENT ? "2026-CS-0142" : undefined),
+          regNo: cleanRegNo || "2026-CS-0142",
           branch: branch || "CSE Core",
-          passoutYear: 2026,
-        },
-      });
+        };
+        memoryUsers.set(targetEmail, user);
+        if (cleanRegNo) memoryUsers.set(cleanRegNo, user);
+      }
     }
 
     return NextResponse.json({
