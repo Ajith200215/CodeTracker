@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { Sparkles, Code2, ShieldAlert, GraduationCap, ChevronRight, LogIn, LogOut, User, X, Mail, Sun, Moon } from "lucide-react";
+import { Sparkles, Code2, ShieldAlert, GraduationCap, ChevronRight, LogIn, LogOut, User, X, Mail, Sun, Moon, Lock } from "lucide-react";
 import { NexaGradeLoginModal } from "../auth/NexaGradeLoginModal";
 
 interface NavbarProps {
@@ -85,25 +85,32 @@ export const Navbar: React.FC<NavbarProps> = ({
             {[
               { id: "home", label: "Home" },
               { id: "dashboard", label: "Dashboard" },
-              { id: "leaderboard", label: "Leaderboard 🏆" },
-              { id: "classrooms", label: "Classrooms" },
-              { id: "exam", label: "Live Exam" },
-              { id: "monitor", label: "Proctor Monitor", teacherOnly: true },
+              { id: "leaderboard", label: "Leaderboard" },
+              { id: "classrooms", label: "Classrooms", locked: true },
+              { id: "exam", label: "Live Exam", locked: true },
+              { id: "monitor", label: "Proctor Monitor", teacherOnly: true, locked: true },
             ]
               .filter((item) => !item.teacherOnly || currentRole === "TEACHER")
               .map((item) => {
                 const isActive = activeTab === item.id;
+                const isLocked = (item as any).locked;
                 return (
                   <button
                     key={item.id}
-                    onClick={() => setActiveTab(item.id)}
-                    className={`px-5 py-2 rounded-full text-xs font-bold transition-all ${
-                      isActive
-                        ? "bg-[#6C5CE7] text-white shadow-md shadow-[#6C5CE7]/25"
-                        : "text-[#5A5C75] dark:text-slate-400 hover:text-[#1E1F2B] dark:hover:text-white hover:bg-[#8B8CF6]/10 dark:hover:bg-[#27272a]"
+                    onClick={() => {
+                      if (isLocked) return;
+                      setActiveTab(item.id);
+                    }}
+                    className={`flex items-center gap-1.5 px-5 py-2 rounded-full text-xs font-bold transition-all ${
+                      isLocked
+                        ? "opacity-60 cursor-not-allowed text-[#6A6C88] dark:text-slate-500"
+                        : isActive
+                          ? "bg-[#6C5CE7] text-white shadow-md shadow-[#6C5CE7]/25"
+                          : "text-[#5A5C75] dark:text-slate-400 hover:text-[#1E1F2B] dark:hover:text-white hover:bg-[#8B8CF6]/10 dark:hover:bg-[#27272a]"
                     }`}
                   >
-                    {item.label}
+                    <span>{item.label}</span>
+                    {isLocked && <Lock className="w-3 h-3 text-slate-400" />}
                   </button>
                 );
               })}
