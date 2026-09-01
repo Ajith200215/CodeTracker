@@ -371,73 +371,45 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({ onSt
         </div>
       </div>
 
-      {/* Main Content Grid: Solve Progress Chart & Active Assessment */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        <div className="lg:col-span-8 bg-white rounded-[32px] p-6 sm:p-8 border border-[#8B8CF6]/20 shadow-xl shadow-[#8B8CF6]/5">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h3 className="font-serif-display text-2xl font-bold text-[#1E1F2B]">
-                Solve Progress Over Time
-              </h3>
-              <p className="text-xs text-[#6A6C88] font-medium">
-                Combined platform solved trend
-              </p>
-            </div>
-            <span className="text-xs font-extrabold text-[#6C5CE7] bg-[#F0F2FF] px-3.5 py-1.5 rounded-full">
-              7 Platforms Active
-            </span>
-          </div>
-
-          <div className="h-64 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#F0F2FF" />
-                <XAxis dataKey="week" stroke="#6A6C88" fontSize={12} />
-                <YAxis stroke="#6A6C88" fontSize={12} />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "#1E1F2B",
-                    borderRadius: "16px",
-                    color: "#fff",
-                    border: "none",
-                  }}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="solved"
-                  stroke="#6C5CE7"
-                  strokeWidth={4}
-                  dot={{ r: 6, fill: "#F8A195" }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        {/* Active Proctored Exam Card */}
-        <div className="lg:col-span-4 bg-[#1E1F2B] text-white rounded-[32px] p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden shadow-2xl">
+      {/* Main Content: Solve Progress Chart */}
+      <div className="bg-white rounded-[32px] p-6 sm:p-8 border border-[#8B8CF6]/20 shadow-xl shadow-[#8B8CF6]/5">
+        <div className="flex items-center justify-between mb-6">
           <div>
-            <div className="inline-flex items-center gap-1.5 bg-[#F8A195]/20 text-[#F8A195] px-3 py-1 rounded-full text-xs font-extrabold mb-4">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Proctored Assessment</span>
-            </div>
-
-            <h3 className="font-serif-display text-2xl font-bold text-white mb-2">
-              Mid-Semester Algorithms Exam
+            <h3 className="font-serif-display text-2xl font-bold text-[#1E1F2B]">
+              Solve Progress Over Time
             </h3>
-            <p className="text-xs text-slate-300 font-medium mb-4 leading-relaxed">
-              45 Mins • Monaco Code Editor • 2 Coding Questions & 3 MCQs. Real-time 
-              browser tab switch proctoring enabled.
+            <p className="text-xs text-[#6A6C88] font-medium">
+              Combined platform solved trend
             </p>
           </div>
+          <span className="text-xs font-extrabold text-[#6C5CE7] bg-[#F0F2FF] px-3.5 py-1.5 rounded-full">
+            7 Platforms Active
+          </span>
+        </div>
 
-          <button
-            onClick={onStartExam}
-            className="w-full py-4 rounded-full bg-[#6C5CE7] hover:bg-[#5A4AD1] text-white font-extrabold text-xs shadow-lg transition-all hover:scale-105 flex items-center justify-center gap-2"
-          >
-            <span>Launch Exam Sandbox</span>
-            <ArrowUpRight className="w-4 h-4 text-[#F8A195]" />
-          </button>
+        <div className="h-64 w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#F0F2FF" />
+              <XAxis dataKey="week" stroke="#6A6C88" fontSize={12} />
+              <YAxis stroke="#6A6C88" fontSize={12} />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "#1E1F2B",
+                  borderRadius: "16px",
+                  color: "#fff",
+                  border: "none",
+                }}
+              />
+              <Line
+                type="monotone"
+                dataKey="solved"
+                stroke="#6C5CE7"
+                strokeWidth={4}
+                dot={{ r: 6, fill: "#F8A195" }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
         </div>
       </div>
 
