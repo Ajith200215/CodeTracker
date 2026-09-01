@@ -13,7 +13,8 @@ import {
   EyeOff, 
   Code2, 
   Sparkles,
-  CheckCircle2
+  CheckCircle2,
+  Lock
 } from "lucide-react";
 
 interface NexaGradeLoginModalProps {
@@ -285,15 +286,12 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
 
           <button
             type="button"
-            onClick={() => { setPortalRole("TEACHER"); setErrorMsg(null); }}
-            className={`py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 ${
-              portalRole === "TEACHER"
-                ? "bg-white dark:bg-amber-500 text-slate-900 dark:text-black shadow-sm"
-                : "text-slate-500 hover:text-slate-900 dark:hover:text-slate-200"
-            }`}
+            disabled
+            className="py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 cursor-not-allowed opacity-60 text-slate-400"
+            title="Faculty portal is currently locked"
           >
-            <ShieldAlert className="w-4 h-4" />
-            <span>Faculty Portal</span>
+            <Lock className="w-4 h-4" />
+            <span>Faculty Portal (Locked)</span>
           </button>
         </div>
 
