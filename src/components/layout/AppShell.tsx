@@ -20,7 +20,8 @@ import {
   X,
   Mail,
   Trophy,
-  Lock
+  Lock,
+  Home
 } from "lucide-react";
 
 interface AppShellProps {
@@ -70,14 +71,16 @@ export const AppShell: React.FC<AppShellProps> = ({
     : { name: "Dr. Yukari Samo", email: "yukari.samo@college.edu", avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&auto=format&fit=crop&q=80", dept: "Computer Science Lead" };
 
   const studentNavItems = [
+    { id: "home", label: "Home", icon: Home },
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
     { id: "leaderboard", label: "Leaderboard 🏆", icon: Trophy },
     { id: "classrooms", label: "Classrooms", icon: BookOpen, locked: true },
     { id: "tests", label: "Proctored Exam", icon: GraduationCap, locked: true },
-    { id: "feedback", label: "Feedback", icon: MessageSquareQuote },
+    { id: "feedback", label: "Feedback", icon: MessageSquareQuote, locked: true },
   ];
 
   const teacherNavItems = [
+    { id: "home", label: "Home", icon: Home },
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
     { id: "leaderboard", label: "Leaderboard 🏆", icon: Trophy },
     { id: "classrooms", label: "Classrooms", icon: BookOpen, locked: true },
