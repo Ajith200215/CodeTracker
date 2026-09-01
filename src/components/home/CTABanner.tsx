@@ -11,13 +11,11 @@ export const CTABanner: React.FC<CTABannerProps> = ({ onStart }) => {
   return (
     <section className="py-16 px-4 lg:px-12 bg-[#8B8CF6] text-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-        {/* Left Column Text */}
         <div className="lg:col-span-7 space-y-4 text-left">
           <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-bold text-white">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Join 320k+ Active Students</span>
+            <span>Join Now</span>
           </div>
-
           <h2 className="font-serif-display text-4xl sm:text-5xl font-extrabold text-white leading-tight">
             Get Started with CodeTracker Today!
           </h2>

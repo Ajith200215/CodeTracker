@@ -95,34 +95,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStart, onWatchDemo }
             </button>
           </div>
 
-          {/* Social Proof Stats Pill */}
-          <div className="pt-4 flex items-center gap-4 bg-white/90 p-3.5 px-5 rounded-3xl border border-[#8B8CF6]/20 shadow-xs">
-            <div className="flex -space-x-2">
-              <img
-                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80"
-                alt="Student"
-                className="w-10 h-10 rounded-full border-2 border-white object-cover"
-              />
-              <img
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80"
-                alt="Student"
-                className="w-10 h-10 rounded-full border-2 border-white object-cover"
-              />
-              <img
-                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80"
-                alt="Student"
-                className="w-10 h-10 rounded-full border-2 border-white object-cover"
-              />
-            </div>
-            <div>
-              <div className="text-xl font-extrabold text-[#6C5CE7] leading-none">
-                320k+
-              </div>
-              <div className="text-xs font-semibold text-[#6A6C88]">
-                Problems solved with our platform method
-              </div>
-            </div>
-          </div>
+
         </motion.div>
 
         {/* Right Preview Column (Replicating Edulite Floating Mobile Frame) */}
