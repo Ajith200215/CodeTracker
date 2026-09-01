@@ -73,7 +73,7 @@ export const AppShell: React.FC<AppShellProps> = ({
   const studentNavItems = [
     { id: "home", label: "Home", icon: Home },
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { id: "leaderboard", label: "Leaderboard 🏆", icon: Trophy },
+    { id: "leaderboard", label: "Leaderboard", icon: Trophy },
     { id: "classrooms", label: "Classrooms", icon: BookOpen, locked: true },
     { id: "tests", label: "Proctored Exam", icon: GraduationCap, locked: true },
     { id: "feedback", label: "Feedback", icon: MessageSquareQuote, locked: true },
@@ -82,7 +82,7 @@ export const AppShell: React.FC<AppShellProps> = ({
   const teacherNavItems = [
     { id: "home", label: "Home", icon: Home },
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { id: "leaderboard", label: "Leaderboard 🏆", icon: Trophy },
+    { id: "leaderboard", label: "Leaderboard", icon: Trophy },
     { id: "classrooms", label: "Classrooms", icon: BookOpen, locked: true },
     { id: "tests", label: "Proctored Exam", icon: GraduationCap, locked: true },
     { id: "monitor", label: "Monitor", icon: ShieldAlert },
@@ -160,32 +160,8 @@ export const AppShell: React.FC<AppShellProps> = ({
           </nav>
         </div>
 
-        {/* Role Switcher & Logged-in User Card */}
-        <div className="p-4 border-t border-[#8B8CF6]/15 space-y-3 bg-[#F6F7FF]">
-          {/* Quick Role Toggle Bar */}
-          <div className="bg-white p-1 rounded-full border border-[#8B8CF6]/20 flex items-center shadow-xs">
-            <button
-              onClick={() => onRoleToggle("STUDENT")}
-              className={`flex-1 py-1.5 rounded-full text-[11px] font-bold transition-all ${
-                currentRole === "STUDENT"
-                  ? "bg-[#8B8CF6] text-white shadow-xs"
-                  : "text-[#6A6C88] hover:text-[#1E1F2B]"
-              }`}
-            >
-              Student
-            </button>
-            <button
-              onClick={() => onRoleToggle("TEACHER")}
-              className={`flex-1 py-1.5 rounded-full text-[11px] font-bold transition-all ${
-                currentRole === "TEACHER"
-                  ? "bg-[#1E1F2B] text-white shadow-xs"
-                  : "text-[#6A6C88] hover:text-[#1E1F2B]"
-              }`}
-            >
-              Teacher
-            </button>
-          </div>
-
+        {/* Logged-in User Card */}
+        <div className="p-4 border-t border-[#8B8CF6]/15 bg-[#F6F7FF]">
           <div className="flex items-center gap-3 bg-white p-3 rounded-2xl border border-[#8B8CF6]/15">
             <img
               src={user.avatar}
