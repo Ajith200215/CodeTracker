@@ -91,7 +91,7 @@ export const AppShell: React.FC<AppShellProps> = ({
   const navItems = currentRole === "STUDENT" ? studentNavItems : teacherNavItems;
 
   return (
-    <div className="min-h-screen bg-[#F6F7FF] dark:bg-black flex flex-col lg:flex-row text-[#1E1F2B] dark:text-white">
+    <div className="min-h-screen bg-[#F6F7FF] dark:bg-gray-950 flex flex-col lg:flex-row text-[#1E1F2B] dark:text-white">
       {/* Sidebar Navigation */}
       <aside className={`fixed lg:static inset-y-0 left-0 z-40 w-64 bg-white dark:bg-gray-900 border-r border-[#8B8CF6]/15 dark:border-gray-800 flex flex-col justify-between transition-transform duration-300 ${
         sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
@@ -141,9 +141,9 @@ export const AppShell: React.FC<AppShellProps> = ({
                   }}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-xs font-bold transition-all ${
                     isLocked 
-                      ? "opacity-60 cursor-not-allowed text-[#6A6C88] dark:text-gray-400 bg-[#F6F7FF] dark:bg-black/50" 
+                      ? "opacity-60 cursor-not-allowed text-[#6A6C88] dark:text-gray-400 bg-[#F6F7FF] dark:bg-gray-950/50" 
                       : isActive
-                        ? "bg-[#6C5CE7] dark:bg-black text-white shadow-md shadow-[#6C5CE7]/25 dark:shadow-none"
+                        ? "bg-[#6C5CE7] dark:bg-gray-950 text-white shadow-md shadow-[#6C5CE7]/25 dark:shadow-none"
                         : "text-[#5A5C75] dark:text-gray-300 hover:bg-[#F0F2FF] hover:dark:bg-gray-800 dark:bg-gray-800 hover:text-[#1E1F2B] hover:dark:text-white"
                   }`}
                 >
@@ -161,7 +161,7 @@ export const AppShell: React.FC<AppShellProps> = ({
         </div>
 
         {/* Logged-in User Card */}
-        <div className="p-4 border-t border-[#8B8CF6]/15 dark:border-gray-800 bg-[#F6F7FF] dark:bg-black">
+        <div className="p-4 border-t border-[#8B8CF6]/15 dark:border-gray-800 bg-[#F6F7FF] dark:bg-gray-950">
           <div className="flex items-center gap-3 bg-white dark:bg-gray-900 p-3 rounded-2xl border border-[#8B8CF6]/15 dark:border-gray-800">
             <img
               src={user.avatar}
@@ -227,7 +227,7 @@ export const AppShell: React.FC<AppShellProps> = ({
               </button>
             )}
 
-            <button className="w-9 h-9 rounded-full bg-[#F6F7FF] dark:bg-black border border-[#8B8CF6]/20 dark:border-gray-700 flex items-center justify-center text-[#6C5CE7] hover:bg-[#8B8CF6]/20 transition-all relative">
+            <button className="w-9 h-9 rounded-full bg-[#F6F7FF] dark:bg-gray-950 border border-[#8B8CF6]/20 dark:border-gray-700 flex items-center justify-center text-[#6C5CE7] hover:bg-[#8B8CF6]/20 transition-all relative">
               <Bell className="w-4 h-4" />
               <span className="w-2 h-2 rounded-full bg-[#F8A195] absolute top-1 right-1"></span>
             </button>
@@ -242,11 +242,11 @@ export const AppShell: React.FC<AppShellProps> = ({
 
       {/* Login Modal Overlay */}
       {showLoginModal && (
-        <div className="fixed inset-0 z-50 bg-[#161723]/60 dark:bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-[#161723]/60 dark:bg-gray-950/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white dark:bg-gray-900 rounded-[36px] p-8 max-w-md w-full border border-[#8B8CF6]/20 dark:border-gray-700 shadow-2xl relative space-y-5 text-center">
             <button
               onClick={() => setShowLoginModal(false)}
-              className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#F6F7FF] dark:bg-black hover:bg-[#EAEBFF] hover:dark:bg-gray-700 flex items-center justify-center text-slate-500 dark:text-gray-400"
+              className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#F6F7FF] dark:bg-gray-950 hover:bg-[#EAEBFF] hover:dark:bg-gray-700 flex items-center justify-center text-slate-500 dark:text-gray-400"
             >
               <X className="w-4 h-4" />
             </button>
@@ -269,7 +269,7 @@ export const AppShell: React.FC<AppShellProps> = ({
               <label className="text-[11px] font-extrabold uppercase text-[#6A6C88] dark:text-gray-400 tracking-wider">
                 College Email Address
               </label>
-              <div className="flex items-center gap-2 bg-[#F6F7FF] dark:bg-black p-2.5 px-4 rounded-2xl border border-[#8B8CF6]/30 dark:border-gray-700">
+              <div className="flex items-center gap-2 bg-[#F6F7FF] dark:bg-gray-950 p-2.5 px-4 rounded-2xl border border-[#8B8CF6]/30 dark:border-gray-700">
                 <Mail className="w-4 h-4 text-[#8B8CF6]" />
                 <input
                   type="email"

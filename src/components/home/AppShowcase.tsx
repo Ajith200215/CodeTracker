@@ -19,7 +19,7 @@ interface AppShowcaseProps {
 
 export const AppShowcase: React.FC<AppShowcaseProps> = ({ onOpenApp }) => {
   return (
-    <section className="py-20 px-4 lg:px-12 bg-[#F6F7FF] dark:bg-black">
+    <section className="py-20 px-4 lg:px-12 bg-[#F6F7FF] dark:bg-gray-900">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
