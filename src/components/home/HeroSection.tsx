@@ -223,17 +223,19 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStart, onWatchDemo }
 
       {/* Video Modal Overlay */}
       {isVideoOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-300">
-          <div className="relative w-full max-w-5xl bg-black rounded-3xl overflow-hidden shadow-2xl border border-gray-800 scale-in-center">
+        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black/90 backdrop-blur-sm p-2 sm:p-6 animate-in fade-in duration-300">
+          <div className="w-full max-w-5xl flex justify-end mb-3">
             <button 
               onClick={() => setIsVideoOpen(false)}
-              className="absolute top-4 right-4 z-10 w-10 h-10 bg-black/50 hover:bg-black/80 rounded-full flex items-center justify-center text-white backdrop-blur-md transition-all"
+              className="w-10 h-10 bg-white/10 hover:bg-white/25 rounded-full flex items-center justify-center text-white backdrop-blur-md transition-all"
             >
               <X className="w-5 h-5" />
             </button>
+          </div>
+          <div className="relative w-full max-w-5xl bg-[#000000] rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border border-gray-800 scale-in-center">
             <div className="relative pt-[56.25%] w-full h-0">
               <iframe 
-                className="absolute top-0 left-0 w-full h-full rounded-2xl"
+                className="absolute top-0 left-0 w-full h-full"
                 src="https://drive.google.com/file/d/1v7KGuBPgwpAEtIlxJOppy05W3RKFPCb3/preview" 
                 title="Platform Demo Video"
                 frameBorder="0" 
