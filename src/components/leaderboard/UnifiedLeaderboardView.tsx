@@ -299,11 +299,63 @@ export const UnifiedLeaderboardView: React.FC = () => {
 
       {selectedPlacementId && (
         <div className="fixed inset-0 z-[100] bg-[#161723]/60 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setSelectedPlacementId(null)}>
-          <div className="bg-slate-950 rounded-[32px] w-full max-w-3xl h-[85vh] relative overflow-hidden shadow-2xl border border-indigo-500/20" onClick={e => e.stopPropagation()}>
+          <div className="bg-slate-950 rounded-[32px] w-full max-w-2xl max-h-[90vh] overflow-y-auto relative shadow-2xl border border-indigo-500/20" onClick={e => e.stopPropagation()}>
             <button onClick={() => setSelectedPlacementId(null)} className="absolute top-6 right-6 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-slate-800 text-slate-300 hover:bg-slate-700 transition-colors">
               <X className="w-5 h-5" />
             </button>
-            <iframe src={`/api/students/${selectedPlacementId}/placement-card`} className="w-full h-full border-none" />
+            
+            {(() => {
+              const selectedStudent = processedLeaderboard.find(s => s.id === selectedPlacementId);
+              if (!selectedStudent) return null;
+
+              const platformsData = [
+                { name: "LeetCode", handle: selectedStudent.handles?.LEETCODE, data: selectedStudent.leetcode },
+                { name: "Codeforces", handle: selectedStudent.handles?.CODEFORCES, data: selectedStudent.codeforces },
+                { name: "CodeChef", handle: selectedStudent.handles?.CODECHEF, data: selectedStudent.codechef },
+                { name: "HackerRank", handle: selectedStudent.handles?.HACKERRANK, data: selectedStudent.hackerrank }
+              ].filter(p => p.handle && p.handle.toLowerCase() !== "none" && p.handle.toLowerCase() !== "undefined");
+
+              return (
+                <div className="p-8">
+                  <div className="absolute -right-16 -top-16 w-48 h-48 bg-indigo-600/10 rounded-full blur-2xl"></div>
+
+                  <div className="flex items-center justify-between border-b border-slate-800 pb-6 mb-6">
+                    <div>
+                      <span className="text-xs font-bold text-indigo-400 tracking-widest uppercase bg-indigo-950/80 px-3 py-1 rounded-full border border-indigo-800">
+                        Verified Coding Placement Card
+                      </span>
+                      <h1 className="text-3xl font-extrabold text-white mt-2">{selectedStudent.name}</h1>
+                      <p className="text-slate-400 text-sm font-mono mt-0.5">{selectedStudent.regNo || selectedStudent.email}</p>
+                    </div>
+                    <div className="text-right bg-slate-950 px-5 py-3 rounded-xl border border-slate-800">
+                      <div className="text-xs font-semibold text-slate-400 uppercase">CodeScore</div>
+                      <div className="text-3xl font-black text-indigo-400 font-mono">{selectedStudent.codeScore}</div>
+                    </div>
+                  </div>
+
+                  <h3 className="text-sm font-bold text-slate-300 uppercase tracking-wider mb-3">Competitive Programming Matrix</h3>
+                  <div className="grid grid-cols-2 gap-4 mb-6">
+                    {platformsData.map((platform, idx) => (
+                      <div key={idx} className="bg-slate-950 p-4 rounded-xl border border-slate-800">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-bold text-slate-200">{platform.name}</span>
+                          <span className="text-xs font-mono text-indigo-400">@{platform.handle}</span>
+                        </div>
+                        <div className="text-xs text-slate-400 flex justify-between mt-2">
+                          <span>Solved: <strong className="text-white">{platform.data?.solved || 0}</strong></span>
+                          {platform.data?.rating > 0 && <span>Rating: <strong className="text-amber-400">{platform.data.rating}</strong></span>}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="pt-4 border-t border-slate-800 flex items-center justify-between text-xs text-slate-500">
+                    <span>Generated via <strong>CodeTracker.in</strong> (Live Data)</span>
+                  </div>
+                </div>
+              );
+            })()}
+
           </div>
         </div>
       )}
