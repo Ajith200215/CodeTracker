@@ -77,6 +77,7 @@ export const authOptions: NextAuthOptions = {
             name: user.name,
             email: user.email,
             role: user.role,
+            section: user.section,
           };
         } catch (error: any) {
           console.error("[Auth Authorize Error]:", error);
@@ -121,6 +122,7 @@ export const authOptions: NextAuthOptions = {
             token.id = dbUser.id;
             token.role = dbUser.role;
             token.regNo = dbUser.regNo;
+            token.section = dbUser.section;
           } else {
             token.role = token.role || Role.STUDENT;
           }
@@ -136,6 +138,7 @@ export const authOptions: NextAuthOptions = {
         (session.user as any).id = token.id;
         (session.user as any).role = token.role || Role.STUDENT;
         (session.user as any).regNo = token.regNo || "2026-CS-0142";
+        (session.user as any).section = token.section;
       }
       return session;
     },

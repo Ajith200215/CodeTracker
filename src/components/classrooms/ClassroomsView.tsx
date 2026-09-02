@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Users, Search, ChevronRight, Trophy, Download, ArrowLeft } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 interface Classroom {
   id: string;
@@ -25,6 +26,10 @@ export const ClassroomsView: React.FC = () => {
   const [sectionData, setSectionData] = useState<StudentStat[]>([]);
   const [loadingSection, setLoadingSection] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const { data: session } = useSession();
+  const [showOnlyMyClass, setShowOnlyMyClass] = useState(true);
+
+  const userSection = (session?.user as any)?.section;
 
   useEffect(() => {
     fetchClassrooms();
@@ -114,7 +119,15 @@ export const ClassroomsView: React.FC = () => {
     document.body.removeChild(link);
   };
 
-  const filteredClassrooms = classrooms.filter(c => c.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  const filteredClassrooms = classrooms.filter(c => {
+    const matchesSearch = c.name.toLowerCase().includes(searchTerm.toLowerCase());
+    if (!matchesSearch) return false;
+    
+    if (session?.user && showOnlyMyClass && userSection) {
+      return c.name.toLowerCase() === userSection.toLowerCase();
+    }
+    return true;
+  });
 
   if (selectedSection) {
     return (
@@ -228,15 +241,32 @@ export const ClassroomsView: React.FC = () => {
           <h2 className="font-serif-display text-3xl font-bold text-[#1E1F2B] dark:text-white mb-2">Classroom Directory</h2>
           <p className="text-[#5A5C75] dark:text-gray-400 text-sm">Select a section to view its unified student leaderboard.</p>
         </div>
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-          <input 
-            type="text" 
-            placeholder="Search sections..." 
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-9 pr-4 py-2 bg-[#F6F7FF] dark:bg-gray-900 border border-[#8B8CF6]/30 dark:border-gray-700 rounded-full text-sm w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-[#6C5CE7] dark:text-white"
-          />
+        <div className="flex flex-col sm:flex-row items-center gap-4">
+          {session?.user && userSection && (
+            <label className="flex items-center gap-2 cursor-pointer bg-[#F6F7FF] dark:bg-gray-900 px-4 py-2 rounded-full border border-[#8B8CF6]/30 dark:border-gray-700">
+              <div className="relative">
+                <input 
+                  type="checkbox" 
+                  className="sr-only" 
+                  checked={showOnlyMyClass}
+                  onChange={() => setShowOnlyMyClass(!showOnlyMyClass)}
+                />
+                <div className={`block w-10 h-6 rounded-full transition-colors ${showOnlyMyClass ? 'bg-[#6C5CE7]' : 'bg-gray-300 dark:bg-gray-600'}`}></div>
+                <div className={`dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${showOnlyMyClass ? 'transform translate-x-4' : ''}`}></div>
+              </div>
+              <span className="text-xs font-bold text-[#1E1F2B] dark:text-white">Show only my class</span>
+            </label>
+          )}
+          <div className="relative w-full sm:w-auto">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <input 
+              type="text" 
+              placeholder="Search sections..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-9 pr-4 py-2 bg-[#F6F7FF] dark:bg-gray-900 border border-[#8B8CF6]/30 dark:border-gray-700 rounded-full text-sm w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-[#6C5CE7] dark:text-white"
+            />
+          </div>
         </div>
       </div>
 

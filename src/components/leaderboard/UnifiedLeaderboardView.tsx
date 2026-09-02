@@ -211,6 +211,8 @@ export const UnifiedLeaderboardView: React.FC = () => {
           >
             Total Solved
           </button>
+          
+          <span className="text-xs font-extrabold text-[#6A6C88] ml-2 mr-1 hidden lg:inline">Coding Platform:</span>
           <button
             onClick={() => setSortBy("leetcode")}
             className={`px-3.5 py-2 rounded-xl text-xs font-extrabold transition-all whitespace-nowrap ${

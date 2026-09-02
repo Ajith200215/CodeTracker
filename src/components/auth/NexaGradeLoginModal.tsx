@@ -14,7 +14,8 @@ import {
   Code2, 
   Sparkles,
   CheckCircle2,
-  Lock
+  Lock,
+  Loader2
 } from "lucide-react";
 
 interface NexaGradeLoginModalProps {
@@ -489,9 +490,18 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-3.5 rounded-xl bg-[#6C5CE7] hover:bg-[#5A4AD1] dark:bg-black hover:dark:bg-gray-900 text-white dark:text-white font-extrabold text-xs shadow-lg shadow-[#6C5CE7]/30 transition-all"
+              className="w-full py-3.5 rounded-xl bg-[#6C5CE7] hover:bg-[#5A4AD1] dark:bg-black hover:dark:bg-gray-900 text-white dark:text-white font-extrabold text-xs shadow-lg shadow-[#6C5CE7]/30 transition-all flex items-center justify-center gap-2"
             >
-              {isSubmitting ? "Authenticating..." : mode === "login" ? "Sign In to Student Portal" : "Register Student Account"}
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>Authenticating...</span>
+                </>
+              ) : mode === "login" ? (
+                "Sign In to Student Portal"
+              ) : (
+                "Register Student Account"
+              )}
             </button>
           </form>
         ) : (
@@ -618,9 +628,18 @@ export const NexaGradeLoginModal: React.FC<NexaGradeLoginModalProps> = ({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-3.5 rounded-xl bg-slate-900 dark:bg-black text-white dark:text-white font-extrabold text-xs shadow-lg transition-all"
+              className="w-full py-3.5 rounded-xl bg-slate-900 dark:bg-black text-white dark:text-white font-extrabold text-xs shadow-lg transition-all flex items-center justify-center gap-2"
             >
-              {isSubmitting ? "Authenticating..." : mode === "login" ? "Sign In to Faculty Portal" : "Register Faculty Account"}
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>Authenticating...</span>
+                </>
+              ) : mode === "login" ? (
+                "Sign In to Faculty Portal"
+              ) : (
+                "Register Faculty Account"
+              )}
             </button>
           </form>
         )}
