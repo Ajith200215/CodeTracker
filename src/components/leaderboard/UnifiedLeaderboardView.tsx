@@ -335,17 +335,93 @@ export const UnifiedLeaderboardView: React.FC = () => {
                   </div>
 
                   <h3 className="text-sm font-bold text-slate-300 uppercase tracking-wider mb-3">Competitive Programming Matrix</h3>
-                  <div className="grid grid-cols-2 gap-4 mb-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     {platformsData.map((platform, idx) => (
-                      <div key={idx} className="bg-slate-950 p-4 rounded-xl border border-slate-800">
-                        <div className="flex items-center justify-between mb-1">
+                      <div key={idx} className="bg-slate-950 p-4 rounded-xl border border-slate-800 flex flex-col justify-between">
+                        <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-800">
                           <span className="font-bold text-slate-200">{platform.name}</span>
-                          <span className="text-xs font-mono text-indigo-400">@{platform.handle}</span>
+                          <span className="text-xs font-mono text-indigo-400">{platform.handle}</span>
                         </div>
-                        <div className="text-xs text-slate-400 flex justify-between mt-2">
-                          <span>Solved: <strong className="text-white">{platform.data?.solved || 0}</strong></span>
-                          {platform.data?.rating > 0 && <span>Rating: <strong className="text-amber-400">{platform.data.rating}</strong></span>}
-                        </div>
+                        
+                        {platform.name === 'LeetCode' && (
+                          <div className="space-y-2 text-xs">
+                            <div className="flex justify-between">
+                              <span className="text-slate-400">Total Solved:</span>
+                              <span className="font-bold text-white">{platform.data?.solved || 0}</span>
+                            </div>
+                            <div className="grid grid-cols-3 gap-2 pt-1">
+                              <div className="bg-emerald-950/30 text-emerald-400 p-1.5 rounded text-center border border-emerald-900/50">
+                                <span className="block text-[10px] uppercase opacity-70">Easy</span>
+                                <span className="font-bold">{platform.data?.easy || 0}</span>
+                              </div>
+                              <div className="bg-amber-950/30 text-amber-400 p-1.5 rounded text-center border border-amber-900/50">
+                                <span className="block text-[10px] uppercase opacity-70">Medium</span>
+                                <span className="font-bold">{platform.data?.medium || 0}</span>
+                              </div>
+                              <div className="bg-red-950/30 text-red-400 p-1.5 rounded text-center border border-red-900/50">
+                                <span className="block text-[10px] uppercase opacity-70">Hard</span>
+                                <span className="font-bold">{platform.data?.hard || 0}</span>
+                              </div>
+                            </div>
+                            {(platform.data?.rating > 0) && (
+                              <div className="flex justify-between pt-2">
+                                <span className="text-slate-400">Rating:</span>
+                                <span className="font-bold text-amber-400">{platform.data.rating}</span>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                        
+                        {platform.name === 'Codeforces' && (
+                          <div className="space-y-2 text-xs">
+                            <div className="flex justify-between">
+                              <span className="text-slate-400">Total Solved:</span>
+                              <span className="font-bold text-white">{platform.data?.solved || 0}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-slate-400">Current Rating:</span>
+                              <span className="font-bold text-amber-400">{platform.data?.rating || 0}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-slate-400">Max Rating:</span>
+                              <span className="font-bold text-purple-400">{platform.data?.maxRating || 0}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-slate-400">Rank:</span>
+                              <span className="font-bold text-blue-400 capitalize">{platform.data?.rank || "Unrated"}</span>
+                            </div>
+                          </div>
+                        )}
+
+                        {platform.name === 'CodeChef' && (
+                          <div className="space-y-2 text-xs">
+                            <div className="flex justify-between">
+                              <span className="text-slate-400">Total Solved:</span>
+                              <span className="font-bold text-white">{platform.data?.solved || 0}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-slate-400">Rating:</span>
+                              <span className="font-bold text-amber-400">{platform.data?.rating || 0}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-slate-400">Stars:</span>
+                              <span className="font-bold text-yellow-400">{platform.data?.stars || "Unrated"}</span>
+                            </div>
+                          </div>
+                        )}
+
+                        {platform.name === 'HackerRank' && (
+                          <div className="space-y-2 text-xs">
+                            <div className="flex justify-between">
+                              <span className="text-slate-400">Total Solved:</span>
+                              <span className="font-bold text-white">{platform.data?.solved || 0}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-slate-400">Rank/Badge:</span>
+                              <span className="font-bold text-indigo-400">{platform.data?.rank || "Unrated"}</span>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
