@@ -249,7 +249,15 @@ export const UnifiedLeaderboardView: React.FC = () => {
             </thead>
             <tbody className="divide-y divide-[#8B8CF6]/10 text-xs font-semibold">
               {processedLeaderboard.map((student) => (
-                <tr key={student.id} className="hover:bg-[#F0F2FF]/60 transition-colors">
+                <tr 
+                  key={student.id} 
+                  className="hover:bg-[#F0F2FF]/60 transition-colors cursor-context-menu"
+                  title="Right click to view full detailed stats"
+                  onContextMenu={(e) => {
+                    e.preventDefault();
+                    window.open('/api/students/' + student.id + '/placement-card', '_blank');
+                  }}
+                >
                   <td className="p-4 pl-6">
                     <span className={`w-7 h-7 rounded-full inline-flex items-center justify-center font-extrabold font-mono text-xs ${
                       student.rank === 1 ? "bg-amber-400 text-amber-950 font-black shadow-md" :

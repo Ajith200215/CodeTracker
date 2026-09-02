@@ -186,7 +186,15 @@ export const ClassroomsView: React.FC = () => {
                   </tr>
                 ) : (
                   sectionData.map((student, idx) => (
-                    <tr key={student.studentId} className="hover:bg-[#F0F2FF]/50 dark:hover:bg-gray-700/30 transition-colors">
+                    <tr 
+                      key={student.studentId} 
+                      className="hover:bg-[#F0F2FF]/50 dark:hover:bg-gray-700/30 transition-colors cursor-context-menu"
+                      title="Right click to view full detailed stats"
+                      onContextMenu={(e) => {
+                        e.preventDefault();
+                        window.open('/api/students/' + student.studentId + '/placement-card', '_blank');
+                      }}
+                    >
                       <td className="px-6 py-4">
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
                           idx === 0 ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400" :
