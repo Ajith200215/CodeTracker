@@ -253,10 +253,9 @@ export const UnifiedLeaderboardView: React.FC = () => {
               {processedLeaderboard.map((student) => (
                 <tr 
                   key={student.id} 
-                  className="hover:bg-[#F0F2FF]/60 transition-colors cursor-context-menu"
-                  title="Right click to view full detailed stats"
-                  onContextMenu={(e) => {
-                    e.preventDefault();
+                  className="hover:bg-[#F0F2FF]/60 transition-colors cursor-pointer"
+                  title="Click to view full detailed stats"
+                  onClick={(e) => {
                     setSelectedPlacementId(student.id);
                   }}
                 >

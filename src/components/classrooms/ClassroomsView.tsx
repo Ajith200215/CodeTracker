@@ -189,10 +189,9 @@ export const ClassroomsView: React.FC = () => {
                   sectionData.map((student, idx) => (
                     <tr 
                       key={student.studentId} 
-                      className="hover:bg-[#F0F2FF]/50 dark:hover:bg-gray-700/30 transition-colors cursor-context-menu"
-                      title="Right click to view full detailed stats"
-                      onContextMenu={(e) => {
-                        e.preventDefault();
+                      className="hover:bg-[#F0F2FF]/50 dark:hover:bg-gray-700/30 transition-colors cursor-pointer"
+                      title="Click to view full detailed stats"
+                      onClick={(e) => {
                         setSelectedPlacementId(student.studentId);
                       }}
                     >
