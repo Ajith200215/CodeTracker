@@ -223,17 +223,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onStart, onWatchDemo }
 
       {/* Video Modal Overlay */}
       {isVideoOpen && (
-        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black/90 backdrop-blur-sm p-2 sm:p-6 animate-in fade-in duration-300">
-          <div className="w-full max-w-5xl flex justify-end mb-3">
+        <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black/95 backdrop-blur-md sm:p-6 animate-in fade-in duration-300">
+          <div className="absolute top-4 right-4 z-[10000]">
             <button 
               onClick={() => setIsVideoOpen(false)}
-              className="w-10 h-10 bg-white/10 hover:bg-white/25 rounded-full flex items-center justify-center text-white backdrop-blur-md transition-all"
+              className="w-10 h-10 sm:w-12 sm:h-12 bg-white/15 hover:bg-white/30 rounded-full flex items-center justify-center text-white backdrop-blur-md transition-all shadow-lg border border-white/10"
             >
-              <X className="w-5 h-5" />
+              <X className="w-5 h-5 sm:w-6 sm:h-6" />
             </button>
           </div>
-          <div className="relative w-full max-w-5xl bg-[#000000] rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border border-gray-800 scale-in-center">
-            <div className="relative pt-[56.25%] w-full h-0">
+          <div className="relative w-full h-full sm:h-auto sm:max-w-5xl bg-[#000000] sm:rounded-3xl overflow-hidden shadow-2xl sm:border border-gray-800 scale-in-center flex items-center justify-center">
+            <div className="relative w-full h-full sm:h-0 sm:pt-[56.25%]">
               <iframe 
                 className="absolute top-0 left-0 w-full h-full"
                 src="https://drive.google.com/file/d/1v7KGuBPgwpAEtIlxJOppy05W3RKFPCb3/preview" 
