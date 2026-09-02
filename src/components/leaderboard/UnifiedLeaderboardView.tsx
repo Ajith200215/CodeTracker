@@ -30,6 +30,7 @@ interface LeaderboardEntry {
   codeforces: { username: string; solved: number; rating: number; maxRating: number; rank: string };
   codechef: { username: string; solved: number; rating: number; stars: string };
   hackerrank: { username: string; solved: number; rating: number; rank: string };
+  handles?: Record<string, string>;
 }
 
 export const UnifiedLeaderboardView: React.FC = () => {
