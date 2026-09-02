@@ -14,7 +14,8 @@ import {
   ArrowUpDown,
   Filter,
   CheckCircle2,
-  Medal
+  Medal,
+  X
 } from "lucide-react";
 
 interface LeaderboardEntry {
@@ -36,6 +37,7 @@ export const UnifiedLeaderboardView: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<"codeScore" | "totalSolved" | "leetcode" | "codeforces" | "codechef">("codeScore");
+  const [selectedPlacementId, setSelectedPlacementId] = useState<string | null>(null);
 
   const fetchLeaderboard = async () => {
     setLoading(true);
@@ -255,7 +257,7 @@ export const UnifiedLeaderboardView: React.FC = () => {
                   title="Right click to view full detailed stats"
                   onContextMenu={(e) => {
                     e.preventDefault();
-                    window.open('/api/students/' + student.id + '/placement-card', '_blank');
+                    setSelectedPlacementId(student.id);
                   }}
                 >
                   <td className="p-4 pl-6">
@@ -295,6 +297,17 @@ export const UnifiedLeaderboardView: React.FC = () => {
           </table>
         </div>
       </div>
+
+      {selectedPlacementId && (
+        <div className="fixed inset-0 z-[100] bg-[#161723]/60 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setSelectedPlacementId(null)}>
+          <div className="bg-slate-950 rounded-[32px] w-full max-w-3xl h-[85vh] relative overflow-hidden shadow-2xl border border-indigo-500/20" onClick={e => e.stopPropagation()}>
+            <button onClick={() => setSelectedPlacementId(null)} className="absolute top-6 right-6 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-slate-800 text-slate-300 hover:bg-slate-700 transition-colors">
+              <X className="w-5 h-5" />
+            </button>
+            <iframe src={`/api/students/${selectedPlacementId}/placement-card`} className="w-full h-full border-none" />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

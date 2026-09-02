@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Users, Search, ChevronRight, Trophy, Download, ArrowLeft } from "lucide-react";
+import { Users, Search, ChevronRight, Trophy, Download, ArrowLeft, X } from "lucide-react";
 import { useSession } from "next-auth/react";
 
 interface Classroom {
@@ -28,6 +28,7 @@ export const ClassroomsView: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const { data: session } = useSession();
   const [showOnlyMyClass, setShowOnlyMyClass] = useState(true);
+  const [selectedPlacementId, setSelectedPlacementId] = useState<string | null>(null);
 
   const userSection = (session?.user as any)?.section;
 
@@ -192,7 +193,7 @@ export const ClassroomsView: React.FC = () => {
                       title="Right click to view full detailed stats"
                       onContextMenu={(e) => {
                         e.preventDefault();
-                        window.open('/api/students/' + student.studentId + '/placement-card', '_blank');
+                        setSelectedPlacementId(student.studentId);
                       }}
                     >
                       <td className="px-6 py-4">
@@ -310,6 +311,17 @@ export const ClassroomsView: React.FC = () => {
               <ChevronRight className="w-5 h-5 text-gray-300 group-hover:text-[#6C5CE7] dark:group-hover:text-[#8B8CF6] transition-colors" />
             </button>
           ))}
+        </div>
+      )}
+
+      {selectedPlacementId && (
+        <div className="fixed inset-0 z-[100] bg-[#161723]/60 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setSelectedPlacementId(null)}>
+          <div className="bg-slate-950 rounded-[32px] w-full max-w-3xl h-[85vh] relative overflow-hidden shadow-2xl border border-indigo-500/20" onClick={e => e.stopPropagation()}>
+            <button onClick={() => setSelectedPlacementId(null)} className="absolute top-6 right-6 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-slate-800 text-slate-300 hover:bg-slate-700 transition-colors">
+              <X className="w-5 h-5" />
+            </button>
+            <iframe src={`/api/students/${selectedPlacementId}/placement-card`} className="w-full h-full border-none" />
+          </div>
         </div>
       )}
     </div>
