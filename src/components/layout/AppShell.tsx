@@ -67,9 +67,7 @@ export const AppShell: React.FC<AppShellProps> = ({
   // Logged-in user representation
   const user = session?.user
     ? { name: session.user.name || "User", email: session.user.email || "", avatar: session.user.image || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80", regNo: "2026-CS-0142" }
-    : currentRole === "STUDENT"
-    ? { name: "Sarah Hessy", email: "sarah.hessy@college.edu", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80", regNo: "2026-CS-0142" }
-    : { name: "Dr. Yukari Samo", email: "yukari.samo@college.edu", avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&auto=format&fit=crop&q=80", dept: "Computer Science Lead" };
+    : null;
 
   const studentNavItems = [
     { id: "home", label: "Home", icon: Home },
@@ -158,19 +156,29 @@ export const AppShell: React.FC<AppShellProps> = ({
           </nav>
         </div>
 
-        {/* Logged-in User Card */}
+        {/* User Card / Login Action */}
         <div className="p-4 border-t border-[#8B8CF6]/15 dark:border-gray-800 bg-[#F6F7FF] dark:bg-gray-950">
-          <div className="flex items-center gap-3 bg-white dark:bg-gray-900 p-3 rounded-2xl border border-[#8B8CF6]/15 dark:border-gray-800">
-            <img
-              src={user.avatar}
-              alt={user.name}
-              className="w-9 h-9 rounded-full object-cover border-2 border-[#8B8CF6]"
-            />
-            <div className="flex-1 min-w-0">
-              <div className="text-xs font-bold text-[#1E1F2B] dark:text-white truncate">{user.name}</div>
-              <div className="text-[10px] text-[#6A6C88] dark:text-gray-400 truncate">{user.email}</div>
+          {session?.user ? (
+            <div className="flex items-center gap-3 bg-white dark:bg-gray-900 p-3 rounded-2xl border border-[#8B8CF6]/15 dark:border-gray-800">
+              <img
+                src={user?.avatar}
+                alt={user?.name}
+                className="w-9 h-9 rounded-full object-cover border-2 border-[#8B8CF6]"
+              />
+              <div className="flex-1 min-w-0">
+                <div className="text-xs font-bold text-[#1E1F2B] dark:text-white truncate">{user?.name}</div>
+                <div className="text-[10px] text-[#6A6C88] dark:text-gray-400 truncate">{user?.email}</div>
+              </div>
             </div>
-          </div>
+          ) : (
+            <button
+              onClick={() => setShowLoginModal(true)}
+              className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-[#6C5CE7] text-white text-xs font-extrabold transition-all shadow-md shadow-[#6C5CE7]/25 hover:bg-[#5b4cdb]"
+            >
+              <LogIn className="w-4 h-4" />
+              <span>Login to Portal</span>
+            </button>
+          )}
         </div>
       </aside>
 
@@ -199,29 +207,23 @@ export const AppShell: React.FC<AppShellProps> = ({
                   {currentRole} BADGE
                 </span>
               </div>
-              <p className="text-[11px] text-[#6A6C88] dark:text-gray-400 font-medium hidden sm:block">
-                Logged in as <strong className="text-[#1E1F2B] dark:text-white">{user.name}</strong>
-              </p>
+              {session?.user && (
+                <p className="text-[11px] text-[#6A6C88] dark:text-gray-400 font-medium hidden sm:block">
+                  Logged in as <strong className="text-[#1E1F2B] dark:text-white">{user?.name}</strong>
+                </p>
+              )}
             </div>
           </div>
 
           {/* Topbar Login Action & Notifications */}
           <div className="flex items-center gap-3">
-            {session?.user ? (
+            {session?.user && (
               <button
                 onClick={() => signOut()}
                 className="flex items-center gap-1.5 px-4 py-2 rounded-full border border-[#8B8CF6]/30 dark:border-gray-700 text-xs font-bold text-[#1E1F2B] dark:text-white hover:bg-[#F0F2FF] hover:dark:bg-gray-800 dark:bg-gray-800 transition-all"
               >
                 <LogOut className="w-3.5 h-3.5 text-[#6C5CE7]" />
                 <span>Sign Out ({session.user.name?.split(" ")[0]})</span>
-              </button>
-            ) : (
-              <button
-                onClick={() => setShowLoginModal(true)}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-full border-2 border-[#6C5CE7] text-[#6C5CE7] hover:bg-[#6C5CE7] hover:text-white text-xs font-extrabold transition-all shadow-xs"
-              >
-                <LogIn className="w-3.5 h-3.5" />
-                <span>Login</span>
               </button>
             )}
 
