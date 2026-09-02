@@ -347,26 +347,26 @@ export const UnifiedLeaderboardView: React.FC = () => {
                           <div className="space-y-2 text-xs">
                             <div className="flex justify-between">
                               <span className="text-slate-400">Total Solved:</span>
-                              <span className="font-bold text-white">{platform.data?.solved || 0}</span>
+                              <span className="font-bold text-white">{(platform.data as any)?.solved || 0}</span>
                             </div>
                             <div className="grid grid-cols-3 gap-2 pt-1">
                               <div className="bg-emerald-950/30 text-emerald-400 p-1.5 rounded text-center border border-emerald-900/50">
                                 <span className="block text-[10px] uppercase opacity-70">Easy</span>
-                                <span className="font-bold">{platform.data?.easy || 0}</span>
+                                <span className="font-bold">{(platform.data as any)?.easy || 0}</span>
                               </div>
                               <div className="bg-amber-950/30 text-amber-400 p-1.5 rounded text-center border border-amber-900/50">
                                 <span className="block text-[10px] uppercase opacity-70">Medium</span>
-                                <span className="font-bold">{platform.data?.medium || 0}</span>
+                                <span className="font-bold">{(platform.data as any)?.medium || 0}</span>
                               </div>
                               <div className="bg-red-950/30 text-red-400 p-1.5 rounded text-center border border-red-900/50">
                                 <span className="block text-[10px] uppercase opacity-70">Hard</span>
-                                <span className="font-bold">{platform.data?.hard || 0}</span>
+                                <span className="font-bold">{(platform.data as any)?.hard || 0}</span>
                               </div>
                             </div>
-                            {(platform.data?.rating > 0) && (
+                            {((platform.data as any)?.rating > 0) && (
                               <div className="flex justify-between pt-2">
                                 <span className="text-slate-400">Rating:</span>
-                                <span className="font-bold text-amber-400">{platform.data.rating}</span>
+                                <span className="font-bold text-amber-400">{(platform.data as any).rating}</span>
                               </div>
                             )}
                           </div>
@@ -376,19 +376,19 @@ export const UnifiedLeaderboardView: React.FC = () => {
                           <div className="space-y-2 text-xs">
                             <div className="flex justify-between">
                               <span className="text-slate-400">Total Solved:</span>
-                              <span className="font-bold text-white">{platform.data?.solved || 0}</span>
+                              <span className="font-bold text-white">{(platform.data as any)?.solved || 0}</span>
                             </div>
                             <div className="flex justify-between">
                               <span className="text-slate-400">Current Rating:</span>
-                              <span className="font-bold text-amber-400">{platform.data?.rating || 0}</span>
+                              <span className="font-bold text-amber-400">{(platform.data as any)?.rating || 0}</span>
                             </div>
                             <div className="flex justify-between">
                               <span className="text-slate-400">Max Rating:</span>
-                              <span className="font-bold text-purple-400">{platform.data?.maxRating || 0}</span>
+                              <span className="font-bold text-purple-400">{(platform.data as any)?.maxRating || 0}</span>
                             </div>
                             <div className="flex justify-between">
                               <span className="text-slate-400">Rank:</span>
-                              <span className="font-bold text-blue-400 capitalize">{platform.data?.rank || "Unrated"}</span>
+                              <span className="font-bold text-blue-400 capitalize">{(platform.data as any)?.rank || "Unrated"}</span>
                             </div>
                           </div>
                         )}
@@ -397,15 +397,15 @@ export const UnifiedLeaderboardView: React.FC = () => {
                           <div className="space-y-2 text-xs">
                             <div className="flex justify-between">
                               <span className="text-slate-400">Total Solved:</span>
-                              <span className="font-bold text-white">{platform.data?.solved || 0}</span>
+                              <span className="font-bold text-white">{(platform.data as any)?.solved || 0}</span>
                             </div>
                             <div className="flex justify-between">
                               <span className="text-slate-400">Rating:</span>
-                              <span className="font-bold text-amber-400">{platform.data?.rating || 0}</span>
+                              <span className="font-bold text-amber-400">{(platform.data as any)?.rating || 0}</span>
                             </div>
                             <div className="flex justify-between">
                               <span className="text-slate-400">Stars:</span>
-                              <span className="font-bold text-yellow-400">{platform.data?.stars || "Unrated"}</span>
+                              <span className="font-bold text-yellow-400">{(platform.data as any)?.stars || "Unrated"}</span>
                             </div>
                           </div>
                         )}
@@ -414,11 +414,11 @@ export const UnifiedLeaderboardView: React.FC = () => {
                           <div className="space-y-2 text-xs">
                             <div className="flex justify-between">
                               <span className="text-slate-400">Total Solved:</span>
-                              <span className="font-bold text-white">{platform.data?.solved || 0}</span>
+                              <span className="font-bold text-white">{(platform.data as any)?.solved || 0}</span>
                             </div>
                             <div className="flex justify-between">
                               <span className="text-slate-400">Rank/Badge:</span>
-                              <span className="font-bold text-indigo-400">{platform.data?.rank || "Unrated"}</span>
+                              <span className="font-bold text-indigo-400">{(platform.data as any)?.rank || "Unrated"}</span>
                             </div>
                           </div>
                         )}
