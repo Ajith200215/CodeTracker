@@ -199,13 +199,6 @@ export const AppShell: React.FC<AppShellProps> = ({
                 <h2 className="font-serif-display text-xl font-bold text-[#1E1F2B] dark:text-white">
                   {navItems.find((n) => n.id === activeNav)?.label || "Portal"}
                 </h2>
-                <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${
-                  currentRole === "STUDENT"
-                    ? "bg-[#8B8CF6]/20 text-[#6C5CE7] border border-[#8B8CF6]/30 dark:border-gray-700"
-                    : "bg-[#1E1F2B] text-[#F8A195]"
-                }`}>
-                  {currentRole} BADGE
-                </span>
               </div>
               {session?.user && (
                 <p className="text-[11px] text-[#6A6C88] dark:text-gray-400 font-medium hidden sm:block">
@@ -226,11 +219,6 @@ export const AppShell: React.FC<AppShellProps> = ({
                 <span>Sign Out ({session.user.name?.split(" ")[0]})</span>
               </button>
             )}
-
-            <button className="w-9 h-9 rounded-full bg-[#F6F7FF] dark:bg-gray-950 border border-[#8B8CF6]/20 dark:border-gray-700 flex items-center justify-center text-[#6C5CE7] hover:bg-[#8B8CF6]/20 transition-all relative">
-              <Bell className="w-4 h-4" />
-              <span className="w-2 h-2 rounded-full bg-[#F8A195] absolute top-1 right-1"></span>
-            </button>
           </div>
         </header>
 

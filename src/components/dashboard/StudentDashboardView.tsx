@@ -31,6 +31,7 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({ onSt
   const [isSyncing, setIsSyncing] = useState(true);
   const [syncStatus, setSyncStatus] = useState<string | null>("Syncing live coding platform stats...");
   const [showHandlesModal, setShowHandlesModal] = useState(false);
+  const [inspectPlatform, setInspectPlatform] = useState<string | null>(null);
 
   // All 7 platform usernames state
   const [handles, setHandles] = useState({
@@ -225,150 +226,173 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({ onSt
         </div>
       </div>
 
-      {/* Grid of All 7 Platforms */}
+      {/* Grid of All Connected Platforms */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {!stats.leetcode.username && !stats.codeforces.username && !stats.codechef.username && !stats.geeksforgeeks.username && !stats.hackerrank.username && !stats.atcoder.username && !stats.neetcode.username && (
+          <div className="col-span-full py-12 text-center border-2 border-dashed border-[#8B8CF6]/30 rounded-3xl">
+            <h3 className="text-lg font-bold text-[#1E1F2B] mb-2">No platforms connected</h3>
+            <p className="text-sm text-slate-500 mb-4">Connect your competitive programming accounts to see your stats here.</p>
+            <button onClick={() => setShowHandlesModal(true)} className="px-5 py-2 bg-[#F0F2FF] text-[#6C5CE7] font-bold rounded-full text-xs">Configure Usernames</button>
+          </div>
+        )}
+
         {/* 1. LeetCode */}
+        {stats.leetcode.username && (
         <div className="bg-white rounded-3xl p-5 border border-[#8B8CF6]/20 shadow-lg shadow-[#8B8CF6]/5 flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5 font-bold text-amber-500 text-xs">
               <Code2 className="w-4 h-4" /> LEETCODE
             </div>
-            <span className="text-[10px] font-mono text-slate-500">{stats.leetcode.username ? `@${stats.leetcode.username}` : "Unlinked"}</span>
+            <span className="text-[10px] font-mono text-slate-500">@{stats.leetcode.username}</span>
           </div>
           <div className="my-3">
             <div className="text-2xl font-black text-[#1E1F2B]">
-              {stats.leetcode.username ? `${stats.leetcode.solved} Solved` : "Not Connected"}
+              {stats.leetcode.solved} Solved
             </div>
-            {stats.leetcode.username && (
-              <div className="flex gap-1 text-[10px] font-bold mt-1">
-                <span className="text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">{stats.leetcode.easy} Easy</span>
-                <span className="text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded">{stats.leetcode.medium} Med</span>
-                <span className="text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded">{stats.leetcode.hard} Hard</span>
-              </div>
-            )}
+            <div className="flex gap-1 text-[10px] font-bold mt-1">
+              <span className="text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">{stats.leetcode.easy} Easy</span>
+              <span className="text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded">{stats.leetcode.medium} Med</span>
+              <span className="text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded">{stats.leetcode.hard} Hard</span>
+            </div>
           </div>
-          <div className="text-[11px] text-slate-400 font-medium">
-            {stats.leetcode.username ? `Rating: ${stats.leetcode.rating}` : "Save handle in modal"}
+          <div className="flex items-center justify-between text-[11px] text-slate-400 font-medium">
+            <span>Rating: {stats.leetcode.rating}</span>
+            <button onClick={() => setInspectPlatform('leetcode')} className="text-[#6C5CE7] hover:underline flex items-center gap-1">Inspect <ArrowUpRight className="w-3 h-3" /></button>
           </div>
         </div>
+        )}
 
         {/* 2. Codeforces */}
+        {stats.codeforces.username && (
         <div className="bg-white rounded-3xl p-5 border border-[#8B8CF6]/20 shadow-lg shadow-[#8B8CF6]/5 flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5 font-bold text-sky-500 text-xs">
               <TrendingUp className="w-4 h-4" /> CODEFORCES
             </div>
-            <span className="text-[10px] font-mono text-slate-500">{stats.codeforces.username ? `@${stats.codeforces.username}` : "Unlinked"}</span>
+            <span className="text-[10px] font-mono text-slate-500">@{stats.codeforces.username}</span>
           </div>
           <div className="my-3">
             <div className="text-2xl font-black text-[#1E1F2B]">
-              {stats.codeforces.username ? `${stats.codeforces.rating} Rating` : "Not Connected"}
+              {stats.codeforces.rating} Rating
             </div>
-            {stats.codeforces.username && (
-              <div className="text-xs font-semibold text-sky-600 mt-1">
-                {stats.codeforces.solved} Solved
-              </div>
-            )}
+            <div className="text-xs font-semibold text-sky-600 mt-1">
+              {stats.codeforces.solved} Solved
+            </div>
           </div>
-          <div className="text-[11px] text-slate-400 font-medium">
-            {stats.codeforces.username ? `Max: ${stats.codeforces.maxRating}` : "Save handle in modal"}
+          <div className="flex items-center justify-between text-[11px] text-slate-400 font-medium">
+            <span>Max: {stats.codeforces.maxRating}</span>
+            <button onClick={() => setInspectPlatform('codeforces')} className="text-[#6C5CE7] hover:underline flex items-center gap-1">Inspect <ArrowUpRight className="w-3 h-3" /></button>
           </div>
         </div>
+        )}
 
         {/* 3. CodeChef */}
+        {stats.codechef.username && (
         <div className="bg-white rounded-3xl p-5 border border-[#8B8CF6]/20 shadow-lg shadow-[#8B8CF6]/5 flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5 font-bold text-amber-600 text-xs">
               <Award className="w-4 h-4" /> CODECHEF
             </div>
-            <span className="text-[10px] font-mono text-slate-500">{stats.codechef.username ? `@${stats.codechef.username}` : "Unlinked"}</span>
+            <span className="text-[10px] font-mono text-slate-500">@{stats.codechef.username}</span>
           </div>
           <div className="my-3">
             <div className="text-2xl font-black text-[#1E1F2B]">
-              {stats.codechef.username ? `${stats.codechef.rating} ${stats.codechef.stars}` : "Not Connected"}
+              {stats.codechef.rating} {stats.codechef.stars}
             </div>
-            {stats.codechef.username && (
-              <div className="text-xs font-semibold text-amber-600 mt-1">
-                {stats.codechef.solved} Solved
-              </div>
-            )}
+            <div className="text-xs font-semibold text-amber-600 mt-1">
+              {stats.codechef.solved} Solved
+            </div>
           </div>
-          <div className="text-[11px] text-slate-400 font-medium">
-            {stats.codechef.username ? "API Verified" : "Save handle in modal"}
+          <div className="flex items-center justify-between text-[11px] text-slate-400 font-medium">
+            <span>API Verified</span>
+            <button onClick={() => setInspectPlatform('codechef')} className="text-[#6C5CE7] hover:underline flex items-center gap-1">Inspect <ArrowUpRight className="w-3 h-3" /></button>
           </div>
         </div>
+        )}
 
         {/* 4. GeeksForGeeks */}
+        {stats.geeksforgeeks.username && (
         <div className="bg-white rounded-3xl p-5 border border-[#8B8CF6]/20 shadow-lg shadow-[#8B8CF6]/5 flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5 font-bold text-emerald-600 text-xs">
               <Globe className="w-4 h-4" /> GEEKSFORGEEKS
             </div>
-            <span className="text-[10px] font-mono text-slate-500">{stats.geeksforgeeks.username ? `@${stats.geeksforgeeks.username}` : "Unlinked"}</span>
+            <span className="text-[10px] font-mono text-slate-500">@{stats.geeksforgeeks.username}</span>
           </div>
           <div className="my-3">
             <div className="text-2xl font-black text-[#1E1F2B]">
-              {stats.geeksforgeeks.username ? `${stats.geeksforgeeks.solved} Solved` : "Not Connected"}
+              {stats.geeksforgeeks.solved} Solved
             </div>
           </div>
-          <div className="text-[11px] text-slate-400 font-medium">
-            {stats.geeksforgeeks.username ? `Score: ${stats.geeksforgeeks.rating}` : "Save handle in modal"}
+          <div className="flex items-center justify-between text-[11px] text-slate-400 font-medium">
+            <span>Score: {stats.geeksforgeeks.rating}</span>
+            <button onClick={() => setInspectPlatform('geeksforgeeks')} className="text-[#6C5CE7] hover:underline flex items-center gap-1">Inspect <ArrowUpRight className="w-3 h-3" /></button>
           </div>
         </div>
+        )}
 
         {/* 5. HackerRank */}
+        {stats.hackerrank.username && (
         <div className="bg-white rounded-3xl p-5 border border-[#8B8CF6]/20 shadow-lg shadow-[#8B8CF6]/5 flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5 font-bold text-emerald-500 text-xs">
               <Terminal className="w-4 h-4" /> HACKERRANK
             </div>
-            <span className="text-[10px] font-mono text-slate-500">{stats.hackerrank.username ? `@${stats.hackerrank.username}` : "Unlinked"}</span>
+            <span className="text-[10px] font-mono text-slate-500">@{stats.hackerrank.username}</span>
           </div>
           <div className="my-3">
             <div className="text-2xl font-black text-[#1E1F2B]">
-              {stats.hackerrank.username ? `${stats.hackerrank.solved} Solved` : "Not Connected"}
+              {stats.hackerrank.solved} Solved
             </div>
           </div>
-          <div className="text-[11px] text-slate-400 font-medium">
-            {stats.hackerrank.username ? stats.hackerrank.rank : "Save handle in modal"}
+          <div className="flex items-center justify-between text-[11px] text-slate-400 font-medium">
+            <span>{stats.hackerrank.rank}</span>
+            <button onClick={() => setInspectPlatform('hackerrank')} className="text-[#6C5CE7] hover:underline flex items-center gap-1">Inspect <ArrowUpRight className="w-3 h-3" /></button>
           </div>
         </div>
+        )}
 
         {/* 6. AtCoder */}
+        {stats.atcoder.username && (
         <div className="bg-white rounded-3xl p-5 border border-[#8B8CF6]/20 shadow-lg shadow-[#8B8CF6]/5 flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5 font-bold text-slate-700 text-xs">
               <Layers className="w-4 h-4" /> ATCODER
             </div>
-            <span className="text-[10px] font-mono text-slate-500">{stats.atcoder.username ? `@${stats.atcoder.username}` : "Unlinked"}</span>
+            <span className="text-[10px] font-mono text-slate-500">@{stats.atcoder.username}</span>
           </div>
           <div className="my-3">
             <div className="text-2xl font-black text-[#1E1F2B]">
-              {stats.atcoder.username ? `${stats.atcoder.solved} Solved` : "Not Connected"}
+              {stats.atcoder.solved} Solved
             </div>
           </div>
-          <div className="text-[11px] text-slate-400 font-medium">
-            {stats.atcoder.username ? `Rating: ${stats.atcoder.rating}` : "Save handle in modal"}
+          <div className="flex items-center justify-between text-[11px] text-slate-400 font-medium">
+            <span>Rating: {stats.atcoder.rating}</span>
+            <button onClick={() => setInspectPlatform('atcoder')} className="text-[#6C5CE7] hover:underline flex items-center gap-1">Inspect <ArrowUpRight className="w-3 h-3" /></button>
           </div>
         </div>
+        )}
 
         {/* 7. NeetCode */}
+        {stats.neetcode.username && (
         <div className="bg-white rounded-3xl p-5 border border-[#8B8CF6]/20 shadow-lg shadow-[#8B8CF6]/5 flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5 font-bold text-purple-600 text-xs">
               <Sparkles className="w-4 h-4" /> NEETCODE
             </div>
-            <span className="text-[10px] font-mono text-slate-500">{stats.neetcode.username ? `@${stats.neetcode.username}` : "Unlinked"}</span>
+            <span className="text-[10px] font-mono text-slate-500">@{stats.neetcode.username}</span>
           </div>
           <div className="my-3">
             <div className="text-2xl font-black text-[#1E1F2B]">
-              {stats.neetcode.username ? "Saved Handle" : "Not Connected"}
+              Saved Handle
             </div>
           </div>
-          <div className="text-[11px] text-slate-400 font-medium">
-            {stats.neetcode.username ? `@${stats.neetcode.username}` : "Save handle in modal"}
+          <div className="flex items-center justify-between text-[11px] text-slate-400 font-medium">
+            <span>@{stats.neetcode.username}</span>
+            <button onClick={() => setInspectPlatform('neetcode')} className="text-[#6C5CE7] hover:underline flex items-center gap-1">Inspect <ArrowUpRight className="w-3 h-3" /></button>
           </div>
         </div>
+        )}
       </div>
 
       {/* Main Content: Solve Progress Chart */}
@@ -536,6 +560,152 @@ export const StudentDashboardView: React.FC<StudentDashboardViewProps> = ({ onSt
             >
               Save 7 Handles & Fetch Live Stats
             </button>
+          </div>
+        </div>
+      )}
+      {/* Inspect Platform Modal */}
+      {inspectPlatform && (
+        <div className="fixed inset-0 z-[60] bg-[#161723]/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-[36px] p-6 sm:p-8 max-w-sm w-full border border-[#8B8CF6]/20 shadow-2xl relative">
+            <button
+              onClick={() => setInspectPlatform(null)}
+              className="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#F6F7FF] hover:bg-[#EAEBFF] flex items-center justify-center text-slate-500"
+            >
+              <X className="w-4 h-4" />
+            </button>
+            <h2 className="font-serif-display text-2xl font-extrabold text-[#1E1F2B] capitalize mb-4">
+              {inspectPlatform} Details
+            </h2>
+            <div className="space-y-3">
+              {inspectPlatform === 'leetcode' && (
+                <>
+                  <div className="flex justify-between p-3 bg-gray-50 rounded-xl">
+                    <span className="font-bold text-gray-600">Username</span>
+                    <span className="font-mono text-gray-900">{stats.leetcode.username}</span>
+                  </div>
+                  <div className="flex justify-between p-3 bg-gray-50 rounded-xl">
+                    <span className="font-bold text-gray-600">Total Solved</span>
+                    <span className="font-black text-gray-900">{stats.leetcode.solved}</span>
+                  </div>
+                  <div className="flex justify-between p-3 bg-emerald-50 rounded-xl">
+                    <span className="font-bold text-emerald-700">Easy Solved</span>
+                    <span className="font-black text-emerald-900">{stats.leetcode.easy}</span>
+                  </div>
+                  <div className="flex justify-between p-3 bg-amber-50 rounded-xl">
+                    <span className="font-bold text-amber-700">Medium Solved</span>
+                    <span className="font-black text-amber-900">{stats.leetcode.medium}</span>
+                  </div>
+                  <div className="flex justify-between p-3 bg-rose-50 rounded-xl">
+                    <span className="font-bold text-rose-700">Hard Solved</span>
+                    <span className="font-black text-rose-900">{stats.leetcode.hard}</span>
+                  </div>
+                  <div className="flex justify-between p-3 bg-gray-50 rounded-xl">
+                    <span className="font-bold text-gray-600">Rating</span>
+                    <span className="font-black text-gray-900">{stats.leetcode.rating}</span>
+                  </div>
+                </>
+              )}
+              {inspectPlatform === 'codeforces' && (
+                <>
+                  <div className="flex justify-between p-3 bg-gray-50 rounded-xl">
+                    <span className="font-bold text-gray-600">Handle</span>
+                    <span className="font-mono text-gray-900">{stats.codeforces.username}</span>
+                  </div>
+                  <div className="flex justify-between p-3 bg-gray-50 rounded-xl">
+                    <span className="font-bold text-gray-600">Total Solved</span>
+                    <span className="font-black text-gray-900">{stats.codeforces.solved}</span>
+                  </div>
+                  <div className="flex justify-between p-3 bg-sky-50 rounded-xl">
+                    <span className="font-bold text-sky-700">Current Rating</span>
+                    <span className="font-black text-sky-900">{stats.codeforces.rating}</span>
+                  </div>
+                  <div className="flex justify-between p-3 bg-sky-50 rounded-xl">
+                    <span className="font-bold text-sky-700">Max Rating</span>
+                    <span className="font-black text-sky-900">{stats.codeforces.maxRating}</span>
+                  </div>
+                </>
+              )}
+              {inspectPlatform === 'codechef' && (
+                <>
+                  <div className="flex justify-between p-3 bg-gray-50 rounded-xl">
+                    <span className="font-bold text-gray-600">Username</span>
+                    <span className="font-mono text-gray-900">{stats.codechef.username}</span>
+                  </div>
+                  <div className="flex justify-between p-3 bg-gray-50 rounded-xl">
+                    <span className="font-bold text-gray-600">Total Solved</span>
+                    <span className="font-black text-gray-900">{stats.codechef.solved}</span>
+                  </div>
+                  <div className="flex justify-between p-3 bg-amber-50 rounded-xl">
+                    <span className="font-bold text-amber-700">Current Rating</span>
+                    <span className="font-black text-amber-900">{stats.codechef.rating}</span>
+                  </div>
+                  <div className="flex justify-between p-3 bg-amber-50 rounded-xl">
+                    <span className="font-bold text-amber-700">Stars</span>
+                    <span className="font-black text-amber-900">{stats.codechef.stars}</span>
+                  </div>
+                </>
+              )}
+              {inspectPlatform === 'hackerrank' && (
+                <>
+                  <div className="flex justify-between p-3 bg-gray-50 rounded-xl">
+                    <span className="font-bold text-gray-600">Username</span>
+                    <span className="font-mono text-gray-900">{stats.hackerrank.username}</span>
+                  </div>
+                  <div className="flex justify-between p-3 bg-gray-50 rounded-xl">
+                    <span className="font-bold text-gray-600">Total Solved</span>
+                    <span className="font-black text-gray-900">{stats.hackerrank.solved}</span>
+                  </div>
+                  <div className="flex justify-between p-3 bg-emerald-50 rounded-xl">
+                    <span className="font-bold text-emerald-700">Rank</span>
+                    <span className="font-black text-emerald-900">{stats.hackerrank.rank}</span>
+                  </div>
+                </>
+              )}
+              {inspectPlatform === 'geeksforgeeks' && (
+                <>
+                  <div className="flex justify-between p-3 bg-gray-50 rounded-xl">
+                    <span className="font-bold text-gray-600">Username</span>
+                    <span className="font-mono text-gray-900">{stats.geeksforgeeks.username}</span>
+                  </div>
+                  <div className="flex justify-between p-3 bg-gray-50 rounded-xl">
+                    <span className="font-bold text-gray-600">Total Solved</span>
+                    <span className="font-black text-gray-900">{stats.geeksforgeeks.solved}</span>
+                  </div>
+                  <div className="flex justify-between p-3 bg-emerald-50 rounded-xl">
+                    <span className="font-bold text-emerald-700">Coding Score</span>
+                    <span className="font-black text-emerald-900">{stats.geeksforgeeks.rating}</span>
+                  </div>
+                </>
+              )}
+              {inspectPlatform === 'atcoder' && (
+                <>
+                  <div className="flex justify-between p-3 bg-gray-50 rounded-xl">
+                    <span className="font-bold text-gray-600">Username</span>
+                    <span className="font-mono text-gray-900">{stats.atcoder.username}</span>
+                  </div>
+                  <div className="flex justify-between p-3 bg-gray-50 rounded-xl">
+                    <span className="font-bold text-gray-600">Total Solved</span>
+                    <span className="font-black text-gray-900">{stats.atcoder.solved}</span>
+                  </div>
+                  <div className="flex justify-between p-3 bg-slate-100 rounded-xl">
+                    <span className="font-bold text-slate-700">Rating</span>
+                    <span className="font-black text-slate-900">{stats.atcoder.rating}</span>
+                  </div>
+                </>
+              )}
+              {inspectPlatform === 'neetcode' && (
+                <>
+                  <div className="flex justify-between p-3 bg-gray-50 rounded-xl">
+                    <span className="font-bold text-gray-600">Username</span>
+                    <span className="font-mono text-gray-900">{stats.neetcode.username}</span>
+                  </div>
+                  <div className="flex justify-between p-3 bg-gray-50 rounded-xl">
+                    <span className="font-bold text-gray-600">Total Solved</span>
+                    <span className="font-black text-gray-900">{stats.neetcode.solved}</span>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
       )}
